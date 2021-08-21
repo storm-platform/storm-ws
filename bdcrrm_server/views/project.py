@@ -9,9 +9,10 @@
 """Brazil Data Cube Reproducible Research Management Project Views."""
 
 from bdc_auth_client.decorators import oauth2
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 
 from ..controllers import ProjectController
+from ..controllers.project_graph import ProjectGraphController
 
 project_bp = Blueprint("bdcrrm_project", __name__)
 
@@ -68,3 +69,36 @@ def edit_project_by_id(**kwargs):
                                                    attributes_to_chage=project_data)
 
     return jsonify(project_edited), 200
+
+
+@project_bp.route("/project/<project_id>/graph", methods=["POST", "PUT"])
+@oauth2(roles=["admin"])
+def create_or_update_project_graph(**kwargs):
+    """Create or update the Project Graph."""
+    project_graph = request.files["graph_file"].read()
+
+    controller = ProjectGraphController()
+    controller.add_graph_to_project(kwargs["user_id"], kwargs["project_id"], project_graph)
+
+    return {"code": 201, "message": "The graph was successfully added to project"}, 201
+
+
+@project_bp.route("/project/<project_id>/graph", methods=["GET"])
+@oauth2()
+def get_project_graph(**kwargs):
+    """Create the Project Graph."""
+    controller = ProjectGraphController()
+    graph_file = controller.get_project_graph(kwargs["user_id"], kwargs["project_id"])
+
+    return send_file(graph_file, mimetype="application/octet-stream", as_attachment=True,
+                     attachment_filename="graph"), 200
+
+
+@project_bp.route("/project/<project_id>/graph", methods=["DELETE"])
+@oauth2(roles=["admin"])
+def delete_project_graph(**kwargs):
+    """Delete the Project Graph."""
+    controller = ProjectGraphController()
+    controller.delete_project_graph(kwargs["user_id"], kwargs["project_id"])
+
+    return {"code": 200, "message": "The graph was successfully removed from the project"}, 200

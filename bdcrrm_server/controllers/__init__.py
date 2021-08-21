@@ -9,7 +9,8 @@
 """Brazil Data Cube Reproducible Research Management Server Controllers."""
 
 from .project import ProjectController
+from .project_graph import ProjectGraphController
 
 __all__ = (
-    "ProjectController",
+    "ProjectController", "ProjectGraphController"
 )

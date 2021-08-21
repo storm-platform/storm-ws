@@ -10,7 +10,7 @@
 
 from typing import Dict, List
 
-import werkzeug.exceptions as http_exceptions
+import werkzeug.exceptions as werkzeug_exceptions
 
 from ..models import Project, ProjectUser
 from ..models import db
@@ -94,7 +94,7 @@ class ProjectService:
         ).first_or_404("Project not found!")
 
         if not selected_user.is_admin:
-            raise http_exceptions.Unauthorized(description="Admin access is required to delete a project.")
+            raise werkzeug_exceptions.Unauthorized(description="Admin access is required to delete the project.")
 
         with db.session.begin_nested():
             db.session.delete(selected_user.project)
@@ -117,6 +117,9 @@ class ProjectService:
             ProjectUser.project_id == project_id,
             ProjectUser.user_id == user_id
         ).first_or_404("Project not found!")
+
+        if not selected_user.is_admin:
+            raise werkzeug_exceptions.Unauthorized(description="Admin access is required to edit the project.")
 
         # update the values
         for attr in attributes_to_chage.keys():
