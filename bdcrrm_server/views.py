@@ -51,20 +51,38 @@ def list_projects(**kwargs):
 
 @blueprint.route("/project/<project_id>", methods=["GET"])
 @oauth2()
-def get_project_by_user_and_id(**kwarg):
+def get_project_by_user_and_id(**kwargs):
     """Get project by user and project id."""
     controller = ProjectController()
-    return controller.get_project_by_id(user_id=kwarg["user_id"], project_id=int(kwarg["project_id"])), 200
+    return controller.get_project_by_id(user_id=kwargs["user_id"], project_id=int(kwargs["project_id"])), 200
 
 
 @blueprint.route("/project/<project_id>", methods=["DELETE"])
 @oauth2()
-def delete_project_by_id(**kwarg):
-    """Get project by user and project id."""
+def delete_project_by_id(**kwargs):
+    """Delete a project."""
     controller = ProjectController()
-    controller.delete_project_by_id(user_id=kwarg["user_id"], project_id=int(kwarg["project_id"]))
+    controller.delete_project_by_id(user_id=kwargs["user_id"], project_id=int(kwargs["project_id"]))
 
     return {"code": 200, "message": "Project was successfully deleted"}, 200
+
+
+@blueprint.route("/project/<project_id>", methods=["PUT"])
+@oauth2()
+def edit_project_by_id(**kwargs):
+    """Edit a project."""
+    form = ProjectForm()
+    project_data = request.get_json()
+
+    errors = form.validate(project_data, partial=True)
+    if errors:
+        return errors, 400
+
+    controller = ProjectController()
+    project_edited = controller.edit_project_by_id(user_id=kwargs["user_id"],
+                                                   project_id=int(kwargs["project_id"]), project_values=project_data)
+
+    return jsonify(project_edited), 200
 
 
 @blueprint.route("/ping", methods=["GET"])

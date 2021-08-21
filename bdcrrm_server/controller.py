@@ -86,7 +86,7 @@ class ProjectController:
         return ProjectForm(exclude=["graph"]).dump(selected_user.project)
 
     def delete_project_by_id(self, user_id: int, project_id: int):
-        """Delete a project by `user` and `project` id.
+        """Delete a project object on database.
 
         Args:
             user_id (int): Project User ID (from OAuth service)
@@ -107,3 +107,21 @@ class ProjectController:
             db.session.delete(selected_user.project)
             db.session.delete(selected_user)
         db.session.commit()
+
+    def edit_project_by_id(self, project_id, user_id, project_values):
+        """Edit a project object on database.
+        """
+        selected_user = db.session.query(ProjectUser).filter(
+            ProjectUser.project_id == project_id,
+            ProjectUser.user_id == user_id
+        ).first_or_404("Project not found!")
+
+        # update the values
+        for attr in project_values.keys():
+            setattr(selected_user.project, attr, project_values[attr])
+
+        db.session.commit()
+
+        # ToDo: Fix this metadata transformation
+        selected_user.project.metadata = selected_user.project._metadata
+        return ProjectForm(exclude=["graph"]).dump(selected_user.project)
