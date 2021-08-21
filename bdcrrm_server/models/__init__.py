@@ -6,6 +6,14 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Version information for Brazil Data Cube Reproducible Research Management Server."""
+"""Brazil Data Cube Reproducible Research Management Server models module."""
 
-__version__ = '0.1.0'
+from invenio_db import db
+
+from .files import ProjectObjectVersion
+from .project import Project
+from .project_user import ProjectUser
+
+__all__ = (
+    "ProjectObjectVersion", "Project", "ProjectUser"
+)

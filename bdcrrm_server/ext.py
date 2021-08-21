@@ -6,13 +6,16 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server."""
+"""Brazil Data Cube Reproducible Research Management Server Extension."""
+
+from invenio_db import InvenioDB
+from invenio_files_rest import InvenioFilesREST
 
 from . import config
 
 
-class BDCRRM_SERVER:
-    """BDCRRM_SERVER extension."""
+class BDCReproducibleResearchManagement:
+    """BDCReproducibleResearchManagement extension."""
 
     def __init__(self, app=None, **kwargs):
         """Extension initialization."""
@@ -21,11 +24,14 @@ class BDCRRM_SERVER:
 
     def init_app(self, app, **kwargs):
         """Initialize Flask application object."""
-        self.init_config(app, kwargs)
-        app.extensions['bdcrrm_server'] = self
+        self.init_config(app, **kwargs)
+
+        self._ext_invenio_db = InvenioDB(app)
+        self._ext_invenio_files_rest = InvenioFilesREST(app)
+
+        app.extensions["bdcrrm_server"] = self
 
     def init_config(self, app, **kwargs):
         """Initialize configuration."""
-        conf = config.get_settings(kwargs['config_name'])
-
+        conf = config.get_settings(kwargs["config_name"])
         app.config.from_object(conf)

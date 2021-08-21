@@ -50,13 +50,14 @@ setup_requires = [
 
 install_requires = [
     'Click>=7.0',
-    'Flask>=1.1.1',
+    'Flask>=1.1.4',
     'Flask-SQLAlchemy>=2.4',
     'SQLAlchemy>=1.3.11',
     'psycopg2-binary>=2.8',
-    'python-logstash-async>=1.6,<2',
-    'python-json-logger>=0.1,<1',
-    'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client',
+    'invenio-files-rest>=1.2.0',
+    'invenio-db>=1.0.9',
+    'marshmallow-sqlalchemy==0.25.0',
+    'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client@v0.2.3',
 ]
 
 packages = find_packages()
@@ -71,7 +72,7 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    long_description_content_type = 'text/x-rst',
+    long_description_content_type='text/x-rst',
     keywords=['Time series', 'Earth Observations'],
     license='MIT',
     author='Brazil Data Cube Team',
@@ -87,6 +88,9 @@ setup(
     include_package_data=True,
     platforms='any',
     entry_points={
+        'console_scripts': [
+            'bdcrrm-server = bdcrrm_server.cli:cli'
+        ],
     },
     extras_require=extras_require,
     install_requires=install_requires,
