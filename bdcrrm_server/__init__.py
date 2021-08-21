@@ -10,14 +10,20 @@
 
 import os
 
-from flask import Flask
-from invenio_files_rest.views import blueprint as invenio_files_rest_bp
-from werkzeug.exceptions import HTTPException, InternalServerError
+from flask import Flask, jsonify
 
-from .config import BaseConfiguration
-from .ext import BDCReproducibleResearchManagement
 from .version import __version__
-from .views import blueprint as bdcrrm_bp
+from .config import BaseConfiguration
+from .views import server_bp, project_bp
+from .ext import BDCReproducibleResearchManagement
+
+import sqlalchemy.exc as sqlalchemy_exceptions
+import werkzeug.exceptions as werkzeug_exceptions
+import marshmallow.exceptions as marshmallow_exceptions
+
+from invenio_files_rest.views import blueprint as invenio_files_rest_bp
+
+from .models import db
 
 
 def create_app(config_name='DevelopmentConfig'):
@@ -35,17 +41,40 @@ def create_app(config_name='DevelopmentConfig'):
         return app
 
 
-def setup_app(app, config_name):
+def setup_exception_handlers(app):
     @app.errorhandler(Exception)
     def handle_exception(e):
-        """Handle exceptions."""
-        if isinstance(e, HTTPException):
-            return {'code': e.code, 'description': e.description}, e.code
-
+        """Handle general exceptions."""
         app.logger.exception(e)
+        return {
+                   "code": werkzeug_exceptions.InternalServerError.code,
+                   "description": werkzeug_exceptions.InternalServerError.description
+               }, werkzeug_exceptions.InternalServerError.code
 
-        return {'code': InternalServerError.code,
-                'description': InternalServerError.description}, InternalServerError.code
+    @app.errorhandler(marshmallow_exceptions.ValidationError)
+    def handle_validation_error(e):
+        """Handle marshmallow validation exceptions."""
+        app.logger.exception(e)
+        return jsonify({"code": 400, "message": e.messages}), 400
+
+    @app.errorhandler(sqlalchemy_exceptions.IntegrityError)
+    def handle_integrity_value_error(e):
+        """Handle database integrity exceptions."""
+        app.logger.exception(e)
+        return jsonify({"code": 409,
+                        "message": "Conflict with resources already in the system. "
+                                   "Check the unique identifiers and verify that the "
+                                   "resource already exists in the service."}), 409
+
+    @app.errorhandler(werkzeug_exceptions.HTTPException)
+    def handle_http_exception_value_error(e):
+        """Handle werkzeug.exceptions.HTTPExceptions."""
+        app.logger.exception(e)
+        return {"code": e.code, "description": e.description}, e.code
+
+
+def setup_app(app, config_name):
+    setup_exception_handlers(app)
 
     @app.after_request
     def after_request(response):
@@ -58,7 +87,9 @@ def setup_app(app, config_name):
 
     BDCReproducibleResearchManagement(app, config_name=config_name)
 
-    app.register_blueprint(bdcrrm_bp)
+    app.register_blueprint(server_bp)
+    app.register_blueprint(project_bp)
+
     app.register_blueprint(invenio_files_rest_bp)
 
 

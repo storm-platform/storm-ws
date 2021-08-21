@@ -6,19 +6,18 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server Controllers."""
+"""Brazil Data Cube Reproducible Research Management Server Project Services."""
 
 from typing import Dict, List
 
 import werkzeug.exceptions as http_exceptions
 
-from .forms import ProjectForm
-from .models import Project, ProjectUser
-from .models import db
+from ..models import Project, ProjectUser
+from ..models import db
 
 
-class ProjectController:
-    """Project Controller."""
+class ProjectService:
+    """Project Service."""
 
     def create_project(self, user_id, data) -> Dict:
         """Create a Project.
@@ -28,7 +27,7 @@ class ProjectController:
 
             data (dict): Project data received from the user.
         Returns:
-            Dict: Project created.
+            Project: Created Project Object.
         Raises:
             Exception: When Project is not created.
         """
@@ -48,9 +47,9 @@ class ProjectController:
             )
             db.session.add(project_user)
         db.session.commit()
-        return ProjectForm(exclude=["graph"]).dump(created_project)
+        return created_project
 
-    def list_by_user(self, user_id: int) -> List[Project]:
+    def list_project_by_user(self, user_id: int) -> List[Project]:
         """List Project by a specific user
 
         Args:
@@ -58,15 +57,11 @@ class ProjectController:
         Returns:
             List[Project]: List of `user_id` projects.
         """
-        user_projects = db.session.query(
+        return db.session.query(
             Project
         ).filter(ProjectUser.user_id == user_id).all()
 
-        return [
-            ProjectForm(exclude=["graph"]).dump(user_project) for user_project in user_projects
-        ] if user_projects else []
-
-    def get_project_by_id(self, user_id: int, project_id: int):
+    def get_project_by_id(self, user_id: int, project_id: int) -> Project:
         """Get a project by `user` and `project` id.
 
         Args:
@@ -74,16 +69,14 @@ class ProjectController:
 
             project_id (int): Project ID
         Returns:
-            Dict: Project object
+            Project: List of Project object
         """
-        selected_user = db.session.query(ProjectUser).filter(
+        user_projects = db.session.query(ProjectUser).filter(
             ProjectUser.project_id == project_id,
             ProjectUser.user_id == user_id
         ).first_or_404("Project not found!")
 
-        # ToDo: Fix this metadata transformation
-        selected_user.project.metadata = selected_user.project._metadata
-        return ProjectForm(exclude=["graph"]).dump(selected_user.project)
+        return user_projects.project
 
     def delete_project_by_id(self, user_id: int, project_id: int):
         """Delete a project object on database.
@@ -108,8 +101,17 @@ class ProjectController:
             db.session.delete(selected_user)
         db.session.commit()
 
-    def edit_project_by_id(self, project_id, user_id, project_values):
+    def edit_project_by_id(self, project_id, user_id, attributes_to_chage: Dict) -> Project:
         """Edit a project object on database.
+
+        Args:
+            user_id (int): Project User ID (from OAuth service)
+
+            project_id (int): Project ID that will be deleted.
+
+            attributes_to_chage (Dict): Attributes (and values) that will be changed on database record.
+        Returns:
+            Project: The project updated on the database.
         """
         selected_user = db.session.query(ProjectUser).filter(
             ProjectUser.project_id == project_id,
@@ -117,11 +119,8 @@ class ProjectController:
         ).first_or_404("Project not found!")
 
         # update the values
-        for attr in project_values.keys():
-            setattr(selected_user.project, attr, project_values[attr])
+        for attr in attributes_to_chage.keys():
+            setattr(selected_user.project, attr, attributes_to_chage[attr])
 
         db.session.commit()
-
-        # ToDo: Fix this metadata transformation
-        selected_user.project.metadata = selected_user.project._metadata
-        return ProjectForm(exclude=["graph"]).dump(selected_user.project)
+        return selected_user.project
