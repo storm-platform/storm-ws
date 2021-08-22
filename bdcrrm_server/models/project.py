@@ -6,11 +6,11 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server Project models."""
+"""Brazil Data Cube Reproducible Research Management Server `Project Models`."""
 
 import datetime
 
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 
 from . import db
 from .. import BaseConfiguration
@@ -33,8 +33,11 @@ class Project(db.Model):
     updated_at = db.Column(db.TIMESTAMP(timezone=True), default=datetime.datetime.now,
                            onupdate=datetime.datetime.now, )
 
-    graph = db.Column(db.LargeBinary, nullable=True)
+    graph = db.Column(JSONB, nullable=False, default={})
     _metadata = db.Column("metadata", JSONB, nullable=True, comment="Project metadata.")
+
+    bucket_id = db.Column(UUID, db.ForeignKey("files_bucket.id", onupdate="CASCADE", ondelete="CASCADE"))
+    bucket = db.relationship("Bucket", lazy="joined")
 
     __table_args__ = (
         db.UniqueConstraint("name"),

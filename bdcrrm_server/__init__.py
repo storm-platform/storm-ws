@@ -21,9 +21,8 @@ import sqlalchemy.exc as sqlalchemy_exceptions
 import werkzeug.exceptions as werkzeug_exceptions
 import marshmallow.exceptions as marshmallow_exceptions
 
-from invenio_files_rest.views import blueprint as invenio_files_rest_bp
-
 from .models import db
+from .views.files import invenio_files_rest_blueprint
 
 
 def create_app(config_name='DevelopmentConfig'):
@@ -90,7 +89,7 @@ def setup_app(app, config_name):
     app.register_blueprint(server_bp)
     app.register_blueprint(project_bp)
 
-    app.register_blueprint(invenio_files_rest_bp)
+    app.register_blueprint(invenio_files_rest_blueprint())
 
 
 app = create_app(os.environ.get("BDCRRM_SERVER_ENVIRONMENT", "DevelopmentConfig"))

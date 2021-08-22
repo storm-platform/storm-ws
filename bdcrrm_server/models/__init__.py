@@ -6,14 +6,13 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server models module."""
+"""Brazil Data Cube Reproducible Research Management Server `Models Module`."""
 
 from invenio_db import db
 
-from .files import ProjectObjectVersion
 from .project import Project
 from .project_user import ProjectUser
 
 __all__ = (
-    "ProjectObjectVersion", "Project", "ProjectUser"
+    "Project", "ProjectUser"
 )

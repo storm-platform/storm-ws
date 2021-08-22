@@ -6,12 +6,13 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server Project Controllers."""
+"""Brazil Data Cube Reproducible Research Management Server `Project Controllers`."""
 
 from typing import Dict, List
 
 from ..forms import ProjectForm
 from ..services import ProjectService
+from ..services.project_files import BucketService
 
 
 def _fix_metadata(project):
@@ -26,9 +27,13 @@ class ProjectController:
     def create_project(self, user_id: int, data: Dict) -> Dict:
         """Create a Project."""
         # validating
-        form = ProjectForm(exclude=["graph"])
+        form = ProjectForm(exclude=["graph", "bucket_id"])
         form.load(data)
         data["_metadata"] = data["metadata"]
+
+        # creating the bucket for the project
+        bucket_service = BucketService()
+        data["bucket_id"] = str(bucket_service.create_bucket().id)
 
         # creating the project
         service = ProjectService()

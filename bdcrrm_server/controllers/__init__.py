@@ -6,7 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server Controllers."""
+"""Brazil Data Cube Reproducible Research Management Server `Controllers`."""
 
 from .project import ProjectController
 from .project_graph import ProjectGraphController

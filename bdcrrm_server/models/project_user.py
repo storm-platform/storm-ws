@@ -6,7 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server ProjectUser models."""
+"""Brazil Data Cube Reproducible Research Management Server `ProjectUser Models`."""
 
 from . import db
 from .. import BaseConfiguration

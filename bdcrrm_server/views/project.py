@@ -6,10 +6,10 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Project Views."""
+"""Brazil Data Cube Reproducible Research Management Server `Project Views`."""
 
 from bdc_auth_client.decorators import oauth2
-from flask import Blueprint, request, jsonify, send_file
+from flask import Blueprint, request, jsonify
 
 from ..controllers import ProjectController
 from ..controllers.project_graph import ProjectGraphController
@@ -71,27 +71,14 @@ def edit_project_by_id(**kwargs):
     return jsonify(project_edited), 200
 
 
-@project_bp.route("/project/<project_id>/graph", methods=["POST", "PUT"])
-@oauth2(roles=["admin"])
-def create_or_update_project_graph(**kwargs):
-    """Create or update the Project Graph."""
-    project_graph = request.files["graph_file"].read()
-
-    controller = ProjectGraphController()
-    controller.add_graph_to_project(kwargs["user_id"], kwargs["project_id"], project_graph)
-
-    return {"code": 201, "message": "The graph was successfully added to project"}, 201
-
-
 @project_bp.route("/project/<project_id>/graph", methods=["GET"])
 @oauth2()
 def get_project_graph(**kwargs):
     """Create the Project Graph."""
     controller = ProjectGraphController()
-    graph_file = controller.get_project_graph(kwargs["user_id"], kwargs["project_id"])
+    graph_obj = controller.get_project_graph(kwargs["user_id"], kwargs["project_id"])
 
-    return send_file(graph_file, mimetype="application/octet-stream", as_attachment=True,
-                     attachment_filename="graph"), 200
+    return jsonify(graph_obj), 200
 
 
 @project_bp.route("/project/<project_id>/graph", methods=["DELETE"])
