@@ -57,6 +57,7 @@ install_requires = [
     'invenio-files-rest>=1.2.0',
     'invenio-db>=1.0.9',
     'marshmallow-sqlalchemy==0.25.0',
+    'six>=1.16.0',
     'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client@v0.2.3',
 ]
 
