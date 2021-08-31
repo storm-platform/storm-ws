@@ -31,8 +31,6 @@ class ProjectService:
         Raises:
             Exception: When Project is not created.
         """
-        created_project = None
-
         with db.session.begin_nested():
             created_project = Project(**data)
 

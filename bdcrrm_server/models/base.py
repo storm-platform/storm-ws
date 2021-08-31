@@ -6,11 +6,12 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `General Views`."""
+"""Brazil Data Cube Reproducible Research Management Server `Base model`."""
 
-from . import server_bp
+from ..config import BaseConfiguration
 
 
-@server_bp.route("/ping", methods=["GET"])
-def ping():
-    return {"code": 200, "message": "Pong!"}, 200
+class BaseModel:
+    __table_args__ = (
+        dict(schema=BaseConfiguration.BDCRRM_DB_SCHEMA),
+    )

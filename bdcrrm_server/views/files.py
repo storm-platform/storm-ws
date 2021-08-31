@@ -9,16 +9,18 @@
 """Brazil Data Cube Reproducible Research Management Server `File Views`."""
 
 from functools import partial
+from urllib.parse import urljoin
 
 from bdc_auth_client.decorators import oauth2
 from flask import Blueprint
 from invenio_files_rest.models import ObjectVersion, Bucket
 from invenio_files_rest.serializer import json_serializer
 from invenio_files_rest.views import ObjectResource, BucketResource
-from six.moves.urllib.parse import urljoin
 
 from ..forms import ProjectObjectVersionSchema, ProjectBucketSchema
 from ..services import ProjectService
+
+GRAPH_NODE_FILES_ENDPOINT = "/graph/<project_id>/node/<node_id>/"
 
 
 class AuthenticatedResourceMixin:
@@ -89,7 +91,7 @@ class ProjectNodeObjectResource(ObjectResource, AuthenticatedResourceMixin):
         return super(ProjectNodeObjectResource, self).delete(**context_descriptor)
 
 
-def invenio_files_rest_blueprint():
+def invenio_files_rest_blueprint_for_graphnode_files():
     """Create a wrapper blueprint for `Invenio-Files-Rest` views."""
 
     records_files_blueprint = Blueprint(
@@ -102,7 +104,6 @@ def invenio_files_rest_blueprint():
         ObjectVersion: ProjectObjectVersionSchema
     }
 
-    graph_files_path = "/project/<project_id>/graph/files"
     object_view = ProjectNodeObjectResource.as_view("project_node_resource_object_api", serializers={
         'application/json': partial(
             json_serializer,
@@ -120,10 +121,10 @@ def invenio_files_rest_blueprint():
     })
 
     # add url_rule for `files blueprint` using bdcrrm url schema
-    records_files_blueprint.add_url_rule(graph_files_path,
+    records_files_blueprint.add_url_rule(GRAPH_NODE_FILES_ENDPOINT,
                                          view_func=bucket_view)
 
-    records_files_blueprint.add_url_rule(urljoin(graph_files_path, "<path:key>"),
+    records_files_blueprint.add_url_rule(urljoin(GRAPH_NODE_FILES_ENDPOINT, "<path:key>"),
                                          view_func=object_view)
 
     return records_files_blueprint

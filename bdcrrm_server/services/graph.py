@@ -17,7 +17,7 @@ from ..models import db
 
 
 class ProjectGraphService:
-    """Project Grapg Service."""
+    """Project Graph Service."""
 
     def get_project_graph(self, user_id: int, project_id: int) -> Dict:
         """Get the Graph associated to a Project.

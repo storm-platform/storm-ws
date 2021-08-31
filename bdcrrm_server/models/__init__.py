@@ -11,8 +11,16 @@
 from invenio_db import db
 
 from .project import Project
-from .project_user import ProjectUser
+from .user import ProjectUser
+from .graph import *
 
 __all__ = (
-    "Project", "ProjectUser"
+    "Project",
+    "ProjectUser",
+
+    "NodeParent",
+    "NodeFileDraft",
+    "NodeDraft",
+    "NodeFileRecord",
+    "NodeRecord",
 )

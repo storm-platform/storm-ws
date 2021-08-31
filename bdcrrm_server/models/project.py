@@ -10,7 +10,7 @@
 
 import datetime
 
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import JSONB
 
 from . import db
 from .. import BaseConfiguration
@@ -35,9 +35,6 @@ class Project(db.Model):
 
     graph = db.Column(JSONB, nullable=False, default={})
     _metadata = db.Column("metadata", JSONB, nullable=True, comment="Project metadata.")
-
-    bucket_id = db.Column(UUID, db.ForeignKey("files_bucket.id", onupdate="CASCADE", ondelete="CASCADE"))
-    bucket = db.relationship("Bucket", lazy="joined")
 
     __table_args__ = (
         db.UniqueConstraint("name"),

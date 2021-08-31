@@ -9,7 +9,9 @@
 """Brazil Data Cube Reproducible Research Management Server `Controllers`."""
 
 from .project import ProjectController
-from .project_graph import ProjectGraphController
+
+from .graph import ProjectGraphController
+from .graph_node import ProjectNodeController
 
 __all__ = (
     "ProjectController", "ProjectGraphController"

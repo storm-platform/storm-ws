@@ -14,7 +14,7 @@ from flask import Flask, jsonify
 
 from .version import __version__
 from .config import BaseConfiguration
-from .views import server_bp, project_bp
+from .views import server_bp, project_bp, graph_bp
 from .ext import BDCReproducibleResearchManagement
 
 import sqlalchemy.exc as sqlalchemy_exceptions
@@ -22,7 +22,7 @@ import werkzeug.exceptions as werkzeug_exceptions
 import marshmallow.exceptions as marshmallow_exceptions
 
 from .models import db
-from .views.files import invenio_files_rest_blueprint
+from .views.files import invenio_files_rest_blueprint_for_graphnode_files
 
 
 def create_app(config_name='DevelopmentConfig'):
@@ -86,10 +86,11 @@ def setup_app(app, config_name):
 
     BDCReproducibleResearchManagement(app, config_name=config_name)
 
+    app.register_blueprint(graph_bp)
     app.register_blueprint(server_bp)
     app.register_blueprint(project_bp)
 
-    app.register_blueprint(invenio_files_rest_blueprint())
+    app.register_blueprint(invenio_files_rest_blueprint_for_graphnode_files())
 
 
 app = create_app(os.environ.get("BDCRRM_SERVER_ENVIRONMENT", "DevelopmentConfig"))

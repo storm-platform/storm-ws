@@ -10,7 +10,7 @@
 
 from typing import Dict
 
-from ..services.project_graph import ProjectGraphService
+from ..services.graph import ProjectGraphService
 
 
 class ProjectGraphController:

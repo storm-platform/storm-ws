@@ -7,7 +7,6 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server Extension."""
-
 from invenio_db import InvenioDB
 from invenio_files_rest import InvenioFilesREST
 

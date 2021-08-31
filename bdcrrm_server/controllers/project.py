@@ -12,7 +12,6 @@ from typing import Dict, List
 
 from ..forms import ProjectForm
 from ..services import ProjectService
-from ..services.project_files import BucketService
 
 
 def _fix_metadata(project):
@@ -30,10 +29,6 @@ class ProjectController:
         form = ProjectForm(exclude=["graph", "bucket_id"])
         form.load(data)
         data["_metadata"] = data["metadata"]
-
-        # creating the bucket for the project
-        bucket_service = BucketService()
-        data["bucket_id"] = str(bucket_service.create_bucket().id)
 
         # creating the project
         service = ProjectService()

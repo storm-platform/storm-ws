@@ -8,8 +8,18 @@
 
 """Brazil Data Cube Reproducible Research Management Views."""
 
-from .project import project_bp
-from .server import server_bp
+from flask import Blueprint
+
+graph_bp = Blueprint("bdcrrm_graph", __name__, )
+server_bp = Blueprint("bdcrrm_server", __name__)
+project_bp = Blueprint("bdcrrm_project", __name__)
+
+from .server import ping
+
+from .project import *
+
+from .graph import *
+from .graph_node import *
 
 __all__ = (
     "project_bp",
