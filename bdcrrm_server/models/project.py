@@ -33,7 +33,10 @@ class Project(db.Model):
     updated_at = db.Column(db.TIMESTAMP(timezone=True), default=datetime.datetime.now,
                            onupdate=datetime.datetime.now, )
 
-    graph = db.Column(JSONB, nullable=False, default={})
+    graph_id = db.Column(
+        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project_graph.id", onupdate="CASCADE", ), nullable=True)
+    graph = db.relationship("ProjectGraph", lazy="joined")
+
     _metadata = db.Column("metadata", JSONB, nullable=True, comment="Project metadata.")
 
     __table_args__ = (

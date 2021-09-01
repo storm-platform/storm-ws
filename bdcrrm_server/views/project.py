@@ -12,7 +12,7 @@ from bdc_auth_client.decorators import oauth2
 from flask import request, jsonify
 
 from . import project_bp
-from ..controllers import ProjectController
+from ..controllers.project import ProjectController
 
 
 @project_bp.route("/project", methods=["POST"])
@@ -21,8 +21,8 @@ def create_project(**kwargs):
     """Create a Project."""
     project_data = request.get_json()
 
-    controller = ProjectController()
-    project_created = controller.create_project(kwargs["user_id"], project_data)
+    project_controller = ProjectController()
+    project_created = project_controller.create_project(kwargs["user_id"], project_data)
 
     return jsonify(project_created), 201
 

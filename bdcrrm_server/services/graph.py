@@ -12,22 +12,40 @@ from typing import Dict
 
 import werkzeug.exceptions as werkzeug_exceptions
 
-from ..models import ProjectUser
+from ..models import ProjectGraph, ProjectUser
 from ..models import db
+
+PROJECT_GRAPH_BASE_MODEL = {
+    "graph": {
+        "directed": True,
+        "type": "subgraph",
+        "nodes": {},
+        "edges": []
+    }
+}
 
 
 class ProjectGraphService:
     """Project Graph Service."""
 
+    def create_project_graph(self) -> Dict:
+        """Create a Project Graph."""
+        created_project_graph = ProjectGraph(graph=PROJECT_GRAPH_BASE_MODEL)
+
+        db.session.add(created_project_graph)
+        db.session.commit()
+
+        return created_project_graph
+
     def get_project_graph(self, user_id: int, project_id: int) -> Dict:
-        """Get the Graph associated to a Project.
+        """Get the ProjectGraph.
 
         Args:
             user_id (int): Project User ID (from OAuth service)
 
-            project_id (int): Project ID
+            project_id (int): Project ID that will be deleted.
         Returns:
-            Dict: JSON Graph document
+            ProjectGraph: ProjectGraph object.
         """
         selected_user = db.session.query(ProjectUser).filter(
             ProjectUser.project_id == project_id,
@@ -39,27 +57,42 @@ class ProjectGraphService:
 
         return selected_user.project.graph
 
-    def delete_project_graph(self, user_id: int, project_id: int) -> None:
-        """Delete the Graph associated to a Project.
+    def clean_project_graph(self, user_id: int, project_id: int) -> None:
+        """Clean all nodes from a node.
 
         Args:
             user_id (int): Project User ID (from OAuth service)
 
-            project_id (int): Project ID
+            project_id (int): Project ID that will be deleted.
         Returns:
-            None: The graph project is removed from database.
+            None: The graph project is reseted on database.
         """
         selected_user = db.session.query(ProjectUser).filter(
             ProjectUser.project_id == project_id,
             ProjectUser.user_id == user_id
         ).first_or_404("Project not found!")
 
-        if not selected_user.is_admin:
-            raise werkzeug_exceptions.Unauthorized(description="Admin access is required to delete the Project.")
-
         if selected_user.project.graph is None:
             raise werkzeug_exceptions.NotFound(description="There is no graph associated with the Project.")
 
-        selected_user.project.graph = {}
-        db.session.add(selected_user.project)
+        if not selected_user.is_admin:
+            raise werkzeug_exceptions.Unauthorized(description="Admin access is required to edit the project.")
+
+        selected_user.project.graph.graph = PROJECT_GRAPH_BASE_MODEL
+        db.session.add(selected_user.project.graph)
+        db.session.commit()
+
+    def delete_project_graph(self, project_graph_id: int) -> None:
+        """Delete the Graph associated to a Project.
+
+        Args:
+            project_graph_id (int): Project Graph ID
+        Returns:
+            None: The graph project is removed from database.
+        """
+        selected_graph = db.session.query(ProjectGraph).filter(
+            ProjectGraph.id == project_graph_id
+        ).first_or_404("Graph not found!")
+
+        db.session.delete(selected_graph)
         db.session.commit()

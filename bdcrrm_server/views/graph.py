@@ -28,8 +28,8 @@ def get_project_graph(**kwargs):
 @project_bp.route("/project/<project_id>/graph", methods=["DELETE"])
 @oauth2(roles=["admin"])
 def delete_project_graph(**kwargs):
-    """Delete the Project Graph."""
+    """Clean the Project Graph."""
     controller = ProjectGraphController()
-    controller.delete_project_graph(kwargs["user_id"], kwargs["project_id"])
+    controller.clean_project_graph(kwargs["user_id"], kwargs["project_id"])
 
     return {"code": 200, "message": "The graph was successfully removed from the project"}, 200

@@ -12,6 +12,7 @@ from typing import Dict, List
 
 from ..forms import ProjectForm
 from ..services import ProjectService
+from ..services.graph import ProjectGraphService
 
 
 def _fix_metadata(project):
@@ -26,13 +27,23 @@ class ProjectController:
     def create_project(self, user_id: int, data: Dict) -> Dict:
         """Create a Project."""
         # validating
-        form = ProjectForm(exclude=["graph", "bucket_id"])
+        form = ProjectForm()
         form.load(data)
+
+        project_graph_service = ProjectGraphService()
+        project_graph_created = project_graph_service.create_project_graph()
+
+        data["graph_id"] = project_graph_created.id
         data["_metadata"] = data["metadata"]
 
         # creating the project
         service = ProjectService()
-        created_project = service.create_project(user_id, data)
+
+        try:
+            created_project = service.create_project(user_id, data)
+        except:
+            project_graph_service.delete_project_graph(project_graph_created.id)  # remove the created graph
+            raise
 
         return form.dump(created_project)
 
@@ -47,7 +58,7 @@ class ProjectController:
         service = ProjectService()
         user_projects = service.list_project_by_user(user_id)
 
-        form = ProjectForm(exclude=["graph"])
+        form = ProjectForm()
         return [form.dump(_fix_metadata(p)) for p in user_projects]
 
     def get_project_by_id(self, user_id: int, project_id: int):
@@ -63,7 +74,7 @@ class ProjectController:
         service = ProjectService()
         user_project = service.get_project_by_id(user_id, project_id)
 
-        return ProjectForm(exclude=["graph"]).dump(_fix_metadata(user_project))
+        return ProjectForm().dump(_fix_metadata(user_project))
 
     def delete_project_by_id(self, user_id: int, project_id: int):
         """Delete a project object on database.
@@ -91,10 +102,10 @@ class ProjectController:
             Dict: The project updated on database.
         """
         # validating
-        form = ProjectForm(exclude=["graph"])
+        form = ProjectForm()
         form.load(attributes_to_chage, partial=True)
 
         service = ProjectService()
         edited_project = service.edit_project_by_id(project_id, user_id, attributes_to_chage)
 
-        return ProjectForm(exclude=["graph"]).dump(_fix_metadata(edited_project))
+        return ProjectForm().dump(_fix_metadata(edited_project))

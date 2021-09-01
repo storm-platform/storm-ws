@@ -41,10 +41,8 @@ class ProjectForm(Schema):
     created_at = fields.DateTime(required=False)
     updated_at = fields.DateTime(required=False)
 
-    graph = fields.Raw(required=False)
+    graph_id = fields.Integer(required=False)
     metadata = fields.Nested(ProjectMetadataForm(), required=True)
-
-    bucket_id = fields.UUID(required=True, load_only=True)
 
 
 class GraphNodeMetadata(Schema):
@@ -65,8 +63,8 @@ class GraphNodeMetadata(Schema):
 
 class GraphNodeForm(Schema):
     """Marshamllow Graph node structure."""
-    label = fields.String(required=True)
-    metadata = fields.Nested(GraphNodeMetadata(), required=True)
+    label = fields.String(required=False)
+    metadata = fields.Nested(GraphNodeMetadata(), required=False)
 
 
 class GraphEdgeForm(fields.Field):
@@ -77,14 +75,16 @@ class GraphEdgeForm(fields.Field):
 
 class GraphForm(Schema):
     """Marshmallow Project Graph structure."""
+    type = fields.String(required=True)
     directed = fields.Boolean(required=True, validate=validate.Equal(True))
-    nodes = fields.Dict(keys=fields.String(), values=fields.Nested(GraphNodeForm()))
-    edges = fields.List(cls_or_instance=GraphEdgeForm())
+
+    edges = fields.List(cls_or_instance=GraphEdgeForm(), required=True)
+    nodes = fields.Dict(keys=fields.String(), values=fields.Nested(GraphNodeForm()), required=True)
 
 
 class GraphDocumentForm(Schema):
     """Marshmallow Project Graph structure."""
-    graph = fields.Nested(GraphForm)
+    graph = fields.Nested(GraphForm(), required=True)
 
 
 class ProjectObjectVersionSchema(ObjectVersionSchema):

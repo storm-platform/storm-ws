@@ -35,7 +35,7 @@ class ProjectGraph(BaseModel, db.Model):
     __tablename__ = "project_graph"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    graph = db.Column(JSONB, nullable=False, default={})
+    graph = db.Column(JSONB, nullable=False)
 
 
 #

@@ -95,6 +95,7 @@ class ProjectService:
             raise werkzeug_exceptions.Unauthorized(description="Admin access is required to delete the project.")
 
         with db.session.begin_nested():
+            db.session.delete(selected_user.project.graph)
             db.session.delete(selected_user.project)
             db.session.delete(selected_user)
         db.session.commit()
