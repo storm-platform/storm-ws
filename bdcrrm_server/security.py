@@ -37,6 +37,7 @@ class AuthenticatedUserPermissionPolicy(RecordPermissionPolicy):
     can_draft_create_files = [AuthenticatedUser()]
     can_draft_read_files = [AuthenticatedUser()]
     can_draft_update_files = [AuthenticatedUser()]
+    can_delete_files = [AuthenticatedUser()]
 
 
 def authenticate(func, **kwargs):
