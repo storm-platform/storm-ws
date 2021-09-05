@@ -7,25 +7,22 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server `Services Componentized`."""
+from invenio_drafts_resources.services.records.components import ServiceComponent
 
 
-class BaseServiceComponentized:
+class NodeRecordServiceComponent(ServiceComponent):
 
-    def __init__(self, config):
-        """Constructor.
+    def create(self, identity, data=None, record=None, errors=None):
+        super().create(identity, data=None, record=None, errors=None)
 
-        Args:
-            config (object): Service configuration object
-        """
-        self.config = config
+        # Data files
+        datafiles = data.get("data", {})
+        record.inputs = datafiles.get("inputs", [])
+        record.outputs = datafiles.get("outputs", [])
 
-    @property
-    def components(self):
-        return (c(self) for c in self.config.components)
+        # Environment
+        record.environment = data.get("environment", {})
 
-    def run_components(self, operation, *args, **kwargs):
-        """Run components fro a given operation."""
-
-        for component in self.components:
-            if hasattr(component, operation):
-                getattr(component, operation)(*args, **kwargs)
+        # Commands
+        record.command = data.get("command")
+        record.command_checksum = data.get("command_checksum")

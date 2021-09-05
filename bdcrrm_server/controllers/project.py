@@ -11,8 +11,8 @@
 from typing import Dict, List
 
 from ..forms import ProjectForm
-from ..services import ProjectService
 from ..services.graph import ProjectGraphService
+from ..services.project import ProjectService
 
 
 def _fix_metadata(project):

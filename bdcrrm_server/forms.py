@@ -8,9 +8,8 @@
 
 """Brazil Data Cube Reproducible Research Management Server Marshmallow schemas."""
 
-from flask import request, url_for
-from invenio_files_rest.serializer import BucketSchema, ObjectVersionSchema
-from marshmallow import Schema, fields, validate, post_dump
+from invenio_records_resources.services.records.schema import BaseRecordSchema
+from marshmallow import Schema, fields, validate
 
 
 class ProjectMetadataLicensesForm(Schema):
@@ -87,68 +86,30 @@ class GraphDocumentForm(Schema):
     graph = fields.Nested(GraphForm(), required=True)
 
 
-class ProjectObjectVersionSchema(ObjectVersionSchema):
-    """Invenio Schema for ProjectObjectVersionSchema (bdcrrm.Project + invenio.ObjectVersion)."""
+#
+# Invenio Framework schemas
+#
 
-    def dump_links(self, o):
-        """Dump links."""
-        project_id = request.view_args["project_id"]
-        url_path = ".{0}".format(self.context.get("view_name"))
-        params = {"versionId": o.version_id}
-
-        url_for_self = url_for(
-            url_path,
-            project_id=project_id,
-            key=o.key,
-            _external=True,
-            **(params if not o.is_head or o.deleted else {})
-        )
-        url_for_versions = url_for(
-            url_path, project_id=project_id, key=o.key, _external=True, **params
-        )
-
-        data = {"self": url_for_self, "version": url_for_versions}
-
-        if o.is_head and not o.deleted:
-            url_for_uploads = "{0}?uploads".format(
-                url_for(
-                    url_path, project_id=project_id, key=o.key, _external=True
-                )
-            )
-            data.update({"uploads": url_for_uploads})
-
-        return data
-
-    @post_dump(pass_many=True)
-    def wrap(self, data, many):
-        """Wrap response in envelope."""
-        if not many:
-            return data
-        else:
-            data = {"contents": data}
-            bucket = self.context.get("bucket")
-            if bucket:
-                data.update(
-                    ProjectBucketSchema(context=self.context).dump(bucket).data
-                )
-            return data
+class InvenioFileSchema(Schema):
+    key = fields.String(required=True)
 
 
-class ProjectBucketSchema(BucketSchema):
-    """Invenio Schema for ProjectBucketSchema (bdcrrm.Project + invenio.Bucket)."""
+class Metadata(Schema):
+    author = fields.String(required=True)
+    description = fields.String(required=False)
 
-    def dump_links(self, o):
-        """Dump links."""
-        project_id = request.view_args["project_id"]
 
-        url_path = ".{0}".format(self.context.get("view_name"))
-        url_for_self = url_for(url_path, project_id=project_id, _external=True)
+class NodeRecordFiles(Schema):
+    inputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
+    outputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
 
-        url_for_versions = "{0}?versions".format(url_for_self)
-        url_for_uploads = "{0}?uploads".format(url_for_self)
 
-        return {
-            "self": url_for_self,
-            "versions": url_for_versions,
-            "uploads": url_for_uploads,
-        }
+class NodeRecordSchema(BaseRecordSchema):
+    data = fields.Nested(NodeRecordFiles(), required=True)
+
+    environment = fields.Nested(InvenioFileSchema(), required=True)
+
+    command = fields.String(required=True)
+    command_checksum = fields.String(required=True)
+
+    metadata = fields.Nested(Metadata(), required=True)

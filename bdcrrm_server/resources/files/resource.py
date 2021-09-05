@@ -6,11 +6,9 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Controllers`."""
 
-from .graph import ProjectGraphController
-from .project import ProjectController
+from invenio_records_resources.resources import FileResource
 
-__all__ = (
-    "ProjectController", "ProjectGraphController"
-)
+
+class NodeFileResource(FileResource):
+    ...

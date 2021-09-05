@@ -46,9 +46,10 @@ class NodeParentMetadata(BaseModel, db.Model, RecordMetadataBase):
 
     __tablename__ = 'node_parents_metadata'
 
-    graph_id = db.Column(
-        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project_graph.id", onupdate="CASCADE", ondelete="CASCADE"))
-    graph = db.relationship("ProjectGraph", lazy="joined")
+    project_id = db.Column(
+        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project.id", onupdate="CASCADE", ondelete="CASCADE"))
+
+    project = db.relationship("Project", lazy="joined")
 
 
 class NodeRecordMetadata(BaseModel, db.Model, RecordMetadataBase, ParentRecordMixin):
@@ -115,6 +116,14 @@ class CommonFieldsMixin:
 
     bucket_id = ModelField(dump=False)
     bucket = ModelField(dump=False)
+
+    inputs = DictField("data.inputs")
+    outputs = DictField("data.outputs")
+
+    environment = DictField("environment")
+
+    command = DictField("command")
+    command_checksum = DictField("command_checksum")
 
     is_published = PIDStatusCheckField(status=PIDStatus.REGISTERED, dump=True)
     pids = DictField("pids")

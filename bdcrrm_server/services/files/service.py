@@ -5,12 +5,8 @@
 # Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
+from invenio_records_resources.services import FileService
 
-"""Brazil Data Cube Reproducible Research Management Server `Controllers`."""
 
-from .graph import ProjectGraphController
-from .project import ProjectController
-
-__all__ = (
-    "ProjectController", "ProjectGraphController"
-)
+class NodeFileService(FileService):
+    ...

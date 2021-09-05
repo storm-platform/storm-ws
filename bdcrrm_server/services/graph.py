@@ -15,22 +15,13 @@ import werkzeug.exceptions as werkzeug_exceptions
 from ..models import ProjectGraph, ProjectUser
 from ..models import db
 
-PROJECT_GRAPH_BASE_MODEL = {
-    "graph": {
-        "directed": True,
-        "type": "subgraph",
-        "nodes": {},
-        "edges": []
-    }
-}
-
 
 class ProjectGraphService:
     """Project Graph Service."""
 
     def create_project_graph(self) -> Dict:
         """Create a Project Graph."""
-        created_project_graph = ProjectGraph(graph=PROJECT_GRAPH_BASE_MODEL)
+        created_project_graph = ProjectGraph(graph={})
 
         db.session.add(created_project_graph)
         db.session.commit()
@@ -78,7 +69,7 @@ class ProjectGraphService:
         if not selected_user.is_admin:
             raise werkzeug_exceptions.Unauthorized(description="Admin access is required to edit the project.")
 
-        selected_user.project.graph.graph = PROJECT_GRAPH_BASE_MODEL
+        selected_user.project.graph.graph = {}
         db.session.add(selected_user.project.graph)
         db.session.commit()
 

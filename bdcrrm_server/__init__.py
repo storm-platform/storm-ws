@@ -10,19 +10,36 @@
 
 import os
 
-from flask import Flask, jsonify
-
-from .version import __version__
-from .config import BaseConfiguration
-from .views import server_bp, project_bp, graph_bp
-from .ext import BDCReproducibleResearchManagement
-
+import marshmallow.exceptions as marshmallow_exceptions
 import sqlalchemy.exc as sqlalchemy_exceptions
 import werkzeug.exceptions as werkzeug_exceptions
-import marshmallow.exceptions as marshmallow_exceptions
+from flask import Flask, jsonify
 
-from .models import db
-from .views.files import invenio_files_rest_blueprint_for_graphnode_files
+from .config import BaseConfiguration
+from .ext import BDCReproducibleResearchManagement
+from .resources import node_draft_resource, node_record_resource, file_draft_resource, file_record_resource
+from .security import authenticate
+from .version import __version__
+from .views import server_bp, project_bp, graph_bp
+
+
+def setup_security_authentication(app):
+    """Setup Brazil Data Cube OAuth 2.0."""
+
+    @app.before_request
+    @authenticate
+    def before_request(**kwargs):
+        pass
+
+
+def setup_resources(app):
+    # Files (Draft and Record)
+    app.register_blueprint(file_draft_resource.as_blueprint())
+    app.register_blueprint(file_record_resource.as_blueprint())
+
+    # Nodes (Draft and Record)
+    app.register_blueprint(node_draft_resource.as_blueprint())
+    app.register_blueprint(node_record_resource.as_blueprint())
 
 
 def create_app(config_name='DevelopmentConfig'):
@@ -74,6 +91,8 @@ def setup_exception_handlers(app):
 
 def setup_app(app, config_name):
     setup_exception_handlers(app)
+    setup_security_authentication(app)
+    setup_resources(app)
 
     @app.after_request
     def after_request(response):
@@ -86,11 +105,10 @@ def setup_app(app, config_name):
 
     BDCReproducibleResearchManagement(app, config_name=config_name)
 
+    # Old API style (ToDo: refactoring as a Resource)
     app.register_blueprint(graph_bp)
     app.register_blueprint(server_bp)
     app.register_blueprint(project_bp)
-
-    app.register_blueprint(invenio_files_rest_blueprint_for_graphnode_files())
 
 
 app = create_app(os.environ.get("BDCRRM_SERVER_ENVIRONMENT", "DevelopmentConfig"))
