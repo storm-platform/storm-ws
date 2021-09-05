@@ -27,7 +27,7 @@ class DatabaseConfiguration:
     """Database Configuration."""
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI",
-                                        "postgresql://bdcrrm-server:bdcrrm-server@localhost:25432/bdcrrm_server")
+                                        "postgresql://bdcrrm-server:bdcrrm-server@localhost:35432/bdcrrm_server")
 
     BDCRRM_DB_SCHEMA = os.getenv("BDCRRM_DB_SCHEMA", "bdcrrm")
 
