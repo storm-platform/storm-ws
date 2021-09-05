@@ -57,7 +57,7 @@ def authenticate(func, **kwargs):
 
     @oauth2(**kwargs)
     def wrapper(*args, **kwargs):
-        oauth_authenticated_identity = Identity(kwargs.get("user_id", 777))
+        oauth_authenticated_identity = Identity(kwargs["user_id"])
         oauth_authenticated_identity.provides.add(authenticated_user)
 
         # `identity` is used by invenio framework services to validate the permissions

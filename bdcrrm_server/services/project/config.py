@@ -6,10 +6,10 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Project Services`."""
+"""Brazil Data Cube Reproducible Research Management Server `Project Services config`."""
 
-from invenio_records_resources.services import FileService
+from ...security import AuthenticatedUserPermissionPolicy
 
 
-class NodeFileService(FileService):
-    ...
+class ProjectServiceConfig:
+    permission_policy_cls = AuthenticatedUserPermissionPolicy

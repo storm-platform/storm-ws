@@ -6,27 +6,21 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-from invenio_drafts_resources.services import RecordService as RecordDraftServiceBase
 from invenio_records_resources.services import RecordService as RecordServiceBase
+from invenio_drafts_resources.services import RecordService as RecordDraftServiceBase
 
 
 class NodeRecordService(RecordServiceBase):
-    ...
+
+    def __init__(self, config, project_service=None):
+        """Constructor for RecordService."""
+        super().__init__(config)
+        self._project_service = project_service
 
 
 class NodeDraftService(RecordDraftServiceBase):
 
-    def check_draft_files(self, id_, identity, file_key):
-        """Retrieve a draft."""
-        # Resolve and require permission
-        draft = self.draft_cls.pid.resolve(id_, registered_only=False)
-        self.require_permission(identity, "read_draft", record=draft)
-
-        # Run components
-        for component in self.components:
-            if hasattr(component, 'read_draft'):
-                component.read_draft(identity, draft=draft)
-
-        files = [f['key'] for f in [*draft.inputs, *draft.outputs, *draft.environment]]
-        if file_key not in files:
-            raise RuntimeError("File is not defined for this Node.")
+    def __init__(self, config, files_service=None, draft_files_service=None, project_service=None):
+        """Initializer for NodeDraftRecordService."""
+        super().__init__(config, files_service, draft_files_service)
+        self._project_service = project_service

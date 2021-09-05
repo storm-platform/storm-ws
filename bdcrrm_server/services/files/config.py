@@ -6,6 +6,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
+"""Brazil Data Cube Reproducible Research Management Server `Files Services config`."""
+
 from invenio_records_resources.services import \
     FileServiceConfig as BaseFileServiceConfig
 

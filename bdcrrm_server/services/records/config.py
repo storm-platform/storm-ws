@@ -11,7 +11,8 @@ from invenio_drafts_resources.services.records.components import \
     DraftFilesComponent
 from invenio_records_resources.services import RecordServiceConfig as RecordServiceConfigBase
 
-from ..components import NodeRecordServiceComponent
+from ..components import NodeRecordDefinitionServiceComponent, NodeRecordParentServiceComponent, \
+    BaseProjectValidatorComponent, DraftProjectValidatorServiceComponent
 from ...forms import NodeRecordSchema
 from ...indexer import DraftDummyIndexer, RecordDummyIndexer
 from ...models import NodeRecord, NodeDraft
@@ -32,7 +33,10 @@ class NodeDraftServiceConfig(NodeCommonServiceConfig):
 
     components = DraftServiceConfigBase.components + [
         DraftFilesComponent,
-        NodeRecordServiceComponent
+        BaseProjectValidatorComponent,
+        NodeRecordParentServiceComponent,
+        NodeRecordDefinitionServiceComponent,
+        DraftProjectValidatorServiceComponent
     ]
 
 
@@ -41,5 +45,8 @@ class NodeRecordServiceConfig(RecordServiceConfigBase):
 
     components = RecordServiceConfigBase.components + [
         DraftFilesComponent,
-        NodeRecordServiceComponent
+        BaseProjectValidatorComponent,
+        NodeRecordParentServiceComponent,
+        NodeRecordDefinitionServiceComponent,
+        DraftProjectValidatorServiceComponent
     ]

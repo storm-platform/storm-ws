@@ -17,6 +17,7 @@ from .services.files.config import FileNodeDraftServiceConfig, FileNodeRecordSer
 from .services.files.service import NodeFileService
 from .services.records.config import NodeDraftServiceConfig, NodeRecordServiceConfig
 from .services.records.service import NodeDraftService, NodeRecordService
+from .services.project import ProjectService, ProjectServiceConfig
 
 
 def initialize_server_resources(app) -> None:
@@ -42,6 +43,11 @@ def initialize_invenio_records_resources(app) -> None:
         None: Modificatios are applied on flask app instance.
     """
     #
+    # BDCRRM Project (links all of invenio's modules)
+    #
+    project_service = ProjectService(ProjectServiceConfig)
+
+    #
     # Files (Draft)
     #
     file_draft_service = NodeFileService(FileNodeDraftServiceConfig)
@@ -57,13 +63,13 @@ def initialize_invenio_records_resources(app) -> None:
     # Nodes (Draft)
     #
     node_draft_service = NodeDraftService(NodeDraftServiceConfig, files_service=file_record_service,
-                                          draft_files_service=file_draft_service)
+                                          draft_files_service=file_draft_service, project_service=project_service)
     node_draft_resource = NodeDraftResource(NodeDraftResourceConfig, node_draft_service)
 
     #
     # Nodes (Records)
     #
-    node_record_service = NodeRecordService(NodeRecordServiceConfig)
+    node_record_service = NodeRecordService(NodeRecordServiceConfig, project_service=project_service)
     node_record_resource = NodeRecordResource(NodeRecordResourceConfig, node_record_service)
 
     # Files (Draft and Record)

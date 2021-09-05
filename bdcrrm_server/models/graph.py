@@ -107,6 +107,9 @@ class NodeParent(ParentRecordBase):
 
     model_cls = NodeParentMetadata
 
+    project_id = ModelField(dump=False)
+    project = ModelField(dump=False)
+
 
 class CommonFieldsMixin:
     """Common system fields between records and drafts."""

@@ -14,6 +14,7 @@ import marshmallow.exceptions as marshmallow_exceptions
 import sqlalchemy.exc as sqlalchemy_exceptions
 import werkzeug.exceptions as werkzeug_exceptions
 from flask import Flask, jsonify
+from flask import g, request
 
 from .config import BaseConfiguration
 from .ext import BDCReproducibleResearchManagement
@@ -22,22 +23,31 @@ from .security import authenticate
 from .version import __version__
 from .views import project_bp, graph_bp
 
-from .models import db
-
 
 def setup_security_authentication(app):
-    """Setup Brazil Data Cube OAuth 2.0."""
+    """Setup Brazil Data Cube OAuth 2.0 proxy."""
 
     @app.before_request
     @authenticate
     def before_request(**kwargs):
-        pass
+        pass  # authenticate the user
+
+
+def setup_request_proxies(app):
+    """Setup proxies that are used to identify the request context (e.g. Project)."""
+
+    @app.before_request
+    def project_proxy(**kwargs):
+        project_id = request.view_args.get("project_id", None)
+        g.project_id = int(project_id) if project_id else project_id
 
 
 def create_app(config_name='DevelopmentConfig'):
     """Create the Flask application from a given config object type.
+
     Args:
         config_name (string): Config instance name.
+
     Returns:
         Flask Application with config instance scope.
     """
@@ -98,6 +108,7 @@ def setup_app(app, config_name):
     app.register_blueprint(project_bp)
 
     # Setup API components
+    setup_request_proxies(app)
     setup_exception_handlers(app)
     setup_security_authentication(app)
 
