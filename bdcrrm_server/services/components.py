@@ -6,7 +6,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Services Componentized`."""
+"""Brazil Data Cube Reproducible Research Management Server `Services components`."""
+
 from invenio_drafts_resources.services.records.components import ServiceComponent
 
 

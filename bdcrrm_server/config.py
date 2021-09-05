@@ -27,7 +27,7 @@ class DatabaseConfiguration:
     """Database Configuration."""
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI",
-                                        "postgresql://postgres:postgres@localhost:5432/bdcrrm_server")
+                                        "postgresql://bdcrrm-server:bdcrrm-server@localhost:25432/bdcrrm_server")
 
     BDCRRM_DB_SCHEMA = os.getenv("BDCRRM_DB_SCHEMA", "bdcrrm")
 
@@ -45,9 +45,6 @@ class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfigur
     TESTING = False
 
     SECRET_KEY = 'secret-key'
-
-    # Invenio-Files-Rest (None is used to remove the invenio-access and invenio-account dependencies).
-    FILES_REST_PERMISSION_FACTORY = lambda *args, **kwargs: None
 
 
 class ProductionConfiguration(BaseConfiguration):

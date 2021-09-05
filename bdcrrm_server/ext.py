@@ -10,6 +10,7 @@
 from invenio_access import InvenioAccess
 from invenio_db import InvenioDB
 from invenio_files_rest import InvenioFilesREST
+from invenio_records_resources import InvenioRecordsResources
 from invenio_search import InvenioSearch
 
 from . import config
@@ -31,6 +32,7 @@ class BDCReproducibleResearchManagement:
         self._ext_invenio_files_rest = InvenioFilesREST(app)
         self._ext_invenio_access = InvenioAccess(app)
         self._ext_invenio_search = InvenioSearch(app)
+        self._ext_invenio_records_resources = InvenioRecordsResources(app)
 
         app.extensions["bdcrrm_server"] = self
 

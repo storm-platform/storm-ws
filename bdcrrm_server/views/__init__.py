@@ -19,7 +19,6 @@ from .server import ping
 from .project import *
 
 from .graph import *
-from .graph_node import *
 
 __all__ = (
     "project_bp",

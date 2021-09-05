@@ -6,7 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Project Services`."""
+"""Brazil Data Cube Reproducible Research Management Server `Graph Services`."""
 
 from typing import Dict
 
