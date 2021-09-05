@@ -7,10 +7,13 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server `Resources`."""
+
 from .files.config import FileNodeDraftResourceConfig, FileNodeRecordResourceConfig
 from .files.resource import NodeFileResource
 from .records.config import NodeDraftResourceConfig, NodeRecordResourceConfig
 from .records.resource import NodeRecordResource, NodeDraftResource
+
+from .server import ServerResource, ServerResourceConfig
 
 __all__ = (
     "NodeDraftResourceConfig",
@@ -21,5 +24,8 @@ __all__ = (
 
     "NodeFileResource",
     "NodeDraftResource",
-    "NodeRecordResource"
+    "NodeRecordResource",
+
+    "ServerResource",
+    "ServerResourceConfig"
 )

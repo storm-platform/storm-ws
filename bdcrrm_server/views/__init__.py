@@ -11,10 +11,7 @@
 from flask import Blueprint
 
 graph_bp = Blueprint("bdcrrm_graph", __name__, )
-server_bp = Blueprint("bdcrrm_server", __name__)
 project_bp = Blueprint("bdcrrm_project", __name__)
-
-from .server import ping
 
 from .project import *
 
@@ -22,5 +19,4 @@ from .graph import *
 
 __all__ = (
     "project_bp",
-    "server_bp"
 )

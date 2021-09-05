@@ -5,6 +5,9 @@
 # Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
+
+"""Brazil Data Cube Reproducible Research Management Server `Records Resources config`."""
+
 from invenio_drafts_resources.resources import RecordResourceConfig as DraftResourceConfigBase
 from invenio_records_resources.resources import RecordResourceConfig as RecordResourceConfigBase
 

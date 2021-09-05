@@ -91,20 +91,24 @@ class GraphDocumentForm(Schema):
 #
 
 class InvenioFileSchema(Schema):
+    """Marshmallow Invenio File definition schema."""
     key = fields.String(required=True)
 
 
-class Metadata(Schema):
+class NodeRecordMetadata(Schema):
+    """Marshmallow Invenio File definition schema."""
     author = fields.String(required=True)
     description = fields.String(required=False)
 
 
 class NodeRecordFiles(Schema):
+    """Marshmallow metadata for Node Record on invenio-records."""
     inputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
     outputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
 
 
 class NodeRecordSchema(BaseRecordSchema):
+    """Marshmallow schema for Node Record on invenio-records."""
     data = fields.Nested(NodeRecordFiles(), required=True)
 
     environment = fields.Nested(InvenioFileSchema(), required=True)
@@ -112,4 +116,4 @@ class NodeRecordSchema(BaseRecordSchema):
     command = fields.String(required=True)
     command_checksum = fields.String(required=True)
 
-    metadata = fields.Nested(Metadata(), required=True)
+    metadata = fields.Nested(NodeRecordMetadata(), required=True)

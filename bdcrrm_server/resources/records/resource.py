@@ -6,6 +6,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
+"""Brazil Data Cube Reproducible Research Management Server `Records Resources objects`."""
+
 from invenio_drafts_resources.resources.records.resource import RecordResource as DraftRecordResourceBase
 
 from invenio_records_resources.resources import RecordResource as RecordResourceBase
