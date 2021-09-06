@@ -10,25 +10,43 @@
 
 import os
 
-from flask import Flask, jsonify
-
-from .version import __version__
-from .config import BaseConfiguration
-from .views import server_bp, project_bp
-from .ext import BDCReproducibleResearchManagement
-
+import marshmallow.exceptions as marshmallow_exceptions
 import sqlalchemy.exc as sqlalchemy_exceptions
 import werkzeug.exceptions as werkzeug_exceptions
-import marshmallow.exceptions as marshmallow_exceptions
+from flask import Flask, jsonify
+from flask import g, request
 
-from .models import db
-from .views.files import invenio_files_rest_blueprint
+from .config import BaseConfiguration
+from .ext import BDCReproducibleResearchManagement
+from .initializer import initialize_invenio_records_resources, initialize_server_resources, initialize_project_resources
+from .security import authenticate
+from .version import __version__
+
+
+def setup_security_authentication(app):
+    """Setup Brazil Data Cube OAuth 2.0 proxy."""
+
+    @app.before_request
+    @authenticate
+    def before_request(**kwargs):
+        pass  # authenticate the user
+
+
+def setup_request_proxies(app):
+    """Setup proxies that are used to identify the request context (e.g. Project)."""
+
+    @app.before_request
+    def project_proxy(**kwargs):
+        project_id = request.view_args.get("project_id", None)
+        g.project_id = int(project_id) if project_id else project_id
 
 
 def create_app(config_name='DevelopmentConfig'):
     """Create the Flask application from a given config object type.
+
     Args:
         config_name (string): Config instance name.
+
     Returns:
         Flask Application with config instance scope.
     """
@@ -73,8 +91,6 @@ def setup_exception_handlers(app):
 
 
 def setup_app(app, config_name):
-    setup_exception_handlers(app)
-
     @app.after_request
     def after_request(response):
         """Enable CORS."""
@@ -86,10 +102,15 @@ def setup_app(app, config_name):
 
     BDCReproducibleResearchManagement(app, config_name=config_name)
 
-    app.register_blueprint(server_bp)
-    app.register_blueprint(project_bp)
+    # Setup API components
+    setup_request_proxies(app)
+    setup_exception_handlers(app)
+    setup_security_authentication(app)
 
-    app.register_blueprint(invenio_files_rest_blueprint())
+    # Resources
+    initialize_server_resources(app)
+    initialize_project_resources(app)
+    initialize_invenio_records_resources(app)
 
 
 app = create_app(os.environ.get("BDCRRM_SERVER_ENVIRONMENT", "DevelopmentConfig"))

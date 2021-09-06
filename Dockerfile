@@ -5,13 +5,10 @@
 # Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
+FROM inveniosoftware/centos8-python:3.8
 
-"""Brazil Data Cube Reproducible Research Management Views."""
-
-from .project import project_bp
-from .server import server_bp
-
-__all__ = (
-    "project_bp",
-    "server_bp"
-)
+#
+# Install the bdcrrm-server
+#
+COPY ./ .
+RUN python setup.py install

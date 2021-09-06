@@ -36,6 +36,40 @@ tests_require = [
 examples_require = [
 ]
 
+setup_requires = [
+    'pytest-runner>=5.2',
+]
+
+processing_dependencies = [
+    'celery>=5.0.5'
+]
+
+invenio_dependencies = [
+    'invenio-db>=1.0.9',
+    'invenio-files-rest>=1.2.0',
+    'invenio-records>=1.4.0',
+    'invenio-records-files>=1.2.1',
+    'invenio-indexer>=1.2.1',
+    'invenio-records-resources>=0.16.14',
+    'invenio-drafts-resources>=0.13.6',
+    'invenio-search>=1.4.2',
+    'invenio-celery==1.2.2'  # fixed to avoid problems
+]
+
+general_dependencies = [
+    'Click>=7.0',
+    'Flask>=1.1.4',
+    'Flask-SQLAlchemy>=2.4',
+    'SQLAlchemy>=1.3.11',
+    'psycopg2-binary>=2.8',
+    'marshmallow-sqlalchemy==0.25.0',
+    'six>=1.16.0',
+    'base32-lib>=1.0.2',
+    'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client@v0.2.3',
+]
+
+install_requires = [*general_dependencies, *invenio_dependencies, *processing_dependencies]
+
 extras_require = {
     'docs': docs_require,
     'examples': examples_require,
@@ -43,23 +77,6 @@ extras_require = {
 }
 
 extras_require['all'] = [req for _, reqs in extras_require.items() for req in reqs]
-
-setup_requires = [
-    'pytest-runner>=5.2',
-]
-
-install_requires = [
-    'Click>=7.0',
-    'Flask>=1.1.4',
-    'Flask-SQLAlchemy>=2.4',
-    'SQLAlchemy>=1.3.11',
-    'psycopg2-binary>=2.8',
-    'invenio-files-rest>=1.2.0',
-    'invenio-db>=1.0.9',
-    'marshmallow-sqlalchemy==0.25.0',
-    'six>=1.16.0',
-    'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client@v0.2.3',
-]
 
 packages = find_packages()
 

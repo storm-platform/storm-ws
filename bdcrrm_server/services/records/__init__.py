@@ -6,21 +6,15 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Models Module`."""
+"""Brazil Data Cube Reproducible Research Management Server `Records Services`."""
 
-from invenio_db import db
-
-from .project import Project
-from .user import ProjectUser
-from .graph import *
+from .config import NodeDraftServiceConfig, NodeRecordServiceConfig
+from .service import NodeRecordService, NodeDraftService
 
 __all__ = (
-    "Project",
-    "ProjectUser",
+    "NodeDraftServiceConfig",
+    "NodeRecordServiceConfig",
 
-    "NodeParent",
-    "NodeFileDraft",
-    "NodeDraft",
-    "NodeFileRecord",
-    "NodeRecord",
+    "NodeRecordService",
+    "NodeDraftService"
 )

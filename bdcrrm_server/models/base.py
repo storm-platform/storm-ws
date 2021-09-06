@@ -6,11 +6,12 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Controllers`."""
+"""Brazil Data Cube Reproducible Research Management Server `Base model`."""
 
-from .project import ProjectController
-from .project_graph import ProjectGraphController
+from ..config import BaseConfiguration
 
-__all__ = (
-    "ProjectController", "ProjectGraphController"
-)
+
+class BaseModel:
+    __table_args__ = (
+        dict(schema=BaseConfiguration.BDCRRM_DB_SCHEMA),
+    )

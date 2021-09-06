@@ -6,13 +6,15 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `General Views`."""
+"""Brazil Data Cube Reproducible Research Management Server `Project Services config`."""
 
-from flask import Blueprint
-
-server_bp = Blueprint("bdcrrm_server", __name__)
+from ...security import AuthenticatedUserPermissionPolicy
 
 
-@server_bp.route("/ping", methods=["GET"])
-def ping():
-    return {"code": 200, "message": "Pong!"}, 200
+class ProjectServiceConfig:
+    permission_policy_cls = AuthenticatedUserPermissionPolicy
+
+
+__all__ = (
+    "ProjectServiceConfig"
+)
