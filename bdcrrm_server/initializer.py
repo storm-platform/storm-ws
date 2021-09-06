@@ -10,14 +10,14 @@
 
 import uuid
 
+from .resources.server import ServerResourceConfig, ServerResource
+
 from .resources import NodeFileResource, FileNodeDraftResourceConfig, FileNodeRecordResourceConfig, NodeDraftResource, \
     NodeDraftResourceConfig, NodeRecordResource, NodeRecordResourceConfig
-from .resources.server import ServerResourceConfig, ServerResource
-from .services.files.config import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig
-from .services.files.service import NodeFileService
-from .services.records.config import NodeDraftServiceConfig, NodeRecordServiceConfig
-from .services.records.service import NodeDraftService, NodeRecordService
-from .services.project import ProjectService, ProjectServiceConfig
+
+from .services import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig, NodeFileService, \
+    NodeFileDraftService, ProjectService, ProjectServiceConfig, NodeDraftServiceConfig, NodeRecordServiceConfig, \
+    NodeDraftService, NodeRecordService
 
 
 def initialize_server_resources(app) -> None:
@@ -50,13 +50,13 @@ def initialize_invenio_records_resources(app) -> None:
     #
     # Files (Draft)
     #
-    file_draft_service = NodeFileService(FileNodeDraftServiceConfig)
+    file_draft_service = NodeFileDraftService(FileNodeDraftServiceConfig, project_service=project_service)
     file_draft_resource = NodeFileResource(FileNodeDraftResourceConfig, file_draft_service)
 
     #
     # Files (Records)
     #
-    file_record_service = NodeFileService(FileNodeRecordServiceConfig)
+    file_record_service = NodeFileService(FileNodeRecordServiceConfig, project_service=project_service)
     file_record_resource = NodeFileResource(FileNodeRecordResourceConfig, file_record_service)
 
     #

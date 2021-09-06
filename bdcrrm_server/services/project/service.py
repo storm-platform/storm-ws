@@ -11,11 +11,10 @@
 from typing import Dict, List
 
 import werkzeug.exceptions as werkzeug_exceptions
+from invenio_records_resources.services import Service
 
 from ...models import Project, ProjectUser
 from ...models import db
-
-from invenio_records_resources.services import Service
 
 
 class ProjectService(Service):
@@ -128,3 +127,8 @@ class ProjectService(Service):
 
         db.session.commit()
         return selected_user.project
+
+
+__all__ = (
+    "ProjectService"
+)

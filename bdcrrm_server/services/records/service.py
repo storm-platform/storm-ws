@@ -6,8 +6,10 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-from invenio_records_resources.services import RecordService as RecordServiceBase
+"""Brazil Data Cube Reproducible Research Management Server `Records Services`."""
+
 from invenio_drafts_resources.services import RecordService as RecordDraftServiceBase
+from invenio_records_resources.services import RecordService as RecordServiceBase
 
 
 class NodeRecordService(RecordServiceBase):
@@ -24,3 +26,9 @@ class NodeDraftService(RecordDraftServiceBase):
         """Initializer for NodeDraftRecordService."""
         super().__init__(config, files_service, draft_files_service)
         self._project_service = project_service
+
+
+__all__ = (
+    "NodeRecordService",
+    "NodeDraftService"
+)

@@ -6,13 +6,15 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
+"""Brazil Data Cube Reproducible Research Management Server `Records Services config`."""
+
 from invenio_drafts_resources.services import RecordServiceConfig as DraftServiceConfigBase
 from invenio_drafts_resources.services.records.components import \
     DraftFilesComponent
 from invenio_records_resources.services import RecordServiceConfig as RecordServiceConfigBase
 
 from ..components import NodeRecordDefinitionServiceComponent, NodeRecordParentServiceComponent, \
-    BaseProjectValidatorComponent, DraftProjectValidatorServiceComponent
+    ProjectValidatorRecordServiceComponent
 from ...forms import NodeRecordSchema
 from ...indexer import DraftDummyIndexer, RecordDummyIndexer
 from ...models import NodeRecord, NodeDraft
@@ -33,10 +35,9 @@ class NodeDraftServiceConfig(NodeCommonServiceConfig):
 
     components = DraftServiceConfigBase.components + [
         DraftFilesComponent,
-        BaseProjectValidatorComponent,
         NodeRecordParentServiceComponent,
         NodeRecordDefinitionServiceComponent,
-        DraftProjectValidatorServiceComponent
+        ProjectValidatorRecordServiceComponent
     ]
 
 
@@ -44,9 +45,13 @@ class NodeRecordServiceConfig(RecordServiceConfigBase):
     indexer_cls = RecordDummyIndexer
 
     components = RecordServiceConfigBase.components + [
-        DraftFilesComponent,
-        BaseProjectValidatorComponent,
         NodeRecordParentServiceComponent,
         NodeRecordDefinitionServiceComponent,
-        DraftProjectValidatorServiceComponent
+        ProjectValidatorRecordServiceComponent
     ]
+
+
+__all__ = (
+    "NodeDraftServiceConfig",
+    "NodeRecordServiceConfig"
+)

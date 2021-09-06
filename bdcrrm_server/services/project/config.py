@@ -13,3 +13,8 @@ from ...security import AuthenticatedUserPermissionPolicy
 
 class ProjectServiceConfig:
     permission_policy_cls = AuthenticatedUserPermissionPolicy
+
+
+__all__ = (
+    "ProjectServiceConfig"
+)

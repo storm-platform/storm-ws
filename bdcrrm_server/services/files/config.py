@@ -11,6 +11,7 @@
 from invenio_records_resources.services import \
     FileServiceConfig as BaseFileServiceConfig
 
+from ..components import ProjectValidatorFileServiceComponent, NodeDraftFileDefinitionValidatorComponent
 from ...models import NodeDraft, NodeRecord
 from ...security import AuthenticatedUserPermissionPolicy
 
@@ -18,10 +19,25 @@ from ...security import AuthenticatedUserPermissionPolicy
 class FileCommonServiceConfig(BaseFileServiceConfig):
     permission_policy_cls = AuthenticatedUserPermissionPolicy
 
+    components = BaseFileServiceConfig.components + [
+        ProjectValidatorFileServiceComponent
+    ]
+
 
 class FileNodeDraftServiceConfig(FileCommonServiceConfig):
     record_cls = NodeDraft
 
+    components = FileCommonServiceConfig.components + [
+        NodeDraftFileDefinitionValidatorComponent,
+    ]
+
 
 class FileNodeRecordServiceConfig(FileCommonServiceConfig):
     record_cls = NodeRecord
+
+
+__all__ = (
+    "FileCommonServiceConfig",
+    "FileNodeDraftServiceConfig",
+    "FileNodeRecordServiceConfig"
+)

@@ -7,3 +7,15 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server `Files Services`."""
+
+from .config import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig
+
+from .service import NodeFileService, NodeFileDraftService
+
+__all__ = (
+    "FileNodeDraftServiceConfig",
+    "FileNodeRecordServiceConfig",
+
+    "NodeFileService",
+    "NodeFileDraftService"
+)
