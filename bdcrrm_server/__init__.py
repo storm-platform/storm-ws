@@ -18,10 +18,9 @@ from flask import g, request
 
 from .config import BaseConfiguration
 from .ext import BDCReproducibleResearchManagement
-from .initializer import initialize_invenio_records_resources, initialize_server_resources
+from .initializer import initialize_invenio_records_resources, initialize_server_resources, initialize_project_resources
 from .security import authenticate
 from .version import __version__
-from .views import project_bp, graph_bp
 
 
 def setup_security_authentication(app):
@@ -103,19 +102,15 @@ def setup_app(app, config_name):
 
     BDCReproducibleResearchManagement(app, config_name=config_name)
 
-    # old API style (ToDo: refactoring as a Resource)
-    app.register_blueprint(graph_bp)
-    app.register_blueprint(project_bp)
-
     # Setup API components
     setup_request_proxies(app)
     setup_exception_handlers(app)
     setup_security_authentication(app)
 
     # Resources
-    initialize_invenio_records_resources(app)
-
     initialize_server_resources(app)
+    initialize_project_resources(app)
+    initialize_invenio_records_resources(app)
 
 
 app = create_app(os.environ.get("BDCRRM_SERVER_ENVIRONMENT", "DevelopmentConfig"))

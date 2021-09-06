@@ -10,14 +10,29 @@
 
 import uuid
 
-from .resources.server import ServerResourceConfig, ServerResource
-
 from .resources import NodeFileResource, FileNodeDraftResourceConfig, FileNodeRecordResourceConfig, NodeDraftResource, \
     NodeDraftResourceConfig, NodeRecordResource, NodeRecordResourceConfig
-
+from .resources.project import ProjectResource, ProjectResourceConfig
+from .resources.server import ServerResourceConfig, ServerResource
 from .services import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig, NodeFileService, \
     NodeFileDraftService, ProjectService, ProjectServiceConfig, NodeDraftServiceConfig, NodeRecordServiceConfig, \
     NodeDraftService, NodeRecordService
+
+
+def initialize_project_resources(app) -> None:
+    """Initialize the project resources.
+
+    Args:
+        app (flask.Flask): flask app instance
+
+    Returns:
+        None: Modifications are applied on flask app instance.
+    """
+
+    project_service = ProjectService(ProjectServiceConfig)
+    project_resource = ProjectResource(ProjectResourceConfig, project_service)
+
+    app.register_blueprint(project_resource.as_blueprint())
 
 
 def initialize_server_resources(app) -> None:
@@ -27,7 +42,7 @@ def initialize_server_resources(app) -> None:
         app (flask.Flask): flask app instance
 
     Returns:
-        None: Modificatios are applied on flask app instance.
+        None: Modifications are applied on flask app instance.
     """
     server_resource = ServerResource(ServerResourceConfig)
     app.register_blueprint(server_resource.as_blueprint())

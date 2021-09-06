@@ -41,7 +41,8 @@ class ProjectForm(Schema):
     updated_at = fields.DateTime(required=False)
 
     graph_id = fields.Integer(required=False)
-    metadata = fields.Nested(ProjectMetadataForm(), required=True)
+    metadata = fields.Nested(ProjectMetadataForm(), required=True, load_only=True)
+    _metadata = fields.Nested(ProjectMetadataForm(), required=True, dump_only=True, data_key="metadata")
 
 
 class GraphNodeMetadata(Schema):
