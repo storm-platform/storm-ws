@@ -71,7 +71,7 @@ class BaseProjectValidatorComponent:
         if "_project_service" in dir(self.service):  # avoiding broken errors
 
             current_project = g.project_id
-            user_projects = self.service._project_service.list_project_by_user(identity.id)
+            user_projects = self.service._project_service.list_project_by_user(identity)
 
             if current_project not in [p.id for p in user_projects]:
                 raise RuntimeError("User is not able to access this project.")

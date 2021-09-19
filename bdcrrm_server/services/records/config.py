@@ -15,10 +15,14 @@ from invenio_records_resources.services import RecordServiceConfig as RecordServ
 
 from ..components import NodeRecordDefinitionServiceComponent, NodeRecordParentServiceComponent, \
     ProjectValidatorRecordServiceComponent
+from ..links import NodeRecordLink
 from ...forms import NodeRecordSchema
 from ...indexer import DraftDummyIndexer, RecordDummyIndexer
 from ...models import NodeRecord, NodeDraft
 from ...security import AuthenticatedUserPermissionPolicy
+
+from invenio_drafts_resources.services.records.config import is_draft, is_record
+from invenio_records_resources.services import ConditionalLink
 
 
 class NodeCommonServiceConfig(DraftServiceConfigBase):
@@ -26,6 +30,22 @@ class NodeCommonServiceConfig(DraftServiceConfigBase):
 
     schema = NodeRecordSchema
     permission_policy_cls = AuthenticatedUserPermissionPolicy
+
+    links_item = {
+        "self": ConditionalLink(
+            cond=is_record,
+            if_=NodeRecordLink("{+api}graph/{project_id}/node/{id}{?args*}"),
+            else_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/draft{?args*}"),
+        ),
+        "latest": NodeRecordLink("{+api}graph/{project_id}/node/{id}/versions/latest{?args*}"),
+        "draft": NodeRecordLink("{+api}graph/{project_id}/node/{id}/draft{?args*}", when=is_record),
+        "record": NodeRecordLink("{+api}graph/{project_id}/node/{id}{?args*}", when=is_draft),
+        "publish": NodeRecordLink(
+            "{+api}graph/{project_id}/node/{id}/draft/actions/publish{?args*}",
+            when=is_draft
+        ),
+        "versions": NodeRecordLink("{+api}graph/{project_id}/node/{id}/versions{?args*}"),
+    }
 
 
 class NodeDraftServiceConfig(NodeCommonServiceConfig):

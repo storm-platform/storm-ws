@@ -46,6 +46,13 @@ class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfigur
 
     SECRET_KEY = 'secret-key'
 
+    #
+    # Invenio settings
+    #
+    SITE_UI_URL = os.environ.get("SITE_UI_URL", None)
+
+    SITE_API_URL = os.environ.get("SITE_API_URL", None)
+
 
 class ProductionConfiguration(BaseConfiguration):
     """Production Mode."""
