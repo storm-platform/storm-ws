@@ -15,6 +15,8 @@ from .records.resource import NodeRecordResource, NodeDraftResource
 
 from .server import ServerResource, ServerResourceConfig
 
+from .service import ServiceResource, ServiceResourceConfig
+
 __all__ = (
     "NodeDraftResourceConfig",
     "NodeRecordResourceConfig",
@@ -27,5 +29,8 @@ __all__ = (
     "NodeRecordResource",
 
     "ServerResource",
-    "ServerResourceConfig"
+    "ServerResourceConfig",
+
+    "ServiceResource",
+    "ServiceResourceConfig"
 )

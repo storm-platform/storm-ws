@@ -70,6 +70,8 @@ class InvenioJSONSchemaAPIConfigurations:
     See:
         More details are available on module repository: https://github.com/inveniosoftware/invenio-jsonschemas
     """
+    JSONSCHEMAS_HOST = "local"  # avoiding warning
+
     RECORDS_REFRESOLVER_CLS = "invenio_records.resolver.InvenioRefResolver"
     RECORDS_REFRESOLVER_STORE = "invenio_jsonschemas.proxies.current_refresolver_store"
 

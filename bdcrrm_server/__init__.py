@@ -18,7 +18,12 @@ from flask import g, request
 
 from .config import BaseConfiguration
 from .ext import BDCReproducibleResearchManagement
-from .initializer import initialize_invenio_records_resources, initialize_server_resources, initialize_project_resources
+from .initializer import (
+    initialize_invenio_records_resources,
+    initialize_server_resources,
+    initialize_project_resources,
+    initialize_service_resources
+)
 from .security import authenticate
 from .version import __version__
 
@@ -27,9 +32,14 @@ def setup_security_authentication(app):
     """Setup Brazil Data Cube OAuth 2.0 proxy."""
 
     @app.before_request
-    @authenticate
     def before_request(**kwargs):
-        pass  # authenticate the user
+        @authenticate
+        def _authenticate(**kwargs):
+            pass  # authenticate the user
+
+        # adding some exceptions
+        if request.path != "/":
+            _authenticate()
 
 
 def setup_request_proxies(app):
@@ -111,6 +121,7 @@ def setup_app(app, config_name):
     # Resources
     initialize_server_resources(app)
     initialize_project_resources(app)
+    initialize_service_resources(app)
     initialize_invenio_records_resources(app)
 
 
