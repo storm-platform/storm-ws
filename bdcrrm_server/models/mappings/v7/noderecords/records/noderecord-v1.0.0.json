@@ -1,0 +1,47 @@
+{
+    "mappings": {
+        "date_detection": false,
+        "numeric_detection": false,
+        "properties": {
+            "id": {
+                "type": "keyword"
+            },
+            "data": {
+                "properties": {
+                    "outputs": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "inputs": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "keyword"
+                            }
+                        }
+                    }
+                }
+            },
+            "metadata": {
+                "properties": {
+                    "description": {
+                        "type": "text"
+                    },
+                    "author": {
+                        "type": "text"
+                    }
+                }
+            },
+            "created": {
+                "type": "date"
+            },
+            "updated": {
+                "type": "date"
+            }
+        }
+    }
+}

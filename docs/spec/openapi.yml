@@ -1,0 +1,836 @@
+openapi: 3.0.0
+
+info:
+
+    title: Brazil Data Cube Reproducible Research Server
+
+    description: |
+        Brazil Data Cube Reproducible Research Management Server is designed to enhance reproducible research collaboratively.
+
+    version: '0.1'
+    contact:
+        name: Brazil Data Cube Team
+        url: 'https://discord.com/channels/689541907621085198#'
+        email: brazildatacube@inpe.br
+
+    license:
+        name: MIT
+        url: 'https://opensource.org/licenses/MIT'
+
+paths:
+    /:
+        get:
+            tags:
+                - Root
+            summary: Root entrypoint
+            description: Returns the root entrypoint in the service
+            responses:
+                '200':
+                    $ref: '#/components/responses/Root'
+
+    #
+    # Server
+    #
+    /server/ping:
+        get:
+            tags:
+                - Server
+            summary: Ping the server
+            description: Ping the server with an HTTP request
+            responses:
+                '200':
+                    description: 'Pong!'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    code:
+                                        type: integer
+                                        example: 200
+                                    message:
+                                        type: string
+                                        example: "Pong!"
+
+    #
+    # Record
+    #
+    /project/:
+
+        get:
+            tags:
+                - Project
+            summary: Get all projects available for the user
+            description: Get all projects available for the user
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfProjectCreatedModelResponseBody'
+
+        post:
+            tags:
+                - Project
+            summary: Create a new Project
+            description: Create a new Project
+
+            requestBody:
+                $ref: '#/components/requestBodies/ProjectDefinitionModelRequestBody'
+
+            responses:
+                '201':
+                    $ref: '#/components/responses/ProjectCreatedModelResponseBody'
+
+    /project/{project_id}:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+
+        get:
+            tags:
+                - Project
+            summary: Get a specific project
+            description: Get a specific project if it is available for the current user
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfProjectCreatedModelResponseBody'
+
+        put:
+            tags:
+                - Project
+            summary: Edit a project
+            description: Edit a specific project if it is available for the current user
+            requestBody:
+                $ref: '#/components/requestBodies/ProjectDefinitionModelRequestBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfProjectCreatedModelResponseBody'
+
+        delete:
+            tags:
+                - Project
+            summary: Delete a project
+            description: Delete a project if user is admin
+            responses:
+                '204':
+                    description: Deleted
+
+    #
+    # Node Record
+    #
+    /graph/{project_id}/node:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+
+        get:
+            tags:
+                - Node Record
+            summary: List all nodes associades to the project
+            description: List all Project Nodes, and their versions.
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfNodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+
+    /graph/{project_id}/node/{node_id}:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+
+        get:
+            tags:
+                - Node Record
+            summary: List all nodes associades to the project
+            description: List all Project Nodes, and their versions.
+            responses:
+                '200':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    #
+    # Node Record (Files)
+    #
+    /graph/{project_id}/node/{node_id}/files:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+
+        get:
+            tags:
+                - Node Record (Files)
+            summary: List all record files
+            description: List all record files
+            responses:
+                '200':
+                    $ref: '#/components/responses/InvenioFilesDefinitionModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/files/{file_key}:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/file_key'
+
+        get:
+            tags:
+                - Node Record (Files)
+            summary: Get a record file metadata
+            description: Get a record file metadata
+            responses:
+                '200':
+                    $ref: '#/components/responses/InvenioFileMetadataModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/files/{file_key}/content:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/file_key'
+
+        get:
+            tags:
+                - Node Record (Files)
+            summary: Download a record file's content
+            description: Download a record file's content for a already defined file
+            responses:
+                '200':
+                    $ref: '#/components/responses/BinaryResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    #
+    # Draft nodes
+    #
+    /graph/{project_id}/node/{node_id}/draft:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+        get:
+            tags:
+                - Node Draft
+            summary: Get a Node Draft
+            description: Get a Node Draft
+            responses:
+                '200':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        put:
+            tags:
+                - Node Draft
+            summary: Update a Node Draft
+            description: Update a Node Draft and create a new revision
+            requestBody:
+                $ref: '#/components/requestBodies/NodeDraftRequestBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        post:
+            tags:
+                - Node Draft
+            summary: Edit a Node Record
+            description: Generate a new Node Draft from a published Node Record
+            requestBody:
+                $ref: '#/components/requestBodies/NodeDraftRequestBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        delete:
+            tags:
+                - Node Draft
+            summary: Delete a Node Draft
+            description: Delete a Node Draft
+            responses:
+                '204':
+                    description: Deleted
+
+    /graph/{project_id}/node/{node_id}/draft/actions/publish:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+
+        post:
+            tags:
+                - Node Draft
+            summary: Commit a draft
+            description: Create a new Node Record from the defined Node Draft
+            requestBody:
+                required: false
+                content:
+                    application/json: { }
+            responses:
+                '202':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    #
+    # Node Draft (Files)
+    #
+    /graph/{project_id}/node/{node_id}/draft/files:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+        post:
+            tags:
+                - Node Draft (Files)
+            summary: Start draft file upload(s)
+            description: Start draft file upload(s)
+            requestBody:
+                $ref: '#/components/requestBodies/NodeDraftFileDefinitionRequestBody'
+            responses:
+                '201':
+                    $ref: '#/components/responses/InvenioFilesDefinitionModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+        get:
+            tags:
+                - Node Draft (Files)
+            summary: List all draft files
+            description: List all draft files
+            responses:
+                '200':
+                    $ref: '#/components/responses/InvenioFilesDefinitionModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/draft/files/{file_key}/content:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/file_key'
+
+        put:
+            tags:
+                - Node Draft (Files)
+            summary: Upload a draft file's content
+            description: Upload a draft file's content for a already defined file
+            requestBody:
+                $ref: '#/components/requestBodies/BinaryFilesRequestBody'
+
+            responses:
+                '200':
+                    $ref: '#/components/responses/InvenioFileEntryModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        get:
+            tags:
+                - Node Draft (Files)
+            summary: Download a draft file's content
+            description: Download a draft file's content for a already defined file
+            responses:
+                '200':
+                    $ref: '#/components/responses/BinaryResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/draft/files/{file_key}/commit:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/file_key'
+
+        post:
+            tags:
+                - Node Draft (Files)
+            summary: Commit a draft file
+            description: Create a new version of the requested file
+            requestBody:
+                required: false
+                content:
+                    application/json: { }
+            responses:
+                '200':
+                    $ref: '#/components/responses/InvenioFileMetadataModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/draft/files/{file_key}:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/file_key'
+
+        get:
+            tags:
+                - Node Draft (Files)
+            summary: Get a draft file metadata
+            description: Get a draft file metadata
+            responses:
+                '200':
+                    $ref: '#/components/responses/InvenioFileMetadataModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        delete:
+            tags:
+                - Node Draft (Files)
+            summary: Delete a draft file
+            description: Delete a draft file
+            responses:
+                '204':
+                    description: Deleted
+
+components:
+    parameters:
+        project_id:
+            in: path
+            name: project_id
+            description: Project ID
+            required: true
+            schema:
+                type: string
+
+        node_id:
+            in: path
+            name: node_id
+            description: Node ID
+            required: true
+            schema:
+                type: string
+        file_key:
+            in: path
+            name: file_key
+            description: File Key
+            required: true
+            schema:
+                type: string
+
+    schemas:
+
+        #
+        # General schemas
+        #
+
+        RootType:
+            title: Landing Page
+            description: 'The landing page that provides the service version.'
+            type: object
+            properties:
+                bdcrrm_version:
+                    type: string
+                    example: '0.1'
+                    description: 'Service version.'
+            required:
+                - bdcrrm_version
+
+        ExceptionType:
+            title: Exception raised by the service.
+            description: 'Information about the raised exception.'
+            type: object
+            properties:
+                code:
+                    type: string
+                    example: '403'
+                    description: 'Raised error code'
+                description:
+                    type: string
+                    example: 'Unauthorized access'
+                    description: 'Raised error description'
+
+        #
+        # bdcrrm schemas
+        #
+
+        # Project
+        ProjectDefinitionModel:
+            title: Project
+            description: bdcrrm project model
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: 'my-project'
+                title:
+                    type: string
+                    example: 'My own project'
+                description:
+                    type: string
+                    example: 'A project description'
+                is_public:
+                    type: boolean
+                    example: true
+                metadata:
+                    type: object
+                    properties:
+                        licenses:
+                            type: object
+                            properties:
+                                code:
+                                    type: string
+                                    example: 'MIT'
+                                text:
+                                    type: string
+                                    example: 'MIT'
+                                data:
+                                    type: string
+                                    example: 'MIT'
+                        author_or_org:
+                            type: string
+                            example: 'Project Owner'
+                        author_or_org_email:
+                            type: string
+                            example: 'project@owner.org'
+
+        ProjectCreatedModel:
+            allOf:
+                -   $ref: '#/components/schemas/ProjectDefinitionModel'
+                -   type: object
+                    properties:
+                        graph_id:
+                            type: integer
+                            example: 2
+                        created_at:
+                            type: string
+                            example: '2021-09-06T12:03:42.024484+00:00'
+                        updated_at:
+                            type: string
+                            example: '2021-09-06T12:03:42.024504+00:00'
+                        is_finished:
+                            type: boolean
+                            example: false
+
+        # Graph
+        NodeMetadata:
+            title: Node Metadata
+            description: 'Metadata used to describe the Node content'
+            type: object
+            properties:
+                author:
+                    type: string
+                    example: 'Aladin'
+                description:
+                    type: string
+                    example: 'A metadata description'
+
+        NodeDraftFile:
+            title: Node Draft File
+            description: 'Object used on Node Draft to define new files'
+            type: object
+            properties:
+                key:
+                    type: string
+                    example: "input_file.txt"
+
+        NodeModel:
+            title: Node Draft
+            description: 'Node Draft definition'
+            type: object
+            properties:
+                data:
+                    type: object
+                    properties:
+                        inputs:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/NodeDraftFile'
+                        outputs:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/NodeDraftFile'
+                environment:
+                    $ref: '#/components/schemas/NodeDraftFile'
+                command:
+                    type: string
+                    example: 'python3 myscript.py --arg1 --arg2'
+                command_checksum:
+                    type: string
+                    example: '1220df718931fce2467010993b914f1ad3b9d00a50a4390d42e8e2138dcbb893514d'
+                metadata:
+                    $ref: '#/components/schemas/NodeMetadata'
+
+        #
+        # Invenio Framework customized models
+        #
+
+        # Files
+        InvenioFileMetadataModel:
+            title: Invenio File Commited document
+            description: |
+                'Invenio document with information about a commited file (Object version on invenio-files-rest)'
+            type: object
+            properties:
+                size:
+                    type: number
+                    example: 956.0
+                updated:
+                    type: string
+                    example: '2021-09-06T00:50:55.170782+00:00'
+                mimetype:
+                    type: string
+                    example: 'text/plain'
+                checksum:
+                    type: string
+                    example: 'md5:b573b5f2995f011afc843710cf4739a6'
+                key:
+                    type: string
+                    example: 'output_file.txt'
+                storage_class:
+                    type: string
+                    example: 'S'
+                version_id:
+                    type: string
+                    example: 'd408bc2c-0abe-43b7-b90e-342d4b97be3a'
+                file_id:
+                    type: string
+                    example: '90a20606-9556-4d2e-a411-6645a739ba24'
+                links:
+                    type: object
+                    properties:
+                        self:
+                            type: string
+                            description: 'Link to the current file'
+                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt'
+                        content:
+                            type: string
+                            description: 'Link to download the current file'
+                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt/content'
+                created:
+                    type: string
+                    example: '2021-09-06T00:50:12.162515+00:00'
+                status:
+                    type: string
+                    example: [ completed ]
+
+        InvenioFileEntryModel:
+            title: Invenio File entry
+            description: 'Invenio File document description'
+            type: object
+            properties:
+                updated:
+                    type: string
+                    example: '2021-09-06T00:50:12.165072+00:00'
+                key:
+                    type: string
+                    example: 'output_file.txt'
+                links:
+                    type: object
+                    properties:
+                        self:
+                            type: string
+                            description: 'Link to the current file'
+                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt'
+                        content:
+                            type: string
+                            description: 'Link to download the file content'
+                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt/content'
+                created:
+                    type: string
+                    example: '2021-09-06T00:50:12.162515+00:00'
+                status:
+                    type: string
+                    enum: [ pending, completed ]
+                metadata:
+                    type: object
+                    description: 'metadata extracted from the defined tile'
+
+        InvenioFilesDefinitionModel:
+            title: Invenio files definition model
+            description: 'Model with files information from a record/draft'
+            type: object
+            properties:
+                enabled:
+                    type: boolean
+                    example: true
+                links:
+                    type:
+                        object
+                    properties:
+                        self:
+                            type: string
+                            description: 'Link to the record files'
+                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files'
+                entries:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InvenioFileEntryModel'
+
+        # Links
+        InvenioRecordLinks:
+            title: Invenio Record Links
+            description: 'Invenio Record links'
+            type: object
+            properties:
+                self:
+                    type: string
+                    description: 'Link to the current node draft'
+                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/draft'
+                latest:
+                    type: string
+                    description: 'Link to the latest version of the record associated to the draft'
+                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/versions/latest'
+                record:
+                    type: string
+                    description: 'Link to the parent record of the record'
+                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84'
+                publish:
+                    type: string
+                    description: 'Link to publish a new record from a draft'
+                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/draft/actions/publish'
+                versions:
+                    type: string
+                    description: 'Link to all record versions'
+
+        # Records
+        NodeModelInvenio:
+            title: Invenio Record Node
+            description: 'Node modeled as a Invenio Record object'
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: '2k7cgyek84'
+                updated:
+                    type: string
+                    example: "2021-09-06T00:49:22.601795+00:00"
+                revision_id:
+                    type: integer
+                    example: 3
+                node:
+                    $ref: '#/components/schemas/NodeModel'
+                links:
+                    $ref: '#/components/schemas/InvenioRecordLinks'
+
+
+    requestBodies:
+
+        #
+        # General request bodies
+        #
+        BinaryFilesRequestBody:
+            required: true
+            content:
+                application/octet-stream:
+                    schema:
+                        type: string
+                        format: binary
+
+        #
+        # Files Request bodies
+        #
+        NodeDraftFileDefinitionRequestBody:
+            description: 'A JSON document with the files definitions'
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/NodeDraftFile'
+
+
+        #
+        # Node Draft request bodies
+        #
+        NodeDraftRequestBody:
+            description: 'A JSON document describing the node.'
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/NodeModel'
+
+        ProjectDefinitionModelRequestBody:
+            description: 'A JSON document describing the project'
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ProjectDefinitionModel'
+
+
+    responses:
+
+        #
+        # General responses
+        #
+        Root:
+            description: 'The landing page provides the version of service.'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/RootType'
+
+        Error:
+            description: 'The return for actions that cause an server exception.'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ExceptionType'
+
+
+        BinaryResponseBody:
+            description: 'Binary file'
+            content:
+                application/octet-stream:
+                    schema:
+                        type: string
+                        format: binary
+
+        #
+        # bdcrrm
+        #
+        ProjectCreatedModelResponseBody:
+            description: 'A JSON document with the created project'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ProjectCreatedModel'
+
+        ListOfProjectCreatedModelResponseBody:
+            description: 'A JSON document with a list of current user project.'
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/ProjectCreatedModel'
+
+        #
+        # Invenio Framework customized models
+        #
+        NodeDraftModelInvenioResponseBody:
+            description: 'A JSON document with the stored content.'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/NodeModelInvenio'
+
+        ListOfNodeDraftModelInvenioResponseBody:
+            description: 'A JSON document with a list of Invenio records.'
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/NodeModelInvenio'
+
+        InvenioFilesDefinitionModelResponseBody:
+            description: 'A JSON document with the files defined for a record/draft'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/InvenioFilesDefinitionModel'
+
+        InvenioFileEntryModelResponseBody:
+            description: 'A JSON document with the record/draft file entry'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/InvenioFileEntryModel'
+
+        InvenioFileMetadataModelResponseBody:
+            description: 'A JSON document with the complete description of a commited file'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/InvenioFileMetadataModel'
+

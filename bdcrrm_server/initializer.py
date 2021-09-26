@@ -10,13 +10,30 @@
 
 import uuid
 
-from .resources import NodeFileResource, FileNodeDraftResourceConfig, FileNodeRecordResourceConfig, NodeDraftResource, \
-    NodeDraftResourceConfig, NodeRecordResource, NodeRecordResourceConfig
+from .resources import (
+    NodeFileResource,
+    FileNodeDraftResourceConfig,
+    FileNodeRecordResourceConfig,
+    NodeDraftResource,
+    NodeDraftResourceConfig,
+    NodeRecordResource,
+    NodeRecordResourceConfig, ServiceResource, ServiceResourceConfig
+)
 from .resources.project import ProjectResource, ProjectResourceConfig
 from .resources.server import ServerResourceConfig, ServerResource
-from .services import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig, NodeFileService, \
-    NodeFileDraftService, ProjectService, ProjectServiceConfig, NodeDraftServiceConfig, NodeRecordServiceConfig, \
-    NodeDraftService, NodeRecordService
+
+from .services import (
+    FileNodeDraftServiceConfig,
+    FileNodeRecordServiceConfig,
+    NodeFileService,
+    NodeFileDraftService,
+    ProjectService,
+    ProjectServiceConfig,
+    NodeDraftServiceConfig,
+    NodeRecordServiceConfig,
+    NodeDraftService,
+    NodeRecordService
+)
 
 
 def initialize_project_resources(app) -> None:
@@ -28,7 +45,6 @@ def initialize_project_resources(app) -> None:
     Returns:
         None: Modifications are applied on flask app instance.
     """
-
     project_service = ProjectService(ProjectServiceConfig)
     project_resource = ProjectResource(ProjectResourceConfig, project_service)
 
@@ -46,6 +62,19 @@ def initialize_server_resources(app) -> None:
     """
     server_resource = ServerResource(ServerResourceConfig)
     app.register_blueprint(server_resource.as_blueprint())
+
+
+def initialize_service_resources(app) -> None:
+    """Initialize the services resources.
+
+    Args:
+        app (flask.Flask): flask app instance
+
+    Returns:
+        None: Modifications are applied on flask app instance.
+    """
+    service_resource = ServiceResource(ServiceResourceConfig)
+    app.register_blueprint(service_resource.as_blueprint())
 
 
 def initialize_invenio_records_resources(app) -> None:
@@ -103,5 +132,7 @@ def initialize_invenio_records_resources(app) -> None:
 
 __all__ = (
     "initialize_server_resources",
+    "initialize_project_resources",
+    "initialize_service_resources",
     "initialize_invenio_records_resources"
 )

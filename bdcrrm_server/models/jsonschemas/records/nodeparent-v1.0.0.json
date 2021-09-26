@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "id": "local://records/nodeparent-v1.0.0.json",
+    "title": "InvenioRDM Parent Record Schema v1.0.0",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "description": "JSONSchema declaration.",
+            "type": "string"
+        },
+        "id": {
+            "description": "Persistent record identifier (alphanumeric).",
+            "type": "string"
+        },
+        "pid": {
+            "$ref": "local://records/definitions-v1.0.0.json#/internal-pid"
+        }
+    }
+}
