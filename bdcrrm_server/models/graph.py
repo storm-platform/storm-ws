@@ -15,11 +15,12 @@ from invenio_drafts_resources.records.api import ParentRecord as ParentRecordBas
 from invenio_files_rest.models import Bucket
 from invenio_pidstore.models import PIDStatus
 from invenio_rdm_records.records.systemfields import HasDraftCheckField
+from invenio_records.dumpers import ElasticsearchDumper
 from invenio_records.models import RecordMetadataBase
-from invenio_records.systemfields import ModelField, DictField
+from invenio_records.systemfields import ModelField, DictField, ConstantField
 from invenio_records_resources.records import FileRecordModelMixin
 from invenio_records_resources.records.api import FileRecord
-from invenio_records_resources.records.systemfields import PIDStatusCheckField, FilesField
+from invenio_records_resources.records.systemfields import PIDStatusCheckField, FilesField, IndexField
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy_utils.types import UUIDType
 from werkzeug.local import LocalProxy
@@ -110,6 +111,12 @@ class NodeParent(ParentRecordBase):
     project_id = ModelField(dump=False)
     project = ModelField(dump=False)
 
+    dumper = ElasticsearchDumper()
+
+    schema = ConstantField(
+        "$schema", "local://records/nodeparent-v1.0.0.json"
+    )
+
 
 class CommonFieldsMixin:
     """Common system fields between records and drafts."""
@@ -131,6 +138,10 @@ class CommonFieldsMixin:
     is_published = PIDStatusCheckField(status=PIDStatus.REGISTERED, dump=True)
     pids = DictField("pids")
 
+    dumper = ElasticsearchDumper()
+    schema = ConstantField(
+        '$schema', 'local://records/noderecord-v1.0.0.json')
+
 
 class NodeFileDraft(FileRecord):
     model_cls = NodeFileDraftMetadata
@@ -139,6 +150,9 @@ class NodeFileDraft(FileRecord):
 
 class NodeDraft(CommonFieldsMixin, Draft):
     model_cls = NodeDraftMetadata
+
+    index = IndexField("node-drafts-draft-v1.0.0")
+
     files = FilesField(
         store=False,
         file_cls=NodeFileDraft,
@@ -155,6 +169,8 @@ class NodeFileRecord(FileRecord):
 
 class NodeRecord(CommonFieldsMixin, Record):
     model_cls = NodeRecordMetadata
+
+    index = IndexField("node-records-record-v1.0.0")
 
     files = FilesField(
         store=False,

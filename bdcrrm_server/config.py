@@ -39,7 +39,43 @@ class FlaskConfiguration:
     SESSION_COOKIE_PATH = os.getenv("SESSION_COOKIE_PATH", "/")
 
 
-class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfiguration):
+class OpenSearchConfiguration:
+    """OpenSearch/Elasticsearch Configuration.
+
+    See:
+        More details are available on invenio-search documentation: https://invenio-search.readthedocs.io/en/latest/
+    """
+    OPENSEARCH_DEFAULT_CONFIGURATION = dict(
+        host='localhost',
+        port=9200,
+        use_ssl=True,
+        scheme="https",
+        verify_certs=False,
+        ssl_show_warn=False,
+        http_auth=('admin', 'admin'),
+    )
+
+    SEARCH_CLIENT_CONFIG = dict(
+
+        hosts=[
+            OPENSEARCH_DEFAULT_CONFIGURATION
+        ]
+
+    )
+
+
+class InvenioJSONSchemaAPIConfigurations:
+    """Invenio JSONSchema Configurations.
+
+    See:
+        More details are available on module repository: https://github.com/inveniosoftware/invenio-jsonschemas
+    """
+    RECORDS_REFRESOLVER_CLS = "invenio_records.resolver.InvenioRefResolver"
+    RECORDS_REFRESOLVER_STORE = "invenio_jsonschemas.proxies.current_refresolver_store"
+
+
+class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfiguration, OpenSearchConfiguration,
+                        InvenioJSONSchemaAPIConfigurations):
     """Base Configuration."""
     DEBUG = False
     TESTING = False

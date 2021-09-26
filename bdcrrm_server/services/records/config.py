@@ -11,18 +11,16 @@
 from invenio_drafts_resources.services import RecordServiceConfig as DraftServiceConfigBase
 from invenio_drafts_resources.services.records.components import \
     DraftFilesComponent
+from invenio_drafts_resources.services.records.config import is_draft, is_record
+from invenio_records_resources.services import ConditionalLink
 from invenio_records_resources.services import RecordServiceConfig as RecordServiceConfigBase
 
 from ..components import NodeRecordDefinitionServiceComponent, NodeRecordParentServiceComponent, \
     ProjectValidatorRecordServiceComponent
 from ..links import NodeRecordLink
 from ...forms import NodeRecordSchema
-from ...indexer import DraftDummyIndexer, RecordDummyIndexer
 from ...models import NodeRecord, NodeDraft
 from ...security import AuthenticatedUserPermissionPolicy
-
-from invenio_drafts_resources.services.records.config import is_draft, is_record
-from invenio_records_resources.services import ConditionalLink
 
 
 class NodeCommonServiceConfig(DraftServiceConfigBase):
@@ -51,8 +49,6 @@ class NodeCommonServiceConfig(DraftServiceConfigBase):
 class NodeDraftServiceConfig(NodeCommonServiceConfig):
     draft_cls = NodeDraft
 
-    indexer_cls = DraftDummyIndexer
-
     components = DraftServiceConfigBase.components + [
         DraftFilesComponent,
         NodeRecordParentServiceComponent,
@@ -62,7 +58,6 @@ class NodeDraftServiceConfig(NodeCommonServiceConfig):
 
 
 class NodeRecordServiceConfig(RecordServiceConfigBase):
-    indexer_cls = RecordDummyIndexer
 
     components = RecordServiceConfigBase.components + [
         NodeRecordParentServiceComponent,

@@ -37,8 +37,9 @@ def setup_request_proxies(app):
 
     @app.before_request
     def project_proxy(**kwargs):
-        project_id = request.view_args.get("project_id", None)
-        g.project_id = int(project_id) if project_id else project_id
+        if request.view_args:
+            project_id = request.view_args.get("project_id", None)
+            g.project_id = int(project_id) if project_id else project_id
 
 
 def create_app(config_name='DevelopmentConfig'):
