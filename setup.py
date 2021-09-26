@@ -44,12 +44,19 @@ processing_dependencies = [
     'celery>=5.0.5'
 ]
 
+searchengine_dependencies = [
+    'elasticsearch==7.13.4',  # compatibility with opensearch (https://opensearch.org/docs/clients/index/)
+    'elasticsearch-dsl==7.4.0'
+]
+
 invenio_dependencies = [
     'invenio-db>=1.0.9',
     'invenio-files-rest>=1.2.0',
     'invenio-records>=1.4.0',
     'invenio-records-files>=1.2.1',
     'invenio-indexer>=1.2.1',
+    'invenio-cache>=1.1.0',
+    'invenio-rdm-records>=0.32.5',
     'invenio-records-resources>=0.16.14',
     'invenio-drafts-resources>=0.13.6',
     'invenio-search>=1.4.2',
@@ -109,6 +116,12 @@ setup(
         'console_scripts': [
             'bdcrrm-server = bdcrrm_server.cli:cli'
         ],
+        'invenio_jsonschemas.schemas': [
+            'node_record = bdcrrm_server.models.jsonschemas'
+        ],
+        'invenio_search.mappings': [
+            'noderecords = bdcrrm_server.models.mappings'
+        ]
     },
     extras_require=extras_require,
     install_requires=install_requires,
