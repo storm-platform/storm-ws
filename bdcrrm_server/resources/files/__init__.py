@@ -6,4 +6,17 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Files Resources`."""
+"""Brazil Data Cube Reproducible Research Management Server `Files resources module`."""
+
+from .resource import NodeFileResource
+
+from .config import (
+    FileNodeDraftResourceConfig,
+    FileNodeRecordResourceConfig
+)
+
+__all__ = (
+    "NodeFileResource",
+    "FileNodeDraftResourceConfig",
+    "FileNodeRecordResourceConfig"
+)

@@ -6,7 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Records Resources config`."""
+"""Brazil Data Cube Reproducible Research Management Server `Records resources config`."""
 
 from invenio_drafts_resources.resources import RecordResourceConfig as DraftResourceConfigBase
 from invenio_records_resources.resources import RecordResourceConfig as RecordResourceConfigBase
@@ -24,3 +24,9 @@ class NodeRecordResourceConfig(RecordResourceConfigBase):
 
     blueprint_name = "node_record_resources"
     url_prefix = "/graph/<project_id>/node"
+
+
+__all__ = (
+    "NodeDraftResourceConfig",
+    "NodeRecordResourceConfig"
+)

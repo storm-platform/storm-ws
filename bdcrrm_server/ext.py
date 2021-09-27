@@ -7,13 +7,15 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server Extension."""
-from invenio_access import InvenioAccess
+
 from invenio_db import InvenioDB
+from invenio_search import InvenioSearch
+from invenio_access import InvenioAccess
+from invenio_records import InvenioRecords
 from invenio_files_rest import InvenioFilesREST
 from invenio_jsonschemas import InvenioJSONSchemas
-from invenio_records import InvenioRecords
+
 from invenio_records_resources import InvenioRecordsResources
-from invenio_search import InvenioSearch
 
 from . import config
 
@@ -29,14 +31,7 @@ class BDCReproducibleResearchManagement:
     def init_app(self, app, **kwargs):
         """Initialize Flask application object."""
         self.init_config(app, **kwargs)
-
-        self._ext_invenio_db = InvenioDB(app)
-        self._ext_invenio_files_rest = InvenioFilesREST(app)
-        self._ext_invenio_access = InvenioAccess(app)
-        self._ext_invenio_search = InvenioSearch(app)
-        self._ext_invenio_records = InvenioRecords(app)
-        self._ext_invenio_jsonschema = InvenioJSONSchemas(app)
-        self._ext_invenio_records_resources = InvenioRecordsResources(app)
+        self.init_invenio_extensions(app, **kwargs)
 
         app.extensions["bdcrrm_server"] = self
 
@@ -44,3 +39,13 @@ class BDCReproducibleResearchManagement:
         """Initialize configuration."""
         conf = config.get_settings(kwargs["config_name"])
         app.config.from_object(conf)
+
+    def init_invenio_extensions(self, app, **kwargs):
+        """Initialize invenio extensions."""
+        InvenioDB(app)
+        InvenioFilesREST(app)
+        InvenioAccess(app)
+        InvenioSearch(app)
+        InvenioRecords(app)
+        InvenioJSONSchemas(app)
+        InvenioRecordsResources(app)

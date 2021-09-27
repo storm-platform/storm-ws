@@ -6,12 +6,21 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Project Services`."""
+"""Brazil Data Cube Reproducible Research Management Server `Project services module`."""
 
-from .config import ProjectServiceConfig
-from .service import ProjectService
+from .config import (
+    ProjectServiceConfig,
+    ProjectGraphServiceConfig
+)
+
+from .service import (
+    ProjectService,
+    ProjectGraphService
+)
 
 __all__ = (
+    "ProjectService",
+    "ProjectGraphService",
     "ProjectServiceConfig",
-    "ProjectService"
+    "ProjectGraphServiceConfig"
 )

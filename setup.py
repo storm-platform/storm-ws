@@ -45,7 +45,7 @@ processing_dependencies = [
 ]
 
 searchengine_dependencies = [
-    'elasticsearch==7.13.4',  # compatibility with opensearch (https://opensearch.org/docs/clients/index/)
+    'elasticsearch==7.13.4',  # compatible with opensearch (https://opensearch.org/docs/clients/index/)
     'elasticsearch-dsl==7.4.0'
 ]
 
@@ -63,19 +63,23 @@ invenio_dependencies = [
     'invenio-celery==1.2.2'  # fixed to avoid problems
 ]
 
+database_dependencies = [
+    'SQLAlchemy>=1.3.11',
+    'psycopg2-binary>=2.8',
+    'Flask-SQLAlchemy>=2.4',
+    'sqlalchemy-json>=0.4.0',
+    'marshmallow-sqlalchemy==0.25.0',
+]
+
 general_dependencies = [
     'Click>=7.0',
     'Flask>=1.1.4',
-    'Flask-SQLAlchemy>=2.4',
-    'SQLAlchemy>=1.3.11',
-    'psycopg2-binary>=2.8',
-    'marshmallow-sqlalchemy==0.25.0',
     'six>=1.16.0',
     'base32-lib>=1.0.2',
     'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client@v0.2.3',
 ]
 
-install_requires = [*general_dependencies, *invenio_dependencies, *processing_dependencies]
+install_requires = [*general_dependencies, *invenio_dependencies, *processing_dependencies, *database_dependencies]
 
 extras_require = {
     'docs': docs_require,
@@ -117,10 +121,10 @@ setup(
             'bdcrrm-server = bdcrrm_server.cli:cli'
         ],
         'invenio_jsonschemas.schemas': [
-            'node_record = bdcrrm_server.models.jsonschemas'
+            'node_record = bdcrrm_server.models.graph.jsonschemas'
         ],
         'invenio_search.mappings': [
-            'noderecords = bdcrrm_server.models.mappings'
+            'node_records = bdcrrm_server.models.graph.mappings'
         ]
     },
     extras_require=extras_require,

@@ -6,15 +6,4 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Files resources`."""
-
-from invenio_records_resources.resources import FileResource
-
-
-class NodeFileResource(FileResource):
-    ...
-
-
-__all__ = (
-    "NodeFileResource"
-)
+"""Brazil Data Cube Reproducible Research Management Server `Opensearch/Elasticsearch mappings`."""

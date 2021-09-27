@@ -25,3 +25,8 @@ class NodeRecordLink(Link):
                 "access_token": request.args.get("access_token", )  # required for bdcrrm applications
             }
         })
+
+
+__all__ = (
+    "NodeRecordLink"
+)

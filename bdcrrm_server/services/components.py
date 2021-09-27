@@ -10,8 +10,8 @@
 
 from flask import g
 
-from invenio_drafts_resources.services.records.components import ServiceComponent as DraftServiceComponent
 from invenio_records_resources.services.files import FileServiceComponent
+from invenio_drafts_resources.services.records.components import ServiceComponent as DraftServiceComponent
 
 
 class NodeRecordParentServiceComponent(DraftServiceComponent):
@@ -27,9 +27,8 @@ class NodeRecordParentServiceComponent(DraftServiceComponent):
 class NodeRecordDefinitionServiceComponent(DraftServiceComponent):
     """Component for NodeRecord attributes definitions control."""
 
-    def create(self, identity, data=None, record=None, errors=None):
-        super().create(identity, data=None, record=None, errors=None)
-
+    def _populate_node_record(self, data=None, record=None):
+        """Populate a node record object based on another record (Draft or Publised)."""
         # Data files
         datafiles = data.get("data", {})
         record.inputs = datafiles.get("inputs", [])
@@ -41,6 +40,21 @@ class NodeRecordDefinitionServiceComponent(DraftServiceComponent):
         # Commands
         record.command = data.get("command")
         record.command_checksum = data.get("command_checksum")
+
+    def create(self, identity, data=None, record=None, errors=None):
+        self._populate_node_record(data, record)
+
+    def publish(self, identity, draft=None, record=None):
+        """Publish handler."""
+        self._populate_node_record(draft, record)
+
+    def edit(self, identity, draft=None, record=None):
+        """Edit a record handler."""
+        self._populate_node_record(record, draft)
+
+    def new_version(self, identity, draft=None, record=None):
+        """New version handler."""
+        self._populate_node_record(record, draft)
 
 
 class NodeDraftFileDefinitionValidatorComponent(FileServiceComponent):

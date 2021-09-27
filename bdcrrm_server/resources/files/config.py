@@ -6,6 +6,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
+"""Brazil Data Cube Reproducible Research Management Server `Files resources config`."""
+
 from invenio_records_resources.resources import FileResourceConfig as BaseFileResourceConfig
 from marshmallow import fields
 
@@ -34,3 +36,9 @@ class FileNodeRecordResourceConfig(NodeCommonResourceConfig):
 
     blueprint_name = "node_record_files"
     url_prefix = "/graph/<project_id>/node/<pid_value>"
+
+
+__all__ = (
+    "FileNodeDraftResourceConfig",
+    "FileNodeRecordResourceConfig"
+)
