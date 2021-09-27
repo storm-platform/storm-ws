@@ -10,19 +10,28 @@
 
 import uuid
 
-from .resources import (
+from . import (
     NodeFileResource,
     FileNodeDraftResourceConfig,
     FileNodeRecordResourceConfig,
     NodeDraftResource,
     NodeDraftResourceConfig,
     NodeRecordResource,
-    NodeRecordResourceConfig, ServiceResource, ServiceResourceConfig
-)
-from .resources.project import ProjectResource, ProjectResourceConfig
-from .resources.server import ServerResourceConfig, ServerResource
+    NodeRecordResourceConfig,
+    ServiceResource,
+    ServiceResourceConfig,
+    ProjectGraphResourceConfig,
+    ProjectGraphNodeResourceConfig,
 
-from .services import (
+    ProjectGraphResource,
+    ProjectGraphNodeResource
+)
+from .project import (
+    ProjectResource,
+    ProjectResourceConfig
+)
+from .server import ServerResourceConfig, ServerResource
+from ..services import (
     FileNodeDraftServiceConfig,
     FileNodeRecordServiceConfig,
     NodeFileService,
@@ -32,7 +41,9 @@ from .services import (
     NodeDraftServiceConfig,
     NodeRecordServiceConfig,
     NodeDraftService,
-    NodeRecordService
+    NodeRecordService,
+    ProjectGraphService,
+    ProjectGraphServiceConfig
 )
 
 
@@ -75,6 +86,28 @@ def initialize_service_resources(app) -> None:
     """
     service_resource = ServiceResource(ServiceResourceConfig)
     app.register_blueprint(service_resource.as_blueprint())
+
+
+def initialize_graph_resources(app) -> None:
+    """Initialize the Graph resources.
+
+    Args:
+        app (flask.Flask): flask app instance
+
+    Returns:
+        None: Modifications are applied on flask app instance.
+    """
+    # Services
+    project_service = ProjectService(ProjectServiceConfig)
+    graph_service = ProjectGraphService(ProjectGraphServiceConfig, project_service)
+
+    # Resources
+    graph_resource = ProjectGraphResource(ProjectGraphResourceConfig, graph_service)
+    graph_node_resource = ProjectGraphNodeResource(ProjectGraphNodeResourceConfig, graph_service)
+
+    # Blueprints
+    app.register_blueprint(graph_resource.as_blueprint())
+    app.register_blueprint(graph_node_resource.as_blueprint())
 
 
 def initialize_invenio_records_resources(app) -> None:
@@ -131,6 +164,7 @@ def initialize_invenio_records_resources(app) -> None:
 
 
 __all__ = (
+    "initialize_graph_resources",
     "initialize_server_resources",
     "initialize_project_resources",
     "initialize_service_resources",

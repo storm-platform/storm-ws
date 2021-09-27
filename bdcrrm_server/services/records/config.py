@@ -6,19 +6,24 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Records Services config`."""
+"""Brazil Data Cube Reproducible Research Management Server `Records services config`."""
+
+from invenio_records_resources.services import ConditionalLink
+from invenio_drafts_resources.services.records.config import is_draft, is_record
+
+from invenio_drafts_resources.services.records.components import DraftFilesComponent
 
 from invenio_drafts_resources.services import RecordServiceConfig as DraftServiceConfigBase
-from invenio_drafts_resources.services.records.components import \
-    DraftFilesComponent
-from invenio_drafts_resources.services.records.config import is_draft, is_record
-from invenio_records_resources.services import ConditionalLink
 from invenio_records_resources.services import RecordServiceConfig as RecordServiceConfigBase
 
-from ..components import NodeRecordDefinitionServiceComponent, NodeRecordParentServiceComponent, \
+from ..components import (
+    NodeRecordDefinitionServiceComponent,
+    NodeRecordParentServiceComponent,
     ProjectValidatorRecordServiceComponent
+)
+
 from ..links import NodeRecordLink
-from ...forms import NodeRecordSchema
+from ...schema import NodeRecordSchema
 from ...models import NodeRecord, NodeDraft
 from ...security import AuthenticatedUserPermissionPolicy
 
@@ -58,7 +63,6 @@ class NodeDraftServiceConfig(NodeCommonServiceConfig):
 
 
 class NodeRecordServiceConfig(RecordServiceConfigBase):
-
     components = RecordServiceConfigBase.components + [
         NodeRecordParentServiceComponent,
         NodeRecordDefinitionServiceComponent,

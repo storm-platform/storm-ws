@@ -10,10 +10,14 @@
 
 import datetime
 
+from sqlalchemy import UniqueConstraint
+
+from sqlalchemy_json import mutable_json_type
 from sqlalchemy.dialects.postgresql import JSONB
 
 from . import db
-from .. import BaseConfiguration
+from .base import BaseModel
+from ..config import BaseConfiguration
 
 
 class Project(db.Model):
@@ -33,10 +37,6 @@ class Project(db.Model):
     updated_at = db.Column(db.TIMESTAMP(timezone=True), default=datetime.datetime.now,
                            onupdate=datetime.datetime.now, )
 
-    graph_id = db.Column(
-        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project_graph.id", onupdate="CASCADE", ), nullable=True)
-    graph = db.relationship("ProjectGraph", lazy="joined")
-
     _metadata = db.Column("metadata", JSONB, nullable=True, comment="Project metadata.")
 
     __table_args__ = (
@@ -45,6 +45,49 @@ class Project(db.Model):
     )
 
 
+class ProjectUser(db.Model):
+    """SQLAlchemy ProjectUser model."""
+
+    __tablename__ = "project_user"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+
+    active = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
+    project_id = db.Column(
+        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project.id", onupdate="CASCADE", ondelete="CASCADE"))
+
+    project = db.relationship("Project", lazy="joined")
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "project_id"),
+        dict(schema=BaseConfiguration.BDCRRM_DB_SCHEMA),
+    )
+
+
+class ProjectGraph(db.Model):
+    """SQLAlchemy ProjectGraph model."""
+
+    __tablename__ = "project_graph"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    graph = db.Column(mutable_json_type(dbtype=JSONB, nested=True), nullable=False)
+    label = db.Column(db.String(40), nullable=False, comment="Graph identification label.")
+
+    project_id = db.Column(
+        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project.id", onupdate="CASCADE", ), nullable=False)
+    project = db.relationship("Project", lazy="joined")
+
+    __table_args__ = (
+                         UniqueConstraint("project_id", "label", name="project_graph_labels"),
+                     ) + BaseModel.__table_args__
+
+
 __all__ = (
-    "Project"
+    "Project",
+    "ProjectUser",
+    "ProjectGraph"
 )

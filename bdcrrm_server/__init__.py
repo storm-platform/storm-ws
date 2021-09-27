@@ -10,19 +10,20 @@
 
 import os
 
-import marshmallow.exceptions as marshmallow_exceptions
+from flask import Flask, jsonify, request, g
+
 import sqlalchemy.exc as sqlalchemy_exceptions
 import werkzeug.exceptions as werkzeug_exceptions
-from flask import Flask, jsonify
-from flask import g, request
+import marshmallow.exceptions as marshmallow_exceptions
 
 from .config import BaseConfiguration
 from .ext import BDCReproducibleResearchManagement
-from .initializer import (
-    initialize_invenio_records_resources,
+from .resources.initializer import (
+    initialize_graph_resources,
     initialize_server_resources,
+    initialize_service_resources,
     initialize_project_resources,
-    initialize_service_resources
+    initialize_invenio_records_resources,
 )
 from .security import authenticate
 from .version import __version__
@@ -37,7 +38,7 @@ def setup_security_authentication(app):
         def _authenticate(**kwargs):
             pass  # authenticate the user
 
-        # adding some exceptions
+        # user is able to see the index without access token
         if request.path != "/":
             _authenticate()
 
@@ -119,6 +120,7 @@ def setup_app(app, config_name):
     setup_security_authentication(app)
 
     # Resources
+    initialize_graph_resources(app)
     initialize_server_resources(app)
     initialize_project_resources(app)
     initialize_service_resources(app)

@@ -8,10 +8,26 @@
 
 """Brazil Data Cube Reproducible Research Management Server `Services`."""
 
-from .files import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig, NodeFileService, \
+from .files import (
+    FileNodeDraftServiceConfig,
+    FileNodeRecordServiceConfig,
+    NodeFileService,
     NodeFileDraftService
-from .project import ProjectService, ProjectServiceConfig
-from .records import NodeDraftServiceConfig, NodeRecordServiceConfig, NodeDraftService, NodeRecordService
+)
+
+from .project import (
+    ProjectService,
+    ProjectServiceConfig,
+    ProjectGraphServiceConfig,
+    ProjectGraphService
+)
+
+from .records import (
+    NodeDraftServiceConfig,
+    NodeRecordServiceConfig,
+    NodeDraftService,
+    NodeRecordService
+)
 
 __all__ = (
     "ProjectServiceConfig",
@@ -26,5 +42,8 @@ __all__ = (
     "ProjectService",
 
     "NodeDraftService",
-    "NodeRecordService"
+    "NodeRecordService",
+
+    "ProjectGraphService",
+    "ProjectGraphServiceConfig"
 )

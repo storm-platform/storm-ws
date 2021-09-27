@@ -6,11 +6,17 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Files Services`."""
+"""Brazil Data Cube Reproducible Research Management Server `Files services module`."""
 
-from .config import FileNodeDraftServiceConfig, FileNodeRecordServiceConfig
+from .config import (
+    FileNodeDraftServiceConfig,
+    FileNodeRecordServiceConfig
+)
 
-from .service import NodeFileService, NodeFileDraftService
+from .service import (
+    NodeFileService,
+    NodeFileDraftService
+)
 
 __all__ = (
     "FileNodeDraftServiceConfig",

@@ -8,14 +8,38 @@
 
 """Brazil Data Cube Reproducible Research Management Server `Resources`."""
 
-from .files.config import FileNodeDraftResourceConfig, FileNodeRecordResourceConfig
-from .files.resource import NodeFileResource
-from .records.config import NodeDraftResourceConfig, NodeRecordResourceConfig
-from .records.resource import NodeRecordResource, NodeDraftResource
+from .files import (
+    FileNodeDraftResourceConfig,
+    FileNodeRecordResourceConfig,
+    NodeFileResource
+)
 
-from .server import ServerResource, ServerResourceConfig
+from .project import (
+    ProjectResourceConfig,
+    ProjectGraphResourceConfig,
+    ProjectGraphNodeResourceConfig,
 
-from .service import ServiceResource, ServiceResourceConfig
+    ProjectResource,
+    ProjectGraphResource,
+    ProjectGraphNodeResource
+)
+
+from .records import (
+    NodeDraftResourceConfig,
+    NodeRecordResourceConfig,
+    NodeRecordResource,
+    NodeDraftResource
+)
+
+from .server import (
+    ServerResource,
+    ServerResourceConfig
+)
+
+from .service import (
+    ServiceResource,
+    ServiceResourceConfig
+)
 
 __all__ = (
     "NodeDraftResourceConfig",
@@ -32,5 +56,13 @@ __all__ = (
     "ServerResourceConfig",
 
     "ServiceResource",
-    "ServiceResourceConfig"
+    "ServiceResourceConfig",
+
+    "ProjectResourceConfig",
+    "ProjectGraphResourceConfig",
+    "ProjectGraphNodeResourceConfig",
+
+    "ProjectResource",
+    "ProjectGraphResource",
+    "ProjectGraphNodeResource"
 )

@@ -6,10 +6,10 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Records Services`."""
+"""Brazil Data Cube Reproducible Research Management Server `Records services`."""
 
-from invenio_drafts_resources.services import RecordService as RecordDraftServiceBase
 from invenio_records_resources.services import RecordService as RecordServiceBase
+from invenio_drafts_resources.services import RecordService as RecordDraftServiceBase
 
 
 class NodeRecordService(RecordServiceBase):
