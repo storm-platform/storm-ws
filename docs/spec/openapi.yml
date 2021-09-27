@@ -50,7 +50,7 @@ paths:
                                         example: 200
                                     message:
                                         type: string
-                                        example: "Pong!"
+                                        example: 'Pong!'
 
     #
     # Record
@@ -109,8 +109,94 @@ paths:
             summary: Delete a project
             description: Delete a project if user is admin
             responses:
-                '204':
+                '200':
                     description: Deleted
+
+    #
+    # Project Graph
+    #
+    /project/{project_id}/graph:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+
+        get:
+            tags:
+                - Project Graph
+            summary: List all Graph associated to the project
+            description: List all ProjectGraph.
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfProjectGraphModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        post:
+            tags:
+                - Project Graph
+            summary: Create a new Project Graph
+            description: Create a new Graph and associate it to the defined Project.
+            requestBody:
+                $ref: '#/components/requestBodies/ProjectDefinitionModelRequestBody'
+            responses:
+                '200':
+                    $ref: '#/components/responses/ProjectGraphModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /project/{project_id}/graph/{graph_label}:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/graph_label'
+
+        get:
+            tags:
+                - Project Graph
+            summary: Describe a specific Project graph
+            description: Get all informations that related to a specific Project Graph
+            responses:
+                '200':
+                    $ref: '#/components/responses/ProjectGraphModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        delete:
+            tags:
+                - Project Graph
+            summary: Delete a Project Graph
+            description: Delete a Project Graph from a specific project.
+            responses:
+                '200':
+                    description: Deleted
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /project/{project_id}/graph/{graph_label}/node/{node_id}:
+        parameters:
+            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/graph_label'
+
+        post:
+            tags:
+                - Project Graph
+            summary: Create a new node on Project Graph
+            description: Add an already published NodeRecord to the Project Graph
+            responses:
+                '200':
+                    $ref: '#/components/responses/ProjectGraphModelResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        delete:
+            tags:
+                - Project Graph
+            summary: Delete a node from Project Graph
+            description: Delete a NodeRecord from Project Graph
+            responses:
+                '200':
+                    description: Deleted
+                '404':
+                    $ref: '#/components/responses/Error'
 
     #
     # Node Record
@@ -141,6 +227,49 @@ paths:
                 - Node Record
             summary: List all nodes associades to the project
             description: List all Project Nodes, and their versions.
+            responses:
+                '200':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/versions:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+
+        post:
+            tags:
+                - Node Record (Versions)
+            summary: Create a new NodeRecord version
+            description: Create a new version of an already published NodeRecord.
+            responses:
+                '200':
+                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+        get:
+            tags:
+                - Node Record (Versions)
+            summary: Get all NodeRecord versions
+            description: Get all versions of an already published NodeRecord.
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfNodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
+
+    /graph/{project_id}/node/{node_id}/versions/latest:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+            -   $ref: '#/components/parameters/node_id'
+
+        get:
+            tags:
+                - Node Record (Versions)
+            summary: Get the NodeRecord latest version
+            description: Get the latest version of a NodeRecord.
             responses:
                 '200':
                     $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
@@ -250,7 +379,7 @@ paths:
             summary: Delete a Node Draft
             description: Delete a Node Draft
             responses:
-                '204':
+                '200':
                     description: Deleted
 
     /graph/{project_id}/node/{node_id}/draft/actions/publish:
@@ -378,7 +507,7 @@ paths:
             summary: Delete a draft file
             description: Delete a draft file
             responses:
-                '204':
+                '200':
                     description: Deleted
 
 components:
@@ -390,7 +519,13 @@ components:
             required: true
             schema:
                 type: string
-
+        graph_label:
+            in: path
+            name: graph_label
+            description: Project Graph label
+            required: true
+            schema:
+                type: string
         node_id:
             in: path
             name: node_id
@@ -417,10 +552,14 @@ components:
             description: 'The landing page that provides the service version.'
             type: object
             properties:
-                bdcrrm_version:
+                application_name:
+                    type: string
+                    example: 'Brazil Data Cube Reproducible Research Management'
+                    description: 'Application name'
+                version:
                     type: string
                     example: '0.1'
-                    description: 'Service version.'
+                    description: 'Application version'
             required:
                 - bdcrrm_version
 
@@ -493,12 +632,78 @@ components:
                         created_at:
                             type: string
                             example: '2021-09-06T12:03:42.024484+00:00'
+                            format: 'date-time'
                         updated_at:
                             type: string
                             example: '2021-09-06T12:03:42.024504+00:00'
+                            format: 'date-time'
                         is_finished:
                             type: boolean
                             example: false
+
+        #
+        # Project Graph
+        #
+        ProjectGraphDefinitionModel:
+            title: Project Graph Definition model
+            description: 'Project Graph definition model'
+            type: object
+            properties:
+                label:
+                    type: string
+                    description: 'Graph label. Is used to identificate the created Project Graph'
+                    example: 'classification_node_steps'
+                metadata:
+                    type: object
+                    properties:
+                        description:
+                            type: string
+                            description: 'Graph description'
+                            example: 'A graph with execution steps that evaluate a classification map'
+                    description: 'Graph metadata'
+
+        ProjectGraphModel:
+            title: Project Graph
+            description: 'Project Graph model'
+            type: object
+            properties:
+                graph:
+                    type: object
+                    properties:
+                        directed:
+                            type: boolean
+                            description: 'Flag that indicates whether the graph is directed or not'
+                        type:
+                            type: string
+                            description: 'Graph type'
+                            example: 'Execution Graph'
+                        metadata:
+                            type: object
+                            properties:
+                                description:
+                                  type: string
+                                  description: 'Graph description'
+                        edges:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    source:
+                                        type: string
+                                        description: 'NodeRecord ID used as source node in the edge'
+                                        example: 'yadgcb0g64'
+                                    target:
+                                        type: string
+                                        description: 'NodeRecord ID used as target node in the edge'
+                                        example: 'wt410zkq75'
+                            description: 'List of all graph nodes'
+                        nodes:
+                            type: array
+                            items:
+                                type: string
+                                description: 'NodeRecord ID represented by the node'
+                                example: 'wt410zkq75'
+                            description: 'List of all graph nodes'
 
         # Graph
         NodeMetadata:
@@ -520,7 +725,7 @@ components:
             properties:
                 key:
                     type: string
-                    example: "input_file.txt"
+                    example: 'input_file.txt'
 
         NodeModel:
             title: Node Draft
@@ -549,6 +754,7 @@ components:
                 metadata:
                     $ref: '#/components/schemas/NodeMetadata'
 
+
         #
         # Invenio Framework customized models
         #
@@ -566,6 +772,7 @@ components:
                 updated:
                     type: string
                     example: '2021-09-06T00:50:55.170782+00:00'
+                    format: 'date-time'
                 mimetype:
                     type: string
                     example: 'text/plain'
@@ -598,6 +805,7 @@ components:
                 created:
                     type: string
                     example: '2021-09-06T00:50:12.162515+00:00'
+                    format: 'date-time'
                 status:
                     type: string
                     example: [ completed ]
@@ -610,6 +818,7 @@ components:
                 updated:
                     type: string
                     example: '2021-09-06T00:50:12.165072+00:00'
+                    format: 'date-time'
                 key:
                     type: string
                     example: 'output_file.txt'
@@ -692,7 +901,8 @@ components:
                     example: '2k7cgyek84'
                 updated:
                     type: string
-                    example: "2021-09-06T00:49:22.601795+00:00"
+                    example: '2021-09-06T00:49:22.601795+00:00'
+                    format: 'date-time'
                 revision_id:
                     type: integer
                     example: 3
@@ -714,6 +924,17 @@ components:
                     schema:
                         type: string
                         format: binary
+
+        #
+        # Project bodies
+        #
+        ProjectGraphDefinitionRequestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                    $ref: '#/components/schemas/ProjectGraphDefinitionModel'
+            description: 'A JSON document with the informations that will be used to identify and describe the generated graph'
 
         #
         # Files Request bodies
@@ -793,6 +1014,23 @@ components:
                         type: array
                         items:
                             $ref: '#/components/schemas/ProjectCreatedModel'
+
+        ProjectGraphModelResponseBody:
+            description: 'A JSON document with the Project Graph'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ProjectGraphModel'
+
+
+        ListOfProjectGraphModelResponseBody:
+            description: 'A JSON document with a list of ProjectGraph available.'
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/ProjectGraphModel'
 
         #
         # Invenio Framework customized models
