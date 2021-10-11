@@ -47,6 +47,11 @@ class NodeCommonServiceConfig(DraftServiceConfigBase):
             "{+api}graph/{project_id}/node/{id}/draft/actions/publish{?args*}",
             when=is_draft
         ),
+        "files": ConditionalLink(
+            cond=is_record,
+            if_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/files{?args*}"),
+            else_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/draft/files{?args*}"),
+        ),
         "versions": NodeRecordLink("{+api}graph/{project_id}/node/{id}/versions{?args*}"),
     }
 

@@ -7,15 +7,22 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server `Files services config`."""
-
-from invenio_records_resources.services import FileServiceConfig as BaseFileServiceConfig
+from invenio_drafts_resources.services.records.config import is_record
+from invenio_records_resources.services import FileServiceConfig as BaseFileServiceConfig, RecordLink, FileLink, \
+    ConditionalLink
 
 from ..components import (
     ProjectValidatorFileServiceComponent,
     NodeDraftFileDefinitionValidatorComponent
 )
+from ..links import NodeRecordLink, NodeFileLink
 from ...models import NodeDraft, NodeRecord
 from ...security import AuthenticatedUserPermissionPolicy
+
+
+def file_record_is_draft(file, ctx):
+    """Shortcut for links to determine if record is a record."""
+    return file.record.is_draft
 
 
 class FileCommonServiceConfig(BaseFileServiceConfig):
@@ -24,6 +31,29 @@ class FileCommonServiceConfig(BaseFileServiceConfig):
     components = BaseFileServiceConfig.components + [
         ProjectValidatorFileServiceComponent
     ]
+
+    file_links_list = {
+        "self": ConditionalLink(
+            cond=is_record,
+            if_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/files{?args*}"),
+            else_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/draft/files{?args*}"),
+        ),
+    }
+
+    file_links_item = {
+        "self": ConditionalLink(
+            cond=file_record_is_draft,
+            if_=NodeFileLink("{+api}graph/{project_id}/node/{id}/draft/files{?args*}"),
+            else_=NodeFileLink("{+api}graph/{project_id}/node/{id}/files{?args*}"),
+        ),
+        "content": ConditionalLink(
+            cond=file_record_is_draft,
+            if_=NodeFileLink("{+api}graph/{project_id}/node/{id}/draft/files/{key}/content{?args*}"),
+            else_=NodeFileLink("{+api}graph/{project_id}/node/{id}/files/{key}/content{?args*}"),
+        ),
+        "commit": NodeFileLink("{+api}graph/{project_id}/node/{id}/draft/files/{key}/commit{?args*}",
+                               when=file_record_is_draft)
+    }
 
 
 class FileNodeDraftServiceConfig(FileCommonServiceConfig):
