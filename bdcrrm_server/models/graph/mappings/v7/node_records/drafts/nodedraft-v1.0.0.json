@@ -41,6 +41,12 @@
             },
             "updated": {
                 "type": "date"
+            },
+            "command": {
+                "type": "text"
+            },
+            "command_checksum": {
+                "type": "text"
             }
         }
     }
