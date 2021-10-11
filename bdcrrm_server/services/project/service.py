@@ -10,6 +10,8 @@
 
 from typing import Dict, List
 
+from copy import deepcopy
+
 import werkzeug.exceptions as werkzeug_exceptions
 from bdcrrm_api.graph import (
     JSONGraphConverter,
@@ -274,12 +276,17 @@ class ProjectGraphService(Service):
             raise werkzeug_exceptions.BadRequest(description="NodeRecord must be published to be used as a GraphNode")
 
         # adding the selected node to the graph
-        graph_manager = ExecutionGraphManager(JSONGraphConverter.from_json({"graph": selected_graph.graph}))
+        selected_execution_graph = deepcopy(selected_graph.graph)
+        graph_manager = ExecutionGraphManager(JSONGraphConverter.from_json({"graph": selected_execution_graph}))
 
         graph_command = selected_node_record.command
         graph_repropack = selected_node_record.environment["key"]
         graph_inputs = [x["key"] for x in selected_node_record["data"]["inputs"]]
         graph_outputs = [x["key"] for x in selected_node_record["data"]["outputs"]]
+
+        # introducing checksum verification
+        graph_inputs = [selected_node_record.files[file_name].file.file_model.checksum for file_name in graph_inputs]
+        graph_outputs = [selected_node_record.files[file_name].file.file_model.checksum for file_name in graph_outputs]
 
         graph_manager.add_vertex(graph_repropack, graph_command, graph_inputs, graph_outputs, name=node_id)
 
@@ -317,9 +324,12 @@ class ProjectGraphService(Service):
             selected_node = graph_manager.graph.vs.select(name=node_id)
 
             if selected_node:
-                graph_manager.delete_vertex("".join(selected_node["command"][0].split()))
+                graph_manager.delete_vertex(" ".join(["".join(x.split()) for x in selected_node["command"][0].split("  ")]))
 
-                selected_graph.graph = JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name")
+                selected_graph.graph = (
+                    JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name")
+                        .get("graph")
+                )
                 db.session.add(selected_graph)
                 db.session.commit()
 
