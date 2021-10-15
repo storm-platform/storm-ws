@@ -8,25 +8,14 @@
 
 """Brazil Data Cube Reproducible Research Management Server `Records resources config`."""
 
-from invenio_drafts_resources.resources import RecordResourceConfig as DraftResourceConfigBase
-from invenio_records_resources.resources import RecordResourceConfig as RecordResourceConfigBase
+from invenio_drafts_resources.resources import RecordResourceConfig
 
 
-class NodeDraftResourceConfig(DraftResourceConfigBase):
-    """Mock record resource configuration."""
-
-    blueprint_name = "node_draft_resources"
-    url_prefix = "/graph/<project_id>/node"
-
-
-class NodeRecordResourceConfig(RecordResourceConfigBase):
-    """Mock record resource configuration."""
-
-    blueprint_name = "node_record_resources"
+class NodeResourceConfig(RecordResourceConfig):
+    blueprint_name = "node_resources"
     url_prefix = "/graph/<project_id>/node"
 
 
 __all__ = (
-    "NodeDraftResourceConfig",
-    "NodeRecordResourceConfig"
+    "NodeResourceConfig"
 )

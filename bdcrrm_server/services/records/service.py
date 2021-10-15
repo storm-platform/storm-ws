@@ -8,19 +8,10 @@
 
 """Brazil Data Cube Reproducible Research Management Server `Records services`."""
 
-from invenio_records_resources.services import RecordService as RecordServiceBase
-from invenio_drafts_resources.services import RecordService as RecordDraftServiceBase
+from invenio_drafts_resources.services import RecordService
 
 
-class NodeRecordService(RecordServiceBase):
-
-    def __init__(self, config, project_service=None):
-        """Constructor for RecordService."""
-        super().__init__(config)
-        self._project_service = project_service
-
-
-class NodeDraftService(RecordDraftServiceBase):
+class NodeService(RecordService):
 
     def __init__(self, config, files_service=None, draft_files_service=None, project_service=None):
         """Initializer for NodeDraftRecordService."""
@@ -29,6 +20,5 @@ class NodeDraftService(RecordDraftServiceBase):
 
 
 __all__ = (
-    "NodeRecordService",
-    "NodeDraftService"
+    "NodeService"
 )

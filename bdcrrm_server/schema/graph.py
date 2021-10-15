@@ -7,9 +7,8 @@
 #
 
 """Brazil Data Cube Reproducible Research Management Server Graph Marshmallow.."""
-
-from invenio_records_resources.services.records.schema import BaseRecordSchema
 from marshmallow import Schema, fields
+from invenio_drafts_resources.services.records.schema import RecordSchema, ParentSchema
 
 
 class InvenioFileSchema(Schema):
@@ -29,7 +28,11 @@ class NodeRecordFiles(Schema):
     outputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
 
 
-class NodeRecordSchema(BaseRecordSchema):
+class NodeParentSchema(ParentSchema):
+    """Marshmallow metadata for Node Parent on invenio-records."""
+
+
+class NodeRecordSchema(RecordSchema):
     """Marshmallow schema for Node Record on invenio-records."""
     data = fields.Nested(NodeRecordFiles(), required=True)
 
@@ -45,5 +48,6 @@ __all__ = (
     "InvenioFileSchema",
     "NodeRecordMetadata",
     "NodeRecordFiles",
-    "NodeRecordSchema"
+    "NodeRecordSchema",
+    "NodeParentSchema"
 )

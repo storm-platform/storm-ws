@@ -9,18 +9,13 @@
 """Brazil Data Cube Reproducible Research Management Server `Records services module`."""
 
 from .config import (
-    NodeDraftServiceConfig,
-    NodeRecordServiceConfig
+    NodeServiceConfig
 )
 from .service import (
-    NodeRecordService,
-    NodeDraftService
+    NodeService
 )
 
 __all__ = (
-    "NodeDraftServiceConfig",
-    "NodeRecordServiceConfig",
-
-    "NodeRecordService",
-    "NodeDraftService"
+    "NodeService",
+    "NodeServiceConfig"
 )

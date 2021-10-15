@@ -14,19 +14,7 @@ from invenio_records_resources.services.files import FileServiceComponent
 from invenio_drafts_resources.services.records.components import ServiceComponent as DraftServiceComponent
 
 
-class NodeRecordParentServiceComponent(DraftServiceComponent):
-    """Component for NodeParent project control."""
-
-    def create(self, identity, data=None, record=None, errors=None):
-        super().create(identity, data=None, record=None, errors=None)
-
-        # add project on parent object
-        record.parent.project_id = g.project_id
-
-
-class NodeRecordDefinitionServiceComponent(DraftServiceComponent):
-    """Component for NodeRecord attributes definitions control."""
-
+class BaseNodeComponent:
     def _populate_node_record(self, data=None, record=None):
         """Populate a node record object based on another record (Draft or Publised)."""
         # Data files
@@ -40,6 +28,20 @@ class NodeRecordDefinitionServiceComponent(DraftServiceComponent):
         # Commands
         record.command = data.get("command")
         record.command_checksum = data.get("command_checksum")
+
+
+class NodeRecordParentServiceComponent(DraftServiceComponent):
+    """Component for NodeParent project control."""
+
+    def create(self, identity, data=None, record=None, errors=None):
+        super().create(identity, data=None, record=None, errors=None)
+
+        # add project on parent object
+        record.parent.project_id = g.project_id
+
+
+class NodeRecordDefinitionServiceComponent(BaseNodeComponent, DraftServiceComponent):
+    """Component for NodeRecord attributes definitions control."""
 
     def create(self, identity, data=None, record=None, errors=None):
         self._populate_node_record(data, record)
@@ -97,7 +99,7 @@ class BaseProjectValidatorComponent:
                 raise RuntimeError("The requested resource does not exist in the current project.")
 
 
-class ProjectValidatorRecordServiceComponent(BaseProjectValidatorComponent):
+class ProjectValidatorRecordServiceComponent(BaseNodeComponent, BaseProjectValidatorComponent):
     """Component to validate User-Project relation."""
 
     def create(self, identity, **kwargs):
@@ -128,6 +130,8 @@ class ProjectValidatorRecordServiceComponent(BaseProjectValidatorComponent):
         """Update draft handler."""
         self._check_userproject(identity)
         self._check_recordproject(record)
+
+        self._populate_node_record(record=record, data=data)
 
     def delete_draft(self, identity, draft=None, record=None, force=False):
         """Delete draft handler."""

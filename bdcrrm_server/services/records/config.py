@@ -8,10 +8,13 @@
 
 """Brazil Data Cube Reproducible Research Management Server `Records services config`."""
 
-from invenio_records_resources.services import ConditionalLink
-from invenio_drafts_resources.services.records.config import is_draft, is_record
+from invenio_records_resources.services import ConditionalLink, pagination_links
+from invenio_drafts_resources.services.records.config import (
+    SearchOptions, SearchVersionsOptions, is_draft, is_record
+)
 
-from invenio_drafts_resources.services.records.components import DraftFilesComponent
+from invenio_drafts_resources.services.records.components import DraftFilesComponent, DraftMetadataComponent, \
+    PIDComponent
 
 from invenio_drafts_resources.services import RecordServiceConfig as DraftServiceConfigBase
 from invenio_records_resources.services import RecordServiceConfig as RecordServiceConfigBase
@@ -25,14 +28,30 @@ from ..components import (
 from ..links import NodeRecordLink
 from ...schema import NodeRecordSchema
 from ...models import NodeRecord, NodeDraft
+from ...schema.graph import NodeParentSchema
 from ...security import AuthenticatedUserPermissionPolicy
 
 
-class NodeCommonServiceConfig(DraftServiceConfigBase):
+class NodeServiceConfig(DraftServiceConfigBase):
     record_cls = NodeRecord
+    draft_cls = NodeDraft
 
+    # API Response schemas
     schema = NodeRecordSchema
+    schema_parent = NodeParentSchema
+
+    # Security policy
     permission_policy_cls = AuthenticatedUserPermissionPolicy
+
+    # Components
+    components = [
+        DraftMetadataComponent,
+        DraftFilesComponent,
+        PIDComponent,
+        NodeRecordParentServiceComponent,
+        NodeRecordDefinitionServiceComponent,
+        ProjectValidatorRecordServiceComponent
+    ]
 
     links_item = {
         "self": ConditionalLink(
@@ -55,27 +74,14 @@ class NodeCommonServiceConfig(DraftServiceConfigBase):
         "versions": NodeRecordLink("{+api}graph/{project_id}/node/{id}/versions{?args*}"),
     }
 
+    links_search = pagination_links("{+api}/graph/{project_id}/node{?args*}")
 
-class NodeDraftServiceConfig(NodeCommonServiceConfig):
-    draft_cls = NodeDraft
+    links_search_drafts = pagination_links("{+api}/user/graph/{project_id}/node{?args*}")
 
-    components = DraftServiceConfigBase.components + [
-        DraftFilesComponent,
-        NodeRecordParentServiceComponent,
-        NodeRecordDefinitionServiceComponent,
-        ProjectValidatorRecordServiceComponent
-    ]
-
-
-class NodeRecordServiceConfig(RecordServiceConfigBase):
-    components = RecordServiceConfigBase.components + [
-        NodeRecordParentServiceComponent,
-        NodeRecordDefinitionServiceComponent,
-        ProjectValidatorRecordServiceComponent
-    ]
+    links_search_versions = pagination_links(
+        "{+api}/graph/{project_id}/node/{id}/versions{?args*}")
 
 
 __all__ = (
-    "NodeDraftServiceConfig",
-    "NodeRecordServiceConfig"
+    "NodeServiceConfig"
 )

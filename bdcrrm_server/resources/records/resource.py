@@ -8,20 +8,13 @@
 
 """Brazil Data Cube Reproducible Research Management Server `Records resources`."""
 
-from invenio_drafts_resources.resources.records.resource import RecordResource as DraftRecordResourceBase
-
-from invenio_records_resources.resources import RecordResource as RecordResourceBase
+from invenio_drafts_resources.resources import RecordResource
 
 
-class NodeDraftResource(DraftRecordResourceBase):
-    ...
-
-
-class NodeRecordResource(RecordResourceBase):
+class NodeResource(RecordResource):
     ...
 
 
 __all__ = (
-    "NodeDraftResource",
-    "NodeRecordResource"
+    "NodeResource"
 )

@@ -23,16 +23,12 @@ from .project import (
 )
 
 from .records import (
-    NodeDraftServiceConfig,
-    NodeRecordServiceConfig,
-    NodeDraftService,
-    NodeRecordService
+    NodeService,
+    NodeServiceConfig
 )
 
 __all__ = (
     "ProjectServiceConfig",
-    "NodeDraftServiceConfig",
-    "NodeRecordServiceConfig",
     "FileNodeDraftServiceConfig",
     "FileNodeRecordServiceConfig",
 
@@ -41,8 +37,8 @@ __all__ = (
 
     "ProjectService",
 
-    "NodeDraftService",
-    "NodeRecordService",
+    "NodeService",
+    "NodeServiceConfig",
 
     "ProjectGraphService",
     "ProjectGraphServiceConfig"

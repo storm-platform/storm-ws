@@ -9,19 +9,14 @@
 """Brazil Data Cube Reproducible Research Management Server `Records resources module`."""
 
 from .config import (
-    NodeDraftResourceConfig,
-    NodeRecordResourceConfig
+    NodeResourceConfig
 )
 
 from .resource import (
-    NodeDraftResource,
-    NodeRecordResource
+    NodeResource
 )
 
 __all__ = (
-    "NodeDraftResource",
-    "NodeRecordResource",
-
-    "NodeDraftResourceConfig",
-    "NodeRecordResourceConfig"
+    "NodeResource",
+    "NodeResourceConfig"
 )

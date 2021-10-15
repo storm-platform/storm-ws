@@ -25,10 +25,8 @@ from .project import (
 )
 
 from .records import (
-    NodeDraftResourceConfig,
-    NodeRecordResourceConfig,
-    NodeRecordResource,
-    NodeDraftResource
+    NodeResource,
+    NodeResourceConfig
 )
 
 from .server import (
@@ -42,15 +40,14 @@ from .service import (
 )
 
 __all__ = (
-    "NodeDraftResourceConfig",
-    "NodeRecordResourceConfig",
+    "NodeResource",
+    "NodeResourceConfig",
 
     "FileNodeDraftResourceConfig",
     "FileNodeRecordResourceConfig",
 
+    "NodeResource",
     "NodeFileResource",
-    "NodeDraftResource",
-    "NodeRecordResource",
 
     "ServerResource",
     "ServerResourceConfig",

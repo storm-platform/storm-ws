@@ -14,10 +14,8 @@ from . import (
     NodeFileResource,
     FileNodeDraftResourceConfig,
     FileNodeRecordResourceConfig,
-    NodeDraftResource,
-    NodeDraftResourceConfig,
-    NodeRecordResource,
-    NodeRecordResourceConfig,
+    NodeResource,
+    NodeResourceConfig,
     ServiceResource,
     ServiceResourceConfig,
     ProjectGraphResourceConfig,
@@ -38,10 +36,8 @@ from ..services import (
     NodeFileDraftService,
     ProjectService,
     ProjectServiceConfig,
-    NodeDraftServiceConfig,
-    NodeRecordServiceConfig,
-    NodeDraftService,
-    NodeRecordService,
+    NodeServiceConfig,
+    NodeService,
     ProjectGraphService,
     ProjectGraphServiceConfig
 )
@@ -137,25 +133,18 @@ def initialize_invenio_records_resources(app) -> None:
     file_record_resource = NodeFileResource(FileNodeRecordResourceConfig, file_record_service)
 
     #
-    # Nodes (Draft)
+    # Nodes
     #
-    node_draft_service = NodeDraftService(NodeDraftServiceConfig, files_service=file_record_service,
-                                          draft_files_service=file_draft_service, project_service=project_service)
-    node_draft_resource = NodeDraftResource(NodeDraftResourceConfig, node_draft_service)
-
-    #
-    # Nodes (Records)
-    #
-    node_record_service = NodeRecordService(NodeRecordServiceConfig, project_service=project_service)
-    node_record_resource = NodeRecordResource(NodeRecordResourceConfig, node_record_service)
+    node_service = NodeService(NodeServiceConfig, files_service=file_record_service,
+                               draft_files_service=file_draft_service, project_service=project_service)
+    node_resource = NodeResource(NodeResourceConfig, node_service)
 
     # Files (Draft and Record)
     app.register_blueprint(file_draft_resource.as_blueprint())
     app.register_blueprint(file_record_resource.as_blueprint())
 
     # Nodes (Draft and Record)
-    app.register_blueprint(node_draft_resource.as_blueprint())
-    app.register_blueprint(node_record_resource.as_blueprint())
+    app.register_blueprint(node_resource.as_blueprint())
 
     # registry services
     registry = app.extensions["invenio-records-resources"].registry
