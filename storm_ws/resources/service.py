@@ -12,7 +12,7 @@ from flask_resources import Resource, ResourceConfig, route
 
 
 class ServiceResourceConfig(ResourceConfig):
-    blueprint_name = "bdcrrm_service"
+    blueprint_name = "storm_service"
     url_prefix = ""
 
 
@@ -26,7 +26,7 @@ class ServiceResource(Resource):
 
     def index(self):
         """Simple ping-pong to check if the server is running."""
-        return {"application_name": "Brazil Data Cube Reproducible Research Management", "version": "0.1"}, 200
+        return {"application_name": "SpatioTemporal Open Research Manager Web Service", "version": "0.1"}, 200
 
 
 __all__ = (

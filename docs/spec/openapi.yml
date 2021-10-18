@@ -2,10 +2,10 @@ openapi: 3.0.0
 
 info:
 
-    title: Brazil Data Cube Reproducible Research Server
+    title: SpatioTemporal Open Research Manager Web Service
 
     description: |
-        Brazil Data Cube Reproducible Research Management Server is designed to enhance reproducible research collaboratively.
+        SpatioTemporal Open Research Manager Web Service is designed to enhance reproducible research collaboratively.
 
     version: '0.1'
     contact:
@@ -509,6 +509,24 @@ paths:
             responses:
                 '200':
                     description: Deleted
+
+    #
+    # User Node Draft and Records
+    #
+    /user/graph/{project_id}/node:
+        parameters:
+            -   $ref: '#/components/parameters/project_id'
+
+        get:
+            tags:
+                - User workspace
+            summary: List all nodes (Draft and Records) created by the user
+            description: List all User Nodes, and their versions, created in the project.
+            responses:
+                '200':
+                    $ref: '#/components/responses/ListOfNodeDraftModelInvenioResponseBody'
+                '404':
+                    $ref: '#/components/responses/Error'
 
 components:
     parameters:
@@ -1071,4 +1089,3 @@ components:
                 application/json:
                     schema:
                         $ref: '#/components/schemas/InvenioFileMetadataModel'
-
