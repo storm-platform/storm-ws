@@ -1,18 +1,16 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Graph API`."""
-
-from invenio_drafts_resources.records import (
-    Draft, Record
-)
+"""SpatioTemporal Open Research Manager Web Service `Graph API`."""
 
 from werkzeug.local import LocalProxy
+
+from invenio_drafts_resources.records import Draft, Record
 
 from invenio_pidstore.models import PIDStatus
 from invenio_records.dumpers import ElasticsearchDumper
@@ -49,7 +47,7 @@ class NodeParent(ParentRecordBase):
 
     model_cls = NodeParentMetadata
 
-    project_id = ModelField(dump=False)
+    project_id = ModelField(dump=True)
     project = ModelField(dump=False)
 
     dumper = ElasticsearchDumper()
@@ -92,7 +90,7 @@ class NodeFileDraft(FileRecord):
 class NodeDraft(CommonFieldsMixin, Draft):
     model_cls = NodeDraftMetadata
 
-    index = IndexField("node-drafts-draft-v1.0.0")
+    index = IndexField("node_records-drafts-nodedraft-v1.0.0", search_alias="node_records")
 
     files = FilesField(
         store=False,
@@ -111,7 +109,7 @@ class NodeFileRecord(FileRecord):
 class NodeRecord(CommonFieldsMixin, Record):
     model_cls = NodeRecordMetadata
 
-    index = IndexField("node-records-record-v1.0.0")
+    index = IndexField("node_records-records-noderecord-v1.0.0", search_alias="node_records-records")
 
     files = FilesField(
         store=False,

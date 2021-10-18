@@ -1,13 +1,24 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server Project Marshmallow."""
+"""SpatioTemporal Open Research Manager Web Service `Project Marshmallow`."""
+
 from marshmallow import Schema, fields, validate
+
+
+class ProjectUserSchema(Schema):
+    """Marshmallow project user schema."""
+    id = fields.Integer(required=False)
+    user_id = fields.Integer(dump_only=True)
+    project_id = fields.Integer(dump_only=True)
+
+    active = fields.Boolean(required=True)
+    is_admin = fields.Boolean(required=True)
 
 
 class ProjectMetadataLicensesSchema(Schema):
@@ -93,6 +104,7 @@ class ProjectMultiGraphSchema(Schema):
 
 
 __all__ = (
+    "ProjectUserSchema",
     "ProjectMetadataLicensesSchema",
     "ProjectMetadataSchema",
     "ProjectSchema",

@@ -11,11 +11,11 @@ services:
         extends:
             file: docker-services.yml
             service: cache
-    mq:
+    rabbitmq:
         extends:
             file: docker-services.yml
-            service: mq
-    db:
+            service: rabbitmq
+    database:
         extends:
             file: docker-services.yml
-            service: db
+            service: database

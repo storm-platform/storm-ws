@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""CLI interface for the Brazil Data Cube Reproducible Research Management Server."""
+"""CLI interface for the SpatioTemporal Open Research Manager Web Service."""
 
 import click
 from flask.cli import FlaskGroup

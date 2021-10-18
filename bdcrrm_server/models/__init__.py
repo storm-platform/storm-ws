@@ -1,17 +1,18 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Models module`."""
+"""SpatioTemporal Open Research Manager Web Service `Models module`."""
 
 from invenio_db import db
 
 from .project import (
     Project,
+    UserProfile,
     ProjectUser,
     ProjectGraph
 )
@@ -21,6 +22,7 @@ from .graph import *
 __all__ = (
     "Project",
     "ProjectUser",
+    "UserProfile",
     "ProjectGraph",
 
     "NodeParent",

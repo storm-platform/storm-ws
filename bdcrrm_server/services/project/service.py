@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Project services`."""
+"""SpatioTemporal Open Research Manager Web Service `Project services`."""
 
 from typing import Dict, List
 
@@ -19,8 +19,9 @@ from bdcrrm_api.graph import (
 )
 from invenio_records_resources.services import Service
 
+from ..cache import cache_manager
 from ...models import Project, ProjectGraph, NodeRecord
-from ...models import ProjectUser
+from ...models import ProjectUser, UserProfile
 from ...models import db
 from ...schema import (
     ProjectGraphDefinitionSchema
@@ -28,8 +29,78 @@ from ...schema import (
 from ...schema import ProjectSchema
 
 
+class UserProfileService(Service):
+    """UserProfile Service."""
+
+    def get_user_profile_by_id(self, user_id) -> UserProfile:
+        """Select User profile by id.
+
+        Args:
+            user_id (int): User id (from OAuth service)
+
+        Returns:
+            UserProfile: User profile selected.
+        """
+        user_data = cache_manager["users_profile"].get(user_id)
+
+        if not user_data:
+            user_data = db.session.query(ProjectUser).filter(
+                ProjectUser.user_id == user_id
+            )
+
+            # validating the data
+            if user_data.count() == 0:
+                raise werkzeug_exceptions.NotFound("User not found!")
+
+            # retrieving data and remove disabled projects
+            user_data = user_data.all()
+            user_data = list(filter(lambda x: x.active, user_data))
+
+            # saving all project ids
+            project_ids = list(map(lambda x: x.project_id, user_data))
+
+            user_data = UserProfile(user_id, project_ids)
+            cache_manager["users_profile"].set(user_id, user_data)
+        return user_data
+
+    def flush_user_profile(self, user_id):
+        """Flush loaded user profile from cache (if exists).
+
+        Args:
+            user_id (int): User id (from OAuth service)
+
+        Returns:
+            None: User profile is flushed in-place.
+        """
+        cache_manager["users_profile"].delete(user_id)
+
+
 class ProjectService(Service):
     """Project Service."""
+
+    def __init__(self, config, user_profile_service=None):
+        """Initializer for NodeDraftRecordService."""
+        super(ProjectService, self).__init__(config)
+        self._user_profile_service = user_profile_service
+
+    def _get_project_user_by_project_id(self, identity, project_id):
+        """Select ProjectUser by Project.
+
+        Args:
+            identity (flask_principal.Identity): Project Owner User ID (from OAuth service)
+
+            project_id (int): Project ID
+
+        Returns:
+            ProjectUser: Selected ProjectUser
+
+        Raises:
+            Exception: when the project is not found.
+        """
+        return db.session.query(ProjectUser).filter(
+            ProjectUser.project_id == project_id,
+            ProjectUser.user_id == identity.id
+        ).first_or_404("Project not found!")
 
     def create_project(self, identity, data) -> Dict:
         """Create a Project.
@@ -87,12 +158,7 @@ class ProjectService(Service):
         Returns:
             Project: List of Project object
         """
-        user_projects = db.session.query(ProjectUser).filter(
-            ProjectUser.project_id == project_id,
-            ProjectUser.user_id == identity.id
-        ).first_or_404("Project not found!")
-
-        return user_projects.project
+        return self._get_project_user_by_project_id(identity, project_id).project
 
     def delete_project_by_id(self, identity, project_id: int):
         """Delete a project object on database.
@@ -104,10 +170,7 @@ class ProjectService(Service):
         Returns:
             Dict: Project object
         """
-        selected_user = db.session.query(ProjectUser).filter(
-            ProjectUser.project_id == project_id,
-            ProjectUser.user_id == identity.id
-        ).first_or_404("Project not found!")
+        selected_user = self._get_project_user_by_project_id(identity, project_id)
 
         if not selected_user.is_admin:
             raise werkzeug_exceptions.Unauthorized(description="Admin access is required to delete the project.")
@@ -133,10 +196,7 @@ class ProjectService(Service):
         form = ProjectSchema()
         form.load(attributes_to_chage, partial=True)
 
-        selected_user = db.session.query(ProjectUser).filter(
-            ProjectUser.project_id == project_id,
-            ProjectUser.user_id == identity.id
-        ).first_or_404("Project not found!")
+        selected_user = self._get_project_user_by_project_id(identity, project_id)
 
         if not selected_user.is_admin:
             raise werkzeug_exceptions.Unauthorized(description="Admin access is required to edit the project.")
@@ -148,6 +208,36 @@ class ProjectService(Service):
         db.session.commit()
         return selected_user.project
 
+    def add_user_to_project(self, identity, user_id, project_id):
+        """Add user to a project.
+
+        Args:
+            identity (flask_principal.Identity): Project User identity (from OAuth service)
+
+            user_id (int): User identity (from OAuth service) that will be added on project.
+
+            project_id (int): Project ID that will be deleted.
+        Returns:
+            Dict: Project object
+        """
+        selected_user = self._get_project_user_by_project_id(identity, project_id)
+
+        if not selected_user.is_admin:
+            raise werkzeug_exceptions.Unauthorized(description="Admin access is required to delete the project.")
+
+        project_user = ProjectUser(
+            project_id=project_id,
+            user_id=user_id,
+            is_admin=False,
+            active=True
+        )
+        db.session.add(project_user)
+        db.session.commit()
+
+        # flushing previous loaded user profile
+        self._user_profile_service.flush_user_profile(user_id)
+        return project_user
+
 
 class ProjectGraphService(Service):
     """Graph Service."""
@@ -156,26 +246,6 @@ class ProjectGraphService(Service):
         """Constructor for GraphService."""
         super().__init__(config)
         self._project_service = project_service
-
-    def _check_user_project_permission(self, identity, project_id) -> None:
-        """Check if the user can access the selected project.
-
-        Args:
-            identity (flask_principal.Identity): Project Owner User ID (from OAuth service)
-
-            project_id (int): Project ID
-
-        Returns:
-            None
-
-        Raises:
-            werkzeug.exceptions.Unauthorized: When user does not have access to the project.
-        """
-        # checking if user is able to get the project graphs (ToDO: create a utility method to do this verification)
-        user_projects = self._project_service.list_project_by_user(identity)
-
-        if not any([int(project_id) == p.id for p in user_projects]):
-            raise werkzeug_exceptions.Unauthorized(description="This user is not able to access this project.")
 
     def add_graph(self, identity, project_id: int, data) -> Dict:
         """Add a new graph to the project.
@@ -230,8 +300,6 @@ class ProjectGraphService(Service):
         Returns:
             ProjectGraph: Project graph
         """
-        self._check_user_project_permission(identity, project_id)
-
         return db.session.query(ProjectGraph).filter(
             ProjectGraph.project_id == project_id,
             ProjectGraph.label == project_graph_label
@@ -247,8 +315,6 @@ class ProjectGraphService(Service):
         Returns:
             List[ProjectGraph]: List of Graph object
         """
-        self._check_user_project_permission(identity, project_id)
-
         return db.session.query(ProjectGraph).filter(
             ProjectGraph.project_id == project_id
         ).all()
@@ -268,7 +334,6 @@ class ProjectGraphService(Service):
         Returns:
             ProjectGraph: Project graph created.
         """
-        self._check_user_project_permission(identity, project_id)
         selected_graph = self.get_graph(identity, project_id, project_graph_label)
 
         selected_node_record = NodeRecord.pid.resolve(node_id)
@@ -313,7 +378,6 @@ class ProjectGraphService(Service):
         Returns:
             ProjectGraph: Project graph created.
         """
-        self._check_user_project_permission(identity, project_id)
         selected_graph = self.get_graph(identity, project_id, project_graph_label)
 
         # adding the selected node to the graph
@@ -324,7 +388,8 @@ class ProjectGraphService(Service):
             selected_node = graph_manager.graph.vs.select(name=node_id)
 
             if selected_node:
-                graph_manager.delete_vertex(" ".join(["".join(x.split()) for x in selected_node["command"][0].split("  ")]))
+                graph_manager.delete_vertex(
+                    " ".join(["".join(x.split()) for x in selected_node["command"][0].split("  ")]))
 
                 selected_graph.graph = (
                     JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name")
@@ -348,7 +413,6 @@ class ProjectGraphService(Service):
         Returns:
             ProjectGraph: Project graph
         """
-        self._check_user_project_permission(identity, project_id)
         selected_graph = self.get_graph(identity, project_id, project_graph_label)
 
         db.session.delete(selected_graph)
@@ -357,5 +421,6 @@ class ProjectGraphService(Service):
 
 __all__ = (
     "ProjectService",
+    "UserProfileService",
     "ProjectGraphService"
 )

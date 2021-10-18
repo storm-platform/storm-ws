@@ -1,44 +1,22 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Secutiry`."""
+"""SpatioTemporal Open Research Manager Web Service `Security module`."""
+
+from flask import g
+import werkzeug.exceptions as werkzeug_exceptions
 
 from bdc_auth_client.decorators import oauth2
-from flask import g
-from flask_principal import Identity
+
 from invenio_access import authenticated_user
-from invenio_drafts_resources.services.records.permissions import \
-    RecordPermissionPolicy
-from invenio_records_permissions.generators import AuthenticatedUser
+from flask_principal import Identity, Need, ItemNeed
 
-
-class AuthenticatedUserPermissionPolicy(RecordPermissionPolicy):
-    """AuthenticatedUser permission policy. All actions allowed for authenticated users."""
-
-    can_edit = [AuthenticatedUser()]
-    can_new_version = [AuthenticatedUser()]
-    can_search = [AuthenticatedUser()]
-    can_create = [AuthenticatedUser()]
-    can_read = [AuthenticatedUser()]
-    can_read_draft = [AuthenticatedUser()]
-    can_update = [AuthenticatedUser()]
-    can_update_draft = [AuthenticatedUser()]
-    can_delete = [AuthenticatedUser()]
-    can_delete_draft = [AuthenticatedUser()]
-    can_publish = [AuthenticatedUser()]
-    can_create_files = [AuthenticatedUser()]
-    can_read_files = [AuthenticatedUser()]
-    can_update_files = [AuthenticatedUser()]
-    can_draft_create_files = [AuthenticatedUser()]
-    can_draft_read_files = [AuthenticatedUser()]
-    can_draft_update_files = [AuthenticatedUser()]
-    can_delete_files = [AuthenticatedUser()]
-    can_search_drafts = [AuthenticatedUser()]
+from .services.project.service import UserProfileService
 
 
 def authenticate(func, **kwargs):
@@ -58,17 +36,29 @@ def authenticate(func, **kwargs):
 
     @oauth2(**kwargs)
     def wrapper(*args, **kwargs):
-        oauth_authenticated_identity = Identity(kwargs["user_id"])
-        oauth_authenticated_identity.provides.add(authenticated_user)
+        # getting user profile
+        user_id = kwargs["user_id"]
+        user_profile = UserProfileService(None).get_user_profile_by_id(user_id)
+
+        # checking user permission
+        if g.get("project_id"):
+            if g.project_id not in user_profile.project_ids:
+                raise werkzeug_exceptions.Unauthorized(description="This user is not able to access this project.")
+
+        # creating the user identity
+        user_profile_identity = Identity(user_id)
+        user_profile_identity.provides.add(authenticated_user)
+        user_profile_identity.provides.add(Need(method="id", value=user_id))
+
+        for project_id in user_profile.project_ids:
+            user_profile_identity.provides.add(ItemNeed("ispartof", project_id, "project"))
 
         # `identity` is used by invenio framework services to validate the permissions
-        g.identity = oauth_authenticated_identity
+        g.identity = user_profile_identity
         return func(*args, **kwargs)
-
     return wrapper
 
 
 __all__ = (
-    "authenticate",
-    "AuthenticatedUserPermissionPolicy"
+    "authenticate"
 )

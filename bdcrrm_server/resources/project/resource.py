@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Project resources`."""
+"""SpatioTemporal Open Research Manager Web Service `Project resources`."""
 
 from flask import g
 from flask_resources import (
@@ -21,6 +21,7 @@ from ..parser import request_data, request_view_args
 from ...schema import (
     ProjectSchema
 )
+from ...schema.project import ProjectUserSchema
 
 
 class ProjectResource(Resource):
@@ -37,7 +38,8 @@ class ProjectResource(Resource):
             route("POST", routes["create-item"], self.create_project),
             route("GET", routes["get-item"], self.get_project),
             route("PUT", routes["delete-item"], self.edit_project),
-            route("DELETE", routes["update-item"], self.delete_project)
+            route("DELETE", routes["update-item"], self.delete_project),
+            route("POST", routes["create-user"], self.add_user_to_project)
         ]
 
     @request_data
@@ -86,6 +88,17 @@ class ProjectResource(Resource):
                                                          )
 
         return ProjectSchema().dump(project_edited), 200
+
+    @request_view_args
+    @response_handler()
+    def add_user_to_project(self):
+        """Add new user to the project."""
+        added_project_user = self.service.add_user_to_project(g.identity,
+                                                              resource_requestctx.view_args["user_id"],
+                                                              resource_requestctx.view_args["project_id"],
+                                                              )
+
+        return ProjectUserSchema().dump(added_project_user), 200
 
 
 class ProjectGraphResource(Resource):

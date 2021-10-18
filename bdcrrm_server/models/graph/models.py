@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Graph Models`."""
+"""SpatioTemporal Open Research Manager Web Service `Graph Models`."""
 
 from invenio_drafts_resources.records import (
     DraftMetadataBase,
@@ -31,7 +31,7 @@ class NodeParentMetadata(BaseModel, db.Model, RecordMetadataBase):
     __tablename__ = 'node_parents_metadata'
 
     project_id = db.Column(
-        db.ForeignKey(f"{BaseConfiguration.BDCRRM_DB_SCHEMA}.project.id", onupdate="CASCADE", ondelete="CASCADE"))
+        db.ForeignKey(f"{BaseConfiguration.STORM_DB_SCHEMA}.project.id", onupdate="CASCADE", ondelete="CASCADE"))
 
     project = db.relationship("Project", lazy="joined")
 

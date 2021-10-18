@@ -1,15 +1,15 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Files resources config`."""
+"""SpatioTemporal Open Research Manager Web Service `Files resources config`."""
 
-from invenio_records_resources.resources import FileResourceConfig as BaseFileResourceConfig
 from marshmallow import fields
+from invenio_records_resources.resources import FileResourceConfig as BaseFileResourceConfig
 
 from ...models import NodeDraft, NodeRecord
 

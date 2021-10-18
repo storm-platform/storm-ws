@@ -6,15 +6,17 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""SpatioTemporal Open Research Manager Web Service `Records resources`."""
+"""SpatioTemporal Open Research Manager Web Service `Cache configurations`."""
 
-from invenio_drafts_resources.resources import RecordResource
+from cacheout import CacheManager
 
-
-class NodeResource(RecordResource):
-    ...
-
+cache_manager = CacheManager({
+    "users_profile": {
+        "maxsize": 512,
+        "ttl": 3600
+    }
+})
 
 __all__ = (
-    "NodeResource"
+    "cache_manager"
 )

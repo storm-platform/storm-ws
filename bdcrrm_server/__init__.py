@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server."""
+"""SpatioTemporal Open Research Manager Web Service."""
 
 import os
 
@@ -16,8 +16,10 @@ import sqlalchemy.exc as sqlalchemy_exceptions
 import werkzeug.exceptions as werkzeug_exceptions
 import marshmallow.exceptions as marshmallow_exceptions
 
+from .ext import StormExt
+
 from .config import BaseConfiguration
-from .ext import BDCReproducibleResearchManagement
+
 from .resources.initializer import (
     initialize_graph_resources,
     initialize_server_resources,
@@ -49,8 +51,12 @@ def setup_request_proxies(app):
     @app.before_request
     def project_proxy(**kwargs):
         if request.view_args:
+            # Project context
             project_id = request.view_args.get("project_id", None)
             g.project_id = int(project_id) if project_id else project_id
+
+            # Record context
+            g.record_id = request.view_args.get("pid_value", None)
 
 
 def create_app(config_name='DevelopmentConfig'):
@@ -112,7 +118,7 @@ def setup_app(app, config_name):
                              "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Api-key")
         return response
 
-    BDCReproducibleResearchManagement(app, config_name=config_name)
+    StormExt(app, config_name=config_name)
 
     # Setup API components
     setup_request_proxies(app)
@@ -127,7 +133,7 @@ def setup_app(app, config_name):
     initialize_invenio_records_resources(app)
 
 
-app = create_app(os.environ.get("BDCRRM_SERVER_ENVIRONMENT", "DevelopmentConfig"))
+app = create_app(os.environ.get("STORM_ENVIRONMENT", "DevelopmentConfig"))
 
 __all__ = (
     "__version__",

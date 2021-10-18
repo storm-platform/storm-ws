@@ -1,29 +1,31 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Project resources config`."""
+"""SpatioTemporal Open Research Manager Web Service `Project resources config`."""
 
-from flask_resources import ResourceConfig
 from marshmallow import fields
+from flask_resources import ResourceConfig
 
 
 class ProjectResourceConfig(ResourceConfig):
     url_prefix = "/project"
     blueprint_name = "bdcrrm_project"
 
-    request_view_args = {"project_id": fields.Str()}
+    request_view_args = {"project_id": fields.Str(),
+                         "user_id": fields.Int()}
 
     routes = {
         "list-items": "",
         "create-item": "",
         "get-item": "/<project_id>",
         "delete-item": "/<project_id>",
-        "update-item": "/<project_id>"
+        "update-item": "/<project_id>",
+        "create-user": "/<project_id>/add/user/<user_id>"
     }
 
 

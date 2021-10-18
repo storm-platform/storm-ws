@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Configuration options for Brazil Data Cube Reproducible Research Management Server."""
+"""Configuration options for SpatioTemporal Open Research Manager Web Service."""
 
 import os
 
@@ -27,40 +27,34 @@ class DatabaseConfiguration:
     """Database Configuration."""
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI",
-                                        "postgresql://bdcrrm-server:bdcrrm-server@localhost:35432/bdcrrm_server")
+                                        "postgresql://storm:storm@localhost:5432/storm-db")
 
-    BDCRRM_DB_SCHEMA = os.getenv("BDCRRM_DB_SCHEMA", "bdcrrm")
+    STORM_DB_SCHEMA = os.getenv("STORM_DB_SCHEMA", "storm_ws")
 
 
 class FlaskConfiguration:
     """Flask Configuration."""
     # Base path used in production (with proxy)
-    APPLICATION_ROOT = os.getenv("BDCRRM_SERVER_PREFIX", "/")
+    APPLICATION_ROOT = os.getenv("STORM_SERVER_PREFIX", "/")
     SESSION_COOKIE_PATH = os.getenv("SESSION_COOKIE_PATH", "/")
 
 
-class OpenSearchConfiguration:
+class SearchEngineConfiguration:
     """OpenSearch/Elasticsearch Configuration.
 
     See:
         More details are available on invenio-search documentation: https://invenio-search.readthedocs.io/en/latest/
     """
-    OPENSEARCH_DEFAULT_CONFIGURATION = dict(
-        host='localhost',
+    SEARCH_ENGINE_DEFAULT_CONFIGURATION = dict(
         port=9200,
-        use_ssl=True,
-        scheme="https",
-        verify_certs=False,
-        ssl_show_warn=False,
-        http_auth=('admin', 'admin'),
+        scheme="http",
+        host='localhost'
     )
 
     SEARCH_CLIENT_CONFIG = dict(
-
         hosts=[
-            OPENSEARCH_DEFAULT_CONFIGURATION
+            SEARCH_ENGINE_DEFAULT_CONFIGURATION
         ]
-
     )
 
 
@@ -76,7 +70,7 @@ class InvenioJSONSchemaAPIConfigurations:
     RECORDS_REFRESOLVER_STORE = "invenio_jsonschemas.proxies.current_refresolver_store"
 
 
-class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfiguration, OpenSearchConfiguration,
+class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfiguration, SearchEngineConfiguration,
                         InvenioJSONSchemaAPIConfigurations):
     """Base Configuration."""
     DEBUG = False
@@ -88,7 +82,6 @@ class BaseConfiguration(FlaskConfiguration, DatabaseConfiguration, OAuthConfigur
     # Invenio settings
     #
     SITE_UI_URL = os.environ.get("SITE_UI_URL", None)
-
     SITE_API_URL = os.environ.get("SITE_API_URL", None)
 
 

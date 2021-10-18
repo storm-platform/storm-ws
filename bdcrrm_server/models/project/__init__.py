@@ -6,15 +6,20 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""SpatioTemporal Open Research Manager Web Service `Records resources`."""
+"""SpatioTemporal Open Research Manager Web Service `Project Models Model`."""
 
-from invenio_drafts_resources.resources import RecordResource
+from .models import (
+    Project,
+    ProjectUser,
+    ProjectGraph
+)
 
-
-class NodeResource(RecordResource):
-    ...
-
+from .api import UserProfile
 
 __all__ = (
-    "NodeResource"
+    "Project",
+    "ProjectUser",
+    "ProjectGraph",
+
+    "UserProfile"
 )

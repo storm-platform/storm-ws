@@ -1,23 +1,20 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Records services config`."""
+"""SpatioTemporal Open Research Manager Web Service `Records services config`."""
 
-from invenio_records_resources.services import ConditionalLink, pagination_links
-from invenio_drafts_resources.services.records.config import (
-    SearchOptions, SearchVersionsOptions, is_draft, is_record
-)
+from invenio_records_resources.services import ConditionalLink
+from invenio_rdm_records.services.components import MetadataComponent
+from invenio_drafts_resources.services.records.config import is_draft, is_record
 
-from invenio_drafts_resources.services.records.components import DraftFilesComponent, DraftMetadataComponent, \
-    PIDComponent
+from invenio_drafts_resources.services.records.components import DraftFilesComponent, PIDComponent
 
-from invenio_drafts_resources.services import RecordServiceConfig as DraftServiceConfigBase
-from invenio_records_resources.services import RecordServiceConfig as RecordServiceConfigBase
+from invenio_drafts_resources.services.records.config import RecordServiceConfig, SearchDraftsOptions, SearchOptions
 
 from ..components import (
     NodeRecordDefinitionServiceComponent,
@@ -25,14 +22,14 @@ from ..components import (
     ProjectValidatorRecordServiceComponent
 )
 
-from ..links import NodeRecordLink
+from ..links import NodeRecordLink, node_pagination_links
+from ..permission import NodeRecordPermissionPolicy
 from ...schema import NodeRecordSchema
 from ...models import NodeRecord, NodeDraft
 from ...schema.graph import NodeParentSchema
-from ...security import AuthenticatedUserPermissionPolicy
 
 
-class NodeServiceConfig(DraftServiceConfigBase):
+class NodeServiceConfig(RecordServiceConfig):
     record_cls = NodeRecord
     draft_cls = NodeDraft
 
@@ -41,11 +38,15 @@ class NodeServiceConfig(DraftServiceConfigBase):
     schema_parent = NodeParentSchema
 
     # Security policy
-    permission_policy_cls = AuthenticatedUserPermissionPolicy
+    permission_policy_cls = NodeRecordPermissionPolicy
+
+    # Search options
+    search = SearchOptions
+    search_versions = SearchDraftsOptions
 
     # Components
     components = [
-        DraftMetadataComponent,
+        MetadataComponent,
         DraftFilesComponent,
         PIDComponent,
         NodeRecordParentServiceComponent,
@@ -74,11 +75,11 @@ class NodeServiceConfig(DraftServiceConfigBase):
         "versions": NodeRecordLink("{+api}graph/{project_id}/node/{id}/versions{?args*}"),
     }
 
-    links_search = pagination_links("{+api}/graph/{project_id}/node{?args*}")
+    links_search = node_pagination_links("{+api}/graph/{id}/node{?args*}")
 
-    links_search_drafts = pagination_links("{+api}/user/graph/{project_id}/node{?args*}")
+    links_search_drafts = node_pagination_links("{+api}/user/graph/{project_id}/node{?args*}")
 
-    links_search_versions = pagination_links(
+    links_search_versions = node_pagination_links(
         "{+api}/graph/{project_id}/node/{id}/versions{?args*}")
 
 

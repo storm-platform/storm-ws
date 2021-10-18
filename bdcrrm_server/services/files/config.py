@@ -1,23 +1,24 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server `Files services config`."""
+"""SpatioTemporal Open Research Manager Web Service `Files services config`."""
+
 from invenio_drafts_resources.services.records.config import is_record
-from invenio_records_resources.services import FileServiceConfig as BaseFileServiceConfig, RecordLink, FileLink, \
-    ConditionalLink
+from invenio_records_resources.services import FileServiceConfig, ConditionalLink
 
 from ..components import (
     ProjectValidatorFileServiceComponent,
     NodeDraftFileDefinitionValidatorComponent
 )
-from ..links import NodeRecordLink, NodeFileLink
+
 from ...models import NodeDraft, NodeRecord
-from ...security import AuthenticatedUserPermissionPolicy
+from ..links import NodeRecordLink, NodeFileLink
+from ..permission import NodeRecordPermissionPolicy
 
 
 def file_record_is_draft(file, ctx):
@@ -25,10 +26,10 @@ def file_record_is_draft(file, ctx):
     return file.record.is_draft
 
 
-class FileCommonServiceConfig(BaseFileServiceConfig):
-    permission_policy_cls = AuthenticatedUserPermissionPolicy
+class FileCommonServiceConfig(FileServiceConfig):
+    permission_policy_cls = NodeRecordPermissionPolicy
 
-    components = BaseFileServiceConfig.components + [
+    components = FileServiceConfig.components + [
         ProjectValidatorFileServiceComponent
     ]
 
@@ -58,6 +59,7 @@ class FileCommonServiceConfig(BaseFileServiceConfig):
 
 class FileNodeDraftServiceConfig(FileCommonServiceConfig):
     record_cls = NodeDraft
+    permission_action_prefix = "draft_"
 
     components = FileCommonServiceConfig.components + [
         NodeDraftFileDefinitionValidatorComponent,
