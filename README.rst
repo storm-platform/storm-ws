@@ -1,33 +1,33 @@
 ..
-    This file is part of Brazil Data Cube Reproducible Research Management Server.
+    This file is part of SpatioTemporal Open Research Manager Web Service.
     Copyright (C) 2021 INPE.
 
-    Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+    SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 
-========================================================
-Brazil Data Cube Reproducible Research Management Server
-========================================================
+=================================================
+SpatioTemporal Open Research Manager Web Service
+=================================================
 
 
 .. image:: https://img.shields.io/badge/license-MIT-green
-        :target: https://github.com//brazil-data-cube/bdcrrm-server/blob/master/LICENSE
+        :target: https://github.com/brazil-data-cube/storm-ws/blob/master/LICENSE
         :alt: Software License
 
 
 .. image:: https://drone.dpi.inpe.br/api/badges/brazil-data-cube/bdcrrm-server/status.svg
-        :target: https://drone.dpi.inpe.br/brazil-data-cube/bdcrrm-server
+        :target: https://drone.dpi.inpe.br/brazil-data-cube/storm-ws
         :alt: Build Status
 
 
 .. image:: https://codecov.io/gh/brazil-data-cube/bdcrrm-server/branch/master/graph/badge.svg
-        :target: https://codecov.io/gh/brazil-data-cube/bdcrrm-server
+        :target: https://codecov.io/gh/brazil-data-cube/storm-ws
         :alt: Code Coverage Test
 
 
 .. image:: https://readthedocs.org/projects/bdcrrm_server/badge/?version=latest
-        :target: https://bdcrrm_server.readthedocs.io/en/latest/
+        :target: https://storm_ws.readthedocs.io/en/latest/
         :alt: Documentation Status
 
 
@@ -37,12 +37,12 @@ Brazil Data Cube Reproducible Research Management Server
 
 
 .. image:: https://img.shields.io/github/tag/brazil-data-cube/bdcrrm-server.svg
-        :target: https://github.com/brazil-data-cube/bdcrrm-server/releases
+        :target: https://github.com/brazil-data-cube/storm-ws/releases
         :alt: Release
 
 
-.. image:: https://img.shields.io/pypi/v/bdcrrm_server
-        :target: https://pypi.org/project/bdcrrm_server/
+.. image:: https://img.shields.io/pypi/v/storm-ws
+        :target: https://pypi.org/project/storm-ws/
         :alt: Python Package Index
 
 

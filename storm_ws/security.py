@@ -40,22 +40,26 @@ def authenticate(func, **kwargs):
         user_id = kwargs["user_id"]
         user_profile = UserProfileService(None).get_user_profile_by_id(user_id)
 
-        # checking user permission
-        if g.get("project_id"):
-            if g.project_id not in user_profile.project_ids:
-                raise werkzeug_exceptions.Unauthorized(description="This user is not able to access this project.")
-
-        # creating the user identity
+        # creating the base user identity
         user_profile_identity = Identity(user_id)
         user_profile_identity.provides.add(authenticated_user)
         user_profile_identity.provides.add(Need(method="id", value=user_id))
 
-        for project_id in user_profile.project_ids:
-            user_profile_identity.provides.add(ItemNeed("ispartof", project_id, "project"))
+        if not user_profile and g.get("project_id"):  # user has no project and wants to access existing project. Deny!
+            raise werkzeug_exceptions.Unauthorized(description="This user is not able to access this project.")
+
+        if user_profile:
+            # checking user permission
+            if g.get("project_id") and g.project_id not in user_profile.project_ids:
+                raise werkzeug_exceptions.Unauthorized(description="This user is not able to access this project.")
+
+            for project_id in user_profile.project_ids:
+                user_profile_identity.provides.add(ItemNeed("ispartof", project_id, "project"))
 
         # `identity` is used by invenio framework services to validate the permissions
         g.identity = user_profile_identity
         return func(*args, **kwargs)
+
     return wrapper
 
 

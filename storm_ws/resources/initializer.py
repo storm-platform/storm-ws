@@ -10,6 +10,8 @@
 
 import uuid
 
+from storm_ws.services.project.service import UserProfileService
+
 from . import (
     NodeFileResource,
     FileNodeDraftResourceConfig,
@@ -52,7 +54,9 @@ def initialize_project_resources(app) -> None:
     Returns:
         None: Modifications are applied on flask app instance.
     """
-    project_service = ProjectService(ProjectServiceConfig)
+    user_profile_service = UserProfileService(None)
+
+    project_service = ProjectService(ProjectServiceConfig, user_profile_service=user_profile_service)
     project_resource = ProjectResource(ProjectResourceConfig, project_service)
 
     app.register_blueprint(project_resource.as_blueprint())

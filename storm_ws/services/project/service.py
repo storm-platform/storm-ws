@@ -50,7 +50,7 @@ class UserProfileService(Service):
 
             # validating the data
             if user_data.count() == 0:
-                raise werkzeug_exceptions.NotFound("User not found!")
+                return None
 
             # retrieving data and remove disabled projects
             user_data = user_data.all()
@@ -134,6 +134,9 @@ class ProjectService(Service):
             )
             db.session.add(project_user)
         db.session.commit()
+
+        # flushing previous loaded user profile
+        self._user_profile_service.flush_user_profile(identity.id)
         return created_project
 
     def list_project_by_user(self, identity) -> List[Project]:

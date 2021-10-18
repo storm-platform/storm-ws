@@ -30,7 +30,7 @@ from invenio_records_resources.records.systemfields import (
     IndexField
 )
 
-from bdcrrm_server.models.graph.models import (
+from .models import (
     NodeParentMetadata,
     NodeVersionsState,
     NodeFileDraftMetadata,
