@@ -31,3 +31,21 @@ services:
         extends:
             file: docker-services.yml
             service: kibana
+
+    # Worker
+    worker:
+        extends:
+            file: docker-services.yml
+            service: app
+        restart: "always"
+        command: [ "celery -A invenio_app.celery worker --loglevel=INFO" ]
+        image: storm-ws
+        depends_on:
+            elasticsearch:
+                condition: service_started
+            cache:
+                condition: service_started
+            database:
+                condition: service_started
+            rabbitmq:
+                condition: service_started
