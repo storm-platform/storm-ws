@@ -6,11 +6,20 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-[aliases]
-test = pytest
+"""SpatioTemporal Open Research Manager Web Service `Project Models Model`."""
 
-[build_sphinx]
-source-dir = docs/sphinx/
-build-dir = docs/sphinx/_build
-all_files = 1
+from .models import (
+    Project,
+    ProjectUser,
+    ProjectGraph
+)
 
+from .api import UserProfile
+
+__all__ = (
+    "Project",
+    "ProjectUser",
+    "ProjectGraph",
+
+    "UserProfile"
+)

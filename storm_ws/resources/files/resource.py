@@ -6,11 +6,15 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-[aliases]
-test = pytest
+"""SpatioTemporal Open Research Manager Web Service `Files resources`."""
 
-[build_sphinx]
-source-dir = docs/sphinx/
-build-dir = docs/sphinx/_build
-all_files = 1
+from invenio_records_resources.resources import FileResource
 
+
+class NodeFileResource(FileResource):
+    ...
+
+
+__all__ = (
+    "NodeFileResource"
+)

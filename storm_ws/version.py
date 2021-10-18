@@ -6,11 +6,6 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-[aliases]
-test = pytest
+"""Version information for SpatioTemporal Open Research Manager Web Service."""
 
-[build_sphinx]
-source-dir = docs/sphinx/
-build-dir = docs/sphinx/_build
-all_files = 1
-
+__version__ = "0.1.0"

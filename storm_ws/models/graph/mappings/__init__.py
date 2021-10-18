@@ -6,11 +6,4 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-[aliases]
-test = pytest
-
-[build_sphinx]
-source-dir = docs/sphinx/
-build-dir = docs/sphinx/_build
-all_files = 1
-
+"""SpatioTemporal Open Research Manager Web Service `Opensearch/Elasticsearch mappings`."""

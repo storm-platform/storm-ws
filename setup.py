@@ -1,12 +1,12 @@
 #
-# This file is part of Brazil Data Cube Reproducible Research Management Server.
+# This file is part of SpatioTemporal Open Research Manager Web Service.
 # Copyright (C) 2021 INPE.
 #
-# Brazil Data Cube Reproducible Research Management Server is free software; you can redistribute it and/or modify it
+# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""Brazil Data Cube Reproducible Research Management Server."""
+"""SpatioTemporal Open Research Manager Web Service."""
 
 import os
 
@@ -69,6 +69,7 @@ database_dependencies = [
     'Flask-SQLAlchemy>=2.4',
     'sqlalchemy-json>=0.4.0',
     'marshmallow-sqlalchemy==0.25.0',
+    'cacheout>=0.13.1'
 ]
 
 general_dependencies = [
@@ -79,7 +80,8 @@ general_dependencies = [
     'bdc-auth-client @ git+https://github.com/brazil-data-cube/bdc-auth-client@v0.2.3',
 ]
 
-install_requires = [*general_dependencies, *invenio_dependencies, *processing_dependencies, *database_dependencies]
+install_requires = [*general_dependencies, *invenio_dependencies, *searchengine_dependencies,
+                    *processing_dependencies, *database_dependencies]
 
 extras_require = {
     'docs': docs_require,
@@ -92,12 +94,12 @@ extras_require['all'] = [req for _, reqs in extras_require.items() for req in re
 packages = find_packages()
 
 g = {}
-with open(os.path.join('bdcrrm_server', 'version.py'), 'rt') as fp:
+with open(os.path.join('storm_ws', 'version.py'), 'rt') as fp:
     exec(fp.read(), g)
     version = g['__version__']
 
 setup(
-    name='bdcrrm_server',
+    name='storm-ws',
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
@@ -106,11 +108,11 @@ setup(
     license='MIT',
     author='Brazil Data Cube Team',
     author_email='brazildatacube@inpe.br',
-    url='https://github.com/brazil-data-cube/bdcrrm-server',
+    url='https://github.com/brazil-data-cube/storm-ws',
     project_urls={
-        'Repository': 'https://github.com/brazil-data-cube/bdcrrm-server',
-        'Issues': 'https://github.com/brazil-data-cube/bdcrrm-server/issues',
-        'Documentation': 'https://bdcrrm_server.readthedocs.io/en/latest/'
+        'Repository': 'https://github.com/brazil-data-cube/storm-ws',
+        'Issues': 'https://github.com/brazil-data-cube/storm-ws/issues',
+        'Documentation': 'https://storm-ws.readthedocs.io/en/latest/'
     },
     packages=packages,
     zip_safe=False,
@@ -118,13 +120,13 @@ setup(
     platforms='any',
     entry_points={
         'console_scripts': [
-            'bdcrrm-server = bdcrrm_server.cli:cli'
+            'storm-ws = storm_ws.cli:cli'
         ],
         'invenio_jsonschemas.schemas': [
-            'node_record = bdcrrm_server.models.graph.jsonschemas'
+            'node_record = storm_ws.models.graph.jsonschemas'
         ],
         'invenio_search.mappings': [
-            'node_records = bdcrrm_server.models.graph.mappings'
+            'node_records = storm_ws.models.graph.mappings'
         ]
     },
     extras_require=extras_require,

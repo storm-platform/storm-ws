@@ -6,11 +6,17 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-[aliases]
-test = pytest
+"""SpatioTemporal Open Research Manager Web Service `Cache configurations`."""
 
-[build_sphinx]
-source-dir = docs/sphinx/
-build-dir = docs/sphinx/_build
-all_files = 1
+from cacheout import CacheManager
 
+cache_manager = CacheManager({
+    "users_profile": {
+        "maxsize": 512,
+        "ttl": 3600
+    }
+})
+
+__all__ = (
+    "cache_manager"
+)
