@@ -53,13 +53,12 @@ paths:
                                         example: 'Pong!'
 
     #
-    # Record
+    # Project
     #
     /project/:
-
         get:
             tags:
-                - Project
+                - Research Project
             summary: Get all projects available for the user
             description: Get all projects available for the user
             responses:
@@ -68,9 +67,9 @@ paths:
 
         post:
             tags:
-                - Project
-            summary: Create a new Project
-            description: Create a new Project
+                - Research Project
+            summary: Create a new Research Project
+            description: Create a new Research Project
 
             requestBody:
                 $ref: '#/components/requestBodies/ProjectDefinitionModelRequestBody'
@@ -85,7 +84,7 @@ paths:
 
         get:
             tags:
-                - Project
+                - Research Project
             summary: Get a specific project
             description: Get a specific project if it is available for the current user
             responses:
@@ -94,7 +93,7 @@ paths:
 
         put:
             tags:
-                - Project
+                - Research Project
             summary: Edit a project
             description: Edit a specific project if it is available for the current user
             requestBody:
@@ -105,7 +104,7 @@ paths:
 
         delete:
             tags:
-                - Project
+                - Research Project
             summary: Delete a project
             description: Delete a project if user is admin
             responses:
@@ -113,85 +112,85 @@ paths:
                     description: Deleted
 
     #
-    # Project Graph
+    # Research pipeline
     #
-    /project/{project_id}/graph:
+    /project/{project_id}/pipeline:
         parameters:
             -   $ref: '#/components/parameters/project_id'
 
         get:
             tags:
-                - Project Graph
-            summary: List all Graph associated to the project
-            description: List all ProjectGraph.
+                - Research Pipeline
+            summary: List all research pipelines associated to the project
+            description: List all ResearchPipelines.
             responses:
                 '200':
-                    $ref: '#/components/responses/ListOfProjectGraphModelResponseBody'
+                    $ref: '#/components/responses/ListOfProjectPipelineModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         post:
             tags:
-                - Project Graph
-            summary: Create a new Project Graph
-            description: Create a new Graph and associate it to the defined Project.
+                - Research Pipeline
+            summary: Create a new Research pipeline
+            description: Create a new Research Pipeline and associate it to the defined Project.
             requestBody:
                 $ref: '#/components/requestBodies/ProjectDefinitionModelRequestBody'
             responses:
                 '200':
-                    $ref: '#/components/responses/ProjectGraphModelResponseBody'
+                    $ref: '#/components/responses/ProjectPipelineModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /project/{project_id}/graph/{graph_label}:
+    /project/{project_id}/pipeline/{pipeline_label}:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/graph_label'
+            -   $ref: '#/components/parameters/pipeline_label'
 
         get:
             tags:
-                - Project Graph
-            summary: Describe a specific Project graph
-            description: Get all informations that related to a specific Project Graph
+                - Research Pipeline
+            summary: Describe a specific Research pipeline.
+            description: Get all informations that related to a specific Project Research Pipeline.
             responses:
                 '200':
-                    $ref: '#/components/responses/ProjectGraphModelResponseBody'
+                    $ref: '#/components/responses/ProjectPipelineModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         delete:
             tags:
-                - Project Graph
-            summary: Delete a Project Graph
-            description: Delete a Project Graph from a specific project.
+                - Research Pipeline
+            summary: Delete a Research Pipeline
+            description: Delete a Research Pipeline from a specific project.
             responses:
                 '200':
                     description: Deleted
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /project/{project_id}/graph/{graph_label}/node/{node_id}:
+    /project/{project_id}/pipeline/{pipeline_label}/node/{compendium_id}:
         parameters:
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/graph_label'
+            -   $ref: '#/components/parameters/pipeline_label'
 
         post:
             tags:
-                - Project Graph
-            summary: Create a new node on Project Graph
-            description: Add an already published NodeRecord to the Project Graph
+                - Research Pipeline
+            summary: Create a new Execution Compendium in the Research Pipeline.
+            description: Add an already published Execution Compendium to the Research Pipeline
             responses:
                 '200':
-                    $ref: '#/components/responses/ProjectGraphModelResponseBody'
+                    $ref: '#/components/responses/ProjectPipelineModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         delete:
             tags:
-                - Project Graph
-            summary: Delete a node from Project Graph
-            description: Delete a NodeRecord from Project Graph
+                - Research Pipeline
+            summary: Delete a Execution Compendium from Research Pipeline.
+            description: Delete a Execution Compendium from Research Pipeline of a given Project.
             responses:
                 '200':
                     description: Deleted
@@ -199,130 +198,130 @@ paths:
                     $ref: '#/components/responses/Error'
 
     #
-    # Node Record
+    # Execution Compendium
     #
-    /graph/{project_id}/node:
+    /pipeline/{project_id}/compendium:
         parameters:
             -   $ref: '#/components/parameters/project_id'
 
         get:
             tags:
-                - Node Record
+                - Execution Compendium
             summary: List all nodes associades to the project
             description: List all Project Nodes, and their versions.
             responses:
                 '200':
-                    $ref: '#/components/responses/ListOfNodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ListOfExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
 
-    /graph/{project_id}/node/{node_id}:
+    /pipeline/{project_id}/compendium/{compendium_id}:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
 
         get:
             tags:
-                - Node Record
-            summary: List all nodes associades to the project
-            description: List all Project Nodes, and their versions.
+                - Execution Compendium
+            summary: List all execution compendia associades to the project.
+            description: List all execution compendia, and their versions.
             responses:
                 '200':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/versions:
+    /pipeline/{project_id}/compendium/{compendium_id}/versions:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
 
         post:
             tags:
-                - Node Record (Versions)
-            summary: Create a new NodeRecord version
-            description: Create a new version of an already published NodeRecord.
+                - Execution Compendium (Versions)
+            summary: Create a new Execution Compendium version
+            description: Create a new version of an already published Execution Compendium.
             responses:
                 '200':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         get:
             tags:
-                - Node Record (Versions)
+                - Execution Compendium (Versions)
             summary: Get all NodeRecord versions
             description: Get all versions of an already published NodeRecord.
             responses:
                 '200':
-                    $ref: '#/components/responses/ListOfNodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ListOfExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/versions/latest:
+    /pipeline/{project_id}/compendium/{compendium_id}/versions/latest:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
 
         get:
             tags:
-                - Node Record (Versions)
+                - Execution Compendium (Versions)
             summary: Get the NodeRecord latest version
             description: Get the latest version of a NodeRecord.
             responses:
                 '200':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
     #
-    # Node Record (Files)
+    # Execution Compendium (Files)
     #
-    /graph/{project_id}/node/{node_id}/files:
+    /pipeline/{project_id}/compendium/{compendium_id}/files:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
 
         get:
             tags:
-                - Node Record (Files)
-            summary: List all record files
-            description: List all record files
+                - Execution Compendium (Files)
+            summary: List all Execution Compendium files
+            description: List all Execution Compendium files
             responses:
                 '200':
-                    $ref: '#/components/responses/InvenioFilesDefinitionModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFilesDefinitionModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/files/{file_key}:
+    /pipeline/{project_id}/compendium/{compendium_id}/files/{file_key}:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
             -   $ref: '#/components/parameters/file_key'
 
         get:
             tags:
-                - Node Record (Files)
+                - Execution Compendium (Files)
             summary: Get a record file metadata
             description: Get a record file metadata
             responses:
                 '200':
-                    $ref: '#/components/responses/InvenioFileMetadataModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFileMetadataModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/files/{file_key}/content:
+    /pipeline/{project_id}/compendium/{compendium_id}/files/{file_key}/content:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
             -   $ref: '#/components/parameters/file_key'
 
         get:
             tags:
-                - Node Record (Files)
-            summary: Download a record file's content
-            description: Download a record file's content for a already defined file
+                - Execution Compendium (Files)
+            summary: Download a Execution Compendium file content.
+            description: Download the file content.
             responses:
                 '200':
                     $ref: '#/components/responses/BinaryResponseBody'
@@ -330,201 +329,201 @@ paths:
                     $ref: '#/components/responses/Error'
 
     #
-    # Draft nodes
+    # Execution Compendium (Draft)
     #
-    /graph/{project_id}/node/{node_id}/draft:
+    /pipeline/{project_id}/compendium/{compendium_id}/draft:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
         get:
             tags:
-                - Node Draft
-            summary: Get a Node Draft
-            description: Get a Node Draft
+                - Execution Compendium (Draft)
+            summary: Get an already defined Execution Compendium Draft
+            description: Get an already defined Execution Compendium Draft
             responses:
                 '200':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         put:
             tags:
-                - Node Draft
-            summary: Update a Node Draft
-            description: Update a Node Draft and create a new revision
+                - Execution Compendium (Draft)
+            summary: Update an already defined Execution Compendium Draft.
+            description: Update an already defined Execution Compendium Draft.
             requestBody:
-                $ref: '#/components/requestBodies/NodeDraftRequestBody'
+                $ref: '#/components/requestBodies/ExecutionCompendiumDraftRequestBody'
             responses:
                 '200':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         post:
             tags:
-                - Node Draft
-            summary: Edit a Node Record
-            description: Generate a new Node Draft from a published Node Record
+                - Execution Compendium (Draft)
+            summary: Create a new draft from an already published Execution Draft.
+            description: Create a new draft from an already published Execution Draft.
             requestBody:
-                $ref: '#/components/requestBodies/NodeDraftRequestBody'
+                $ref: '#/components/requestBodies/ExecutionCompendiumDraftRequestBody'
             responses:
                 '200':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         delete:
             tags:
-                - Node Draft
-            summary: Delete a Node Draft
-            description: Delete a Node Draft
+                - Execution Compendium (Draft)
+            summary: Delete a Execution Compendium Draft.
+            description: Delete a Execution Compendium Draft.
             responses:
                 '200':
                     description: Deleted
 
-    /graph/{project_id}/node/{node_id}/draft/actions/publish:
+    /pipeline/{project_id}/compendium/{compendium_id}/draft/actions/publish:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
 
         post:
             tags:
-                - Node Draft
-            summary: Commit a draft
-            description: Create a new Node Record from the defined Node Draft
+                - Execution Compendium (Draft)
+            summary: Publish a Execution Compendium draft
+            description: Create a new Execution Compendium version and publish it and make it available to other users.
             requestBody:
                 required: false
                 content:
                     application/json: { }
             responses:
                 '202':
-                    $ref: '#/components/responses/NodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
     #
-    # Node Draft (Files)
+    # Execution Compendium Draft (Files)
     #
-    /graph/{project_id}/node/{node_id}/draft/files:
+    /pipeline/{project_id}/compendium/{compendium_id}/draft/files:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
         post:
             tags:
-                - Node Draft (Files)
-            summary: Start draft file upload(s)
-            description: Start draft file upload(s)
+                - Execution Compendium (Draft Files)
+            summary: Start a Execution Compendium draft file upload(s).
+            description: Start a Execution Compendium draft file upload(s).
             requestBody:
-                $ref: '#/components/requestBodies/NodeDraftFileDefinitionRequestBody'
+                $ref: '#/components/requestBodies/ExecutionCompendiumDraftFileDefinitionRequestBody'
             responses:
                 '201':
-                    $ref: '#/components/responses/InvenioFilesDefinitionModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFilesDefinitionModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
         get:
             tags:
-                - Node Draft (Files)
-            summary: List all draft files
-            description: List all draft files
+                - Execution Compendium (Draft Files)
+            summary: List all files from the Execution Compendium Draft.
+            description: List all files from the Execution Compendium Draft.
             responses:
                 '200':
-                    $ref: '#/components/responses/InvenioFilesDefinitionModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFilesDefinitionModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/draft/files/{file_key}/content:
+    /pipeline/{project_id}/compendium/{compendium_id}/draft/files/{file_key}/content:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
             -   $ref: '#/components/parameters/file_key'
 
         put:
             tags:
-                - Node Draft (Files)
-            summary: Upload a draft file's content
-            description: Upload a draft file's content for a already defined file
+                - Execution Compendium (Draft Files)
+            summary: Upload a new file content to the Execution Compendium Draft.
+            description: Upload a new file content to the Execution Compendium Draft.
             requestBody:
                 $ref: '#/components/requestBodies/BinaryFilesRequestBody'
 
             responses:
                 '200':
-                    $ref: '#/components/responses/InvenioFileEntryModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFileEntryModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         get:
             tags:
-                - Node Draft (Files)
-            summary: Download a draft file's content
-            description: Download a draft file's content for a already defined file
+                - Execution Compendium (Draft Files)
+            summary: Download a file from the Execution Compendium draft.
+            description: Download a file from the Execution Compendium draft.
             responses:
                 '200':
                     $ref: '#/components/responses/BinaryResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/draft/files/{file_key}/commit:
+    /pipeline/{project_id}/compendium/{compendium_id}/draft/files/{file_key}/commit:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
             -   $ref: '#/components/parameters/file_key'
 
         post:
             tags:
-                - Node Draft (Files)
-            summary: Commit a draft file
-            description: Create a new version of the requested file
+                - Execution Compendium (Draft Files)
+            summary: Commit a file from a Execution Compendium Draft.
+            description: Create a new version of the request file.
             requestBody:
                 required: false
                 content:
                     application/json: { }
             responses:
                 '200':
-                    $ref: '#/components/responses/InvenioFileMetadataModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFileMetadataModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
-    /graph/{project_id}/node/{node_id}/draft/files/{file_key}:
+    /pipeline/{project_id}/compendium/{compendium_id}/draft/files/{file_key}:
         parameters:
             -   $ref: '#/components/parameters/project_id'
-            -   $ref: '#/components/parameters/node_id'
+            -   $ref: '#/components/parameters/compendium_id'
             -   $ref: '#/components/parameters/file_key'
 
         get:
             tags:
-                - Node Draft (Files)
-            summary: Get a draft file metadata
-            description: Get a draft file metadata
+                - Execution Compendium (Draft Files)
+            summary: Get a file metadata from the Execution Compendium draft.
+            description: Get a file metadata from the Execution Compendium draft.
             responses:
                 '200':
-                    $ref: '#/components/responses/InvenioFileMetadataModelResponseBody'
+                    $ref: '#/components/responses/ExecutionCompendiumFileMetadataModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
         delete:
             tags:
-                - Node Draft (Files)
-            summary: Delete a draft file
-            description: Delete a draft file
+                - Execution Compendium (Draft Files)
+            summary: Delete a file from the Execution Compendium draft.
+            description: Delete a file from the Execution Compendium draft.
             responses:
                 '200':
                     description: Deleted
 
     #
-    # User Node Draft and Records
+    # User Execution Compendium (Published or drafts)
     #
-    /user/graph/{project_id}/node:
+    /user/pipeline/{project_id}/compendium:
         parameters:
             -   $ref: '#/components/parameters/project_id'
 
         get:
             tags:
                 - User workspace
-            summary: List all nodes (Draft and Records) created by the user
-            description: List all User Nodes, and their versions, created in the project.
+            summary: List all execution compendia (Draft and Published) created by the user in the defined project.
+            description: List all execution compendia (Draft and Published) created by the user in the defined project.
             responses:
                 '200':
-                    $ref: '#/components/responses/ListOfNodeDraftModelInvenioResponseBody'
+                    $ref: '#/components/responses/ListOfExecutionCompendiumModelResponseBody'
                 '404':
                     $ref: '#/components/responses/Error'
 
@@ -537,17 +536,17 @@ components:
             required: true
             schema:
                 type: string
-        graph_label:
+        pipeline_label:
             in: path
-            name: graph_label
-            description: Project Graph label
+            name: pipeline_label
+            description: Project Research Pipeline label
             required: true
             schema:
                 type: string
-        node_id:
+        compendium_id:
             in: path
-            name: node_id
-            description: Node ID
+            name: compendium_id
+            description: Execution Compendium ID
             required: true
             schema:
                 type: string
@@ -644,7 +643,7 @@ components:
                 -   $ref: '#/components/schemas/ProjectDefinitionModel'
                 -   type: object
                     properties:
-                        graph_id:
+                        pipeline_id:
                             type: integer
                             example: 2
                         created_at:
@@ -660,41 +659,41 @@ components:
                             example: false
 
         #
-        # Project Graph
+        # Project Pipeline
         #
-        ProjectGraphDefinitionModel:
-            title: Project Graph Definition model
-            description: 'Project Graph definition model'
+        ProjectPipelineDefinitionModel:
+            title: Project Pipeline Definition model
+            description: 'Project Pipeline definition model'
             type: object
             properties:
                 label:
                     type: string
-                    description: 'Graph label. Is used to identificate the created Project Graph'
-                    example: 'classification_node_steps'
+                    description: 'Pipeline label. Is used to identity the type/usage/context of the pipeline'
+                    example: 'lulc_classification_pipeline'
                 metadata:
                     type: object
                     properties:
                         description:
                             type: string
-                            description: 'Graph description'
-                            example: 'A graph with execution steps that evaluate a classification map'
-                    description: 'Graph metadata'
+                            description: 'Pipeline description'
+                            example: 'A pipeline with execution steps that evaluate a LULC classification map'
+                    description: 'Pipeline metadata'
 
-        ProjectGraphModel:
-            title: Project Graph
-            description: 'Project Graph model'
+        ProjectPipelineModel:
+            title: Project Pipeline
+            description: 'Project Pipeline model'
             type: object
             properties:
-                graph:
+                pipeline:
                     type: object
                     properties:
                         directed:
                             type: boolean
-                            description: 'Flag that indicates whether the graph is directed or not'
+                            description: 'Flag that indicates whether the pipeline graph is directed or not'
                         type:
                             type: string
                             description: 'Graph type'
-                            example: 'Execution Graph'
+                            example: 'Directed Acyclic Graph'
                         metadata:
                             type: object
                             properties:
@@ -708,25 +707,25 @@ components:
                                 properties:
                                     source:
                                         type: string
-                                        description: 'NodeRecord ID used as source node in the edge'
+                                        description: 'Execution Compendium ID used as source node in the edge'
                                         example: 'yadgcb0g64'
                                     target:
                                         type: string
-                                        description: 'NodeRecord ID used as target node in the edge'
+                                        description: 'Execution Compendium ID used as target node in the edge'
                                         example: 'wt410zkq75'
-                            description: 'List of all graph nodes'
+                            description: 'List of pipeline compendia connections'
                         nodes:
                             type: array
                             items:
                                 type: string
-                                description: 'NodeRecord ID represented by the node'
+                                description: 'Execution Compendium ID represented by the node'
                                 example: 'wt410zkq75'
-                            description: 'List of all graph nodes'
+                            description: 'List of pipeline compendia'
 
         # Graph
-        NodeMetadata:
-            title: Node Metadata
-            description: 'Metadata used to describe the Node content'
+        ExecutionCompendiumMetadata:
+            title: Execution Compendium metadata
+            description: 'Metadata used to describe the Execution Compendium content (inputs, outputs, environments)'
             type: object
             properties:
                 author:
@@ -736,18 +735,18 @@ components:
                     type: string
                     example: 'A metadata description'
 
-        NodeDraftFile:
-            title: Node Draft File
-            description: 'Object used on Node Draft to define new files'
+        ExecutionCompendiumDraftFile:
+            title: Execution Compendium draft file
+            description: 'Define files in the Execution Compendium draft'
             type: object
             properties:
                 key:
                     type: string
                     example: 'input_file.txt'
 
-        NodeModel:
-            title: Node Draft
-            description: 'Node Draft definition'
+        ExecutionCompendiumDraft:
+            title: Execution Compendium Draft
+            description: 'Execution Compendium draft definition'
             type: object
             properties:
                 data:
@@ -756,13 +755,13 @@ components:
                         inputs:
                             type: array
                             items:
-                                $ref: '#/components/schemas/NodeDraftFile'
+                                $ref: '#/components/schemas/ExecutionCompendiumDraftFile'
                         outputs:
                             type: array
                             items:
-                                $ref: '#/components/schemas/NodeDraftFile'
+                                $ref: '#/components/schemas/ExecutionCompendiumDraftFile'
                 environment:
-                    $ref: '#/components/schemas/NodeDraftFile'
+                    $ref: '#/components/schemas/ExecutionCompendiumDraftFile'
                 command:
                     type: string
                     example: 'python3 myscript.py --arg1 --arg2'
@@ -770,7 +769,7 @@ components:
                     type: string
                     example: '1220df718931fce2467010993b914f1ad3b9d00a50a4390d42e8e2138dcbb893514d'
                 metadata:
-                    $ref: '#/components/schemas/NodeMetadata'
+                    $ref: '#/components/schemas/ExecutionCompendiumMetadata'
 
 
         #
@@ -778,10 +777,10 @@ components:
         #
 
         # Files
-        InvenioFileMetadataModel:
-            title: Invenio File Commited document
+        ExecutionCompendiumFileMetadataModel:
+            title: Execution Compendium document
             description: |
-                'Invenio document with information about a commited file (Object version on invenio-files-rest)'
+                'JSON document with information about a commited file.'
             type: object
             properties:
                 size:
@@ -815,11 +814,11 @@ components:
                         self:
                             type: string
                             description: 'Link to the current file'
-                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt'
+                            example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/files/output_file.txt'
                         content:
                             type: string
                             description: 'Link to download the current file'
-                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt/content'
+                            example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/files/output_file.txt/content'
                 created:
                     type: string
                     example: '2021-09-06T00:50:12.162515+00:00'
@@ -828,9 +827,9 @@ components:
                     type: string
                     example: [ completed ]
 
-        InvenioFileEntryModel:
-            title: Invenio File entry
-            description: 'Invenio File document description'
+        ExecutionCompendiumFileEntryModel:
+            title: Execution Compendium File entry.
+            description: 'Execution Compendium file description'
             type: object
             properties:
                 updated:
@@ -846,11 +845,11 @@ components:
                         self:
                             type: string
                             description: 'Link to the current file'
-                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt'
+                            example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/files/output_file.txt'
                         content:
                             type: string
                             description: 'Link to download the file content'
-                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files/output_file.txt/content'
+                            example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/files/output_file.txt/content'
                 created:
                     type: string
                     example: '2021-09-06T00:50:12.162515+00:00'
@@ -861,9 +860,9 @@ components:
                     type: object
                     description: 'metadata extracted from the defined tile'
 
-        InvenioFilesDefinitionModel:
-            title: Invenio files definition model
-            description: 'Model with files information from a record/draft'
+        ExecutionCompendiumFilesDefinitionModel:
+            title: Execution Compendium files definition model
+            description: 'Model with files information from a Execution Compendium.'
             type: object
             properties:
                 enabled:
@@ -875,43 +874,43 @@ components:
                     properties:
                         self:
                             type: string
-                            description: 'Link to the record files'
-                            example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/files'
+                            description: 'Link to the Execution Compendium files'
+                            example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/files'
                 entries:
                     type: array
                     items:
-                        $ref: '#/components/schemas/InvenioFileEntryModel'
+                        $ref: '#/components/schemas/ExecutionCompendiumFileEntryModel'
 
         # Links
-        InvenioRecordLinks:
-            title: Invenio Record Links
-            description: 'Invenio Record links'
+        ExecutionCompendiumLinks:
+            title: Execution Compendium Links
+            description: 'Execution Compendium links'
             type: object
             properties:
                 self:
                     type: string
-                    description: 'Link to the current node draft'
-                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/draft'
+                    description: 'Link to the current Execution Compendium draft'
+                    example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/draft'
                 latest:
                     type: string
-                    description: 'Link to the latest version of the record associated to the draft'
-                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/versions/latest'
-                record:
+                    description: 'Link to the latest version of the Execution Compendium associated to the draft'
+                    example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/versions/latest'
+                compendium:
                     type: string
-                    description: 'Link to the parent record of the record'
-                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84'
+                    description: 'Link to the parent of the Execution Compendium'
+                    example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84'
                 publish:
                     type: string
-                    description: 'Link to publish a new record from a draft'
-                    example: 'https://127.0.0.1:5000/graph/1/node/2k7cgyek84/draft/actions/publish'
+                    description: 'Link to publish a new Execution Compendium version from the draft'
+                    example: 'https://127.0.0.1:5000/pipeline/1/compendium/2k7cgyek84/draft/actions/publish'
                 versions:
                     type: string
-                    description: 'Link to all record versions'
+                    description: 'Link to all Execution Compendium versions'
 
-        # Records
-        NodeModelInvenio:
-            title: Invenio Record Node
-            description: 'Node modeled as a Invenio Record object'
+        # Executiom Compendium Model (published)
+        ExecutionCompendiumModel:
+            title: Execution Compendium Model
+            description: 'Execution Compendium Model object'
             type: object
             properties:
                 id:
@@ -925,9 +924,9 @@ components:
                     type: integer
                     example: 3
                 node:
-                    $ref: '#/components/schemas/NodeModel'
+                    $ref: '#/components/schemas/ExecutionCompendiumDraft'
                 links:
-                    $ref: '#/components/schemas/InvenioRecordLinks'
+                    $ref: '#/components/schemas/ExecutionCompendiumLinks'
 
 
     requestBodies:
@@ -946,36 +945,36 @@ components:
         #
         # Project bodies
         #
-        ProjectGraphDefinitionRequestBody:
+        ProjectPipelineDefinitionRequestBody:
             required: true
             content:
               application/json:
                 schema:
-                    $ref: '#/components/schemas/ProjectGraphDefinitionModel'
+                    $ref: '#/components/schemas/ProjectPipelineDefinitionModel'
             description: 'A JSON document with the informations that will be used to identify and describe the generated graph'
 
         #
         # Files Request bodies
         #
-        NodeDraftFileDefinitionRequestBody:
+        ExecutionCompendiumDraftFileDefinitionRequestBody:
             description: 'A JSON document with the files definitions'
             required: true
             content:
                 application/json:
                     schema:
-                        $ref: '#/components/schemas/NodeDraftFile'
+                        $ref: '#/components/schemas/ExecutionCompendiumDraftFile'
 
 
         #
-        # Node Draft request bodies
+        # Execution Compendium Draft request bodies
         #
-        NodeDraftRequestBody:
-            description: 'A JSON document describing the node.'
+        ExecutionCompendiumDraftRequestBody:
+            description: 'A JSON document describing the Execution Compendium Draft.'
             required: true
             content:
                 application/json:
                     schema:
-                        $ref: '#/components/schemas/NodeModel'
+                        $ref: '#/components/schemas/ExecutionCompendiumDraft'
 
         ProjectDefinitionModelRequestBody:
             description: 'A JSON document describing the project'
@@ -1033,59 +1032,59 @@ components:
                         items:
                             $ref: '#/components/schemas/ProjectCreatedModel'
 
-        ProjectGraphModelResponseBody:
-            description: 'A JSON document with the Project Graph'
+        ProjectPipelineModelResponseBody:
+            description: 'A JSON document with the Research Pipeline'
             content:
                 application/json:
                     schema:
-                        $ref: '#/components/schemas/ProjectGraphModel'
+                        $ref: '#/components/schemas/ProjectPipelineModel'
 
 
-        ListOfProjectGraphModelResponseBody:
-            description: 'A JSON document with a list of ProjectGraph available.'
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            $ref: '#/components/schemas/ProjectGraphModel'
-
-        #
-        # Invenio Framework customized models
-        #
-        NodeDraftModelInvenioResponseBody:
-            description: 'A JSON document with the stored content.'
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/NodeModelInvenio'
-
-        ListOfNodeDraftModelInvenioResponseBody:
-            description: 'A JSON document with a list of Invenio records.'
+        ListOfProjectPipelineModelResponseBody:
+            description: 'A JSON document with a list of ProjectPipeline available.'
             content:
                 application/json:
                     schema:
                         type: array
                         items:
-                            $ref: '#/components/schemas/NodeModelInvenio'
+                            $ref: '#/components/schemas/ProjectPipelineModel'
 
-        InvenioFilesDefinitionModelResponseBody:
-            description: 'A JSON document with the files defined for a record/draft'
+        #
+        # Invenio Framework based models
+        #
+        ExecutionCompendiumModelResponseBody:
+            description: 'A JSON document with the Execution Compendium content.'
             content:
                 application/json:
                     schema:
-                        $ref: '#/components/schemas/InvenioFilesDefinitionModel'
+                        $ref: '#/components/schemas/ExecutionCompendiumModel'
 
-        InvenioFileEntryModelResponseBody:
-            description: 'A JSON document with the record/draft file entry'
+        ListOfExecutionCompendiumModelResponseBody:
+            description: 'A JSON document with a list of Execution Compendia.'
             content:
                 application/json:
                     schema:
-                        $ref: '#/components/schemas/InvenioFileEntryModel'
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/ExecutionCompendiumModel'
 
-        InvenioFileMetadataModelResponseBody:
+        ExecutionCompendiumFilesDefinitionModelResponseBody:
+            description: 'A JSON document with the Execution Compendia files description'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ExecutionCompendiumFilesDefinitionModel'
+
+        ExecutionCompendiumFileEntryModelResponseBody:
+            description: 'A JSON document with the Execution Compendium file entry'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ExecutionCompendiumFileEntryModel'
+
+        ExecutionCompendiumFileMetadataModelResponseBody:
             description: 'A JSON document with the complete description of a commited file'
             content:
                 application/json:
                     schema:
-                        $ref: '#/components/schemas/InvenioFileMetadataModel'
+                        $ref: '#/components/schemas/ExecutionCompendiumFileMetadataModel'
