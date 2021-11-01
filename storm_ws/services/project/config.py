@@ -8,15 +8,15 @@
 
 """SpatioTemporal Open Research Manager Web Service `Project services config`."""
 
-from ..permission import NodeRecordPermissionPolicy
+from ..permission import CompendiumRecordPermissionPolicy
 
 
 class ProjectServiceConfig:
-    permission_policy_cls = NodeRecordPermissionPolicy
+    permission_policy_cls = CompendiumRecordPermissionPolicy
 
 
 class ProjectGraphServiceConfig:
-    permission_policy_cls = NodeRecordPermissionPolicy
+    permission_policy_cls = CompendiumRecordPermissionPolicy
 
 
 __all__ = (

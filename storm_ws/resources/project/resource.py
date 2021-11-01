@@ -16,7 +16,7 @@ from flask_resources import (
     resource_requestctx
 )
 
-from .adapter import adapter_single_project_graph_as_json, adapter_multi_project_graph_as_json
+from .adapter import adapter_single_project_pipeline_as_json, adapter_multi_project_pipeline_as_json
 from ..parser import request_data, request_view_args
 from ...schema import (
     ProjectSchema
@@ -101,104 +101,104 @@ class ProjectResource(Resource):
         return ProjectUserSchema().dump(added_project_user), 200
 
 
-class ProjectGraphResource(Resource):
-    """ProjectGraph resource."""
+class ProjectPipelineResource(Resource):
+    """ProjectPipeline resource."""
 
     def __init__(self, config, service):
-        super(ProjectGraphResource, self).__init__(config)
+        super(ProjectPipelineResource, self).__init__(config)
         self.service = service
 
     def create_url_rules(self):
         """Define resource urls based on configuration routes."""
         routes = self.config.routes
         return [
-            route("GET", routes["get-item"], self.get_graph),
-            route("GET", routes["list-items"], self.list_graphs),
-            route("POST", routes["create-item"], self.create_graph),
-            route("DELETE", routes["delete-item"], self.delete_graph)
+            route("GET", routes["get-item"], self.get_pipeline),
+            route("GET", routes["list-items"], self.list_pipelines),
+            route("POST", routes["create-item"], self.create_pipeline),
+            route("DELETE", routes["delete-item"], self.delete_pipeline)
         ]
 
     @request_data
     @request_view_args
     @response_handler()
-    def create_graph(self):
-        """Add a new graph to the project graphs."""
+    def create_pipeline(self):
+        """Add a new pipeline to the project."""
         created_graph = self.service.add_graph(
             g.identity,
             resource_requestctx.view_args["project_id"],
             resource_requestctx.data
         )
-        return adapter_single_project_graph_as_json(created_graph), 201
+        return adapter_single_project_pipeline_as_json(created_graph), 201
 
     @request_view_args
     @response_handler()
-    def get_graph(self):
-        """Add a new graph to the project graphs."""
-        selected_graph = self.service.get_graph(
+    def get_pipeline(self):
+        """Get a pipeline from the project."""
+        selected_graph = self.service.get_pipeline(
             g.identity,
             resource_requestctx.view_args["project_id"],
             resource_requestctx.view_args["graph_label"],
         )
-        return adapter_single_project_graph_as_json(selected_graph), 200
+        return adapter_single_project_pipeline_as_json(selected_graph), 200
 
     @request_view_args
     @response_handler()
-    def list_graphs(self):
-        project_graphs = self.service.list_graph_by_project_id(
+    def list_pipelines(self):
+        project_pipelines = self.service.list_pipeline_by_project_id(
             g.identity,
             resource_requestctx.view_args["project_id"],
         )
-        return adapter_multi_project_graph_as_json(project_graphs), 200
+        return adapter_multi_project_pipeline_as_json(project_pipelines), 200
 
     @request_view_args
     @response_handler()
-    def delete_graph(self):
-        """Add a new graph to the project graphs."""
-        graph_label = resource_requestctx.view_args["graph_label"]
-        self.service.delete_graph(
+    def delete_pipeline(self):
+        """Add a new pipeline to the project graphs."""
+        pipeline_label = resource_requestctx.view_args["pipeline_label"]
+        self.service.delete_pipeline(
             g.identity,
             resource_requestctx.view_args["project_id"],
-            graph_label
+            pipeline_label
         )
-        return {"code": 200, "message": f"Graph ({graph_label}) was successfully deleted"}, 200
+        return {"code": 200, "message": f"Pipeline ({pipeline_label}) was successfully deleted"}, 200
 
 
-class ProjectGraphNodeResource(Resource):
-    """ProjectGraphNode resource."""
+class ProjectPipelineCompendiumResource(Resource):
+    """ProjectPipelineCompendiumResource resource."""
 
     def __init__(self, config, service):
-        super(ProjectGraphNodeResource, self).__init__(config)
+        super(ProjectPipelineCompendiumResource, self).__init__(config)
         self.service = service
 
     def create_url_rules(self):
         """Define resource urls based on configuration routes."""
         routes = self.config.routes
         return [
-            route("POST", routes["create-item"], self.add_node),
-            route("DELETE", routes["delete-item"], self.delete_node)
+            route("POST", routes["create-item"], self.add_compendium),
+            route("DELETE", routes["delete-item"], self.delete_compendium)
         ]
 
     @request_view_args
     @response_handler()
-    def add_node(self):
-        """Add a new node to the project graph."""
-        updated_graph = self.service.add_node(
+    def add_compendium(self):
+        """Add a new node to the project pipeline."""
+        updated_pipeline = self.service.add_compendium(
             g.identity,
             resource_requestctx.view_args["project_id"],
-            resource_requestctx.view_args["graph_label"],
-            resource_requestctx.view_args["node_id"]
+            resource_requestctx.view_args["pipeline_label"],
+            resource_requestctx.view_args["compendium_id"]
         )
-        return adapter_single_project_graph_as_json(updated_graph), 201
+        return adapter_single_project_pipeline_as_json(updated_pipeline), 201
 
     @request_view_args
     @response_handler()
-    def delete_node(self):
-        """Add a new node to the project graph."""
-        node_id = resource_requestctx.view_args["node_id"]
-        self.service.delete_node(
+    def delete_compendium(self):
+        """Add a new node to the project pipeline."""
+        node_id = resource_requestctx.view_args["compendium_id"]
+        self.service.delete_compendium(
             g.identity,
             resource_requestctx.view_args["project_id"],
-            resource_requestctx.view_args["graph_label"],
+            resource_requestctx.view_args["pipeline_label"],
             node_id
         )
         return {"code": 200, "message": f"Node {node_id} was successfully deleted"}, 200
@@ -206,6 +206,6 @@ class ProjectGraphNodeResource(Resource):
 
 __all__ = (
     "ProjectResource",
-    "ProjectGraphResource",
-    "ProjectGraphNodeResource"
+    "ProjectPipelineResource",
+    "ProjectPipelineCompendiumResource"
 )

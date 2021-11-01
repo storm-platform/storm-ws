@@ -14,7 +14,7 @@ from flask_resources import ResourceConfig
 
 class ProjectResourceConfig(ResourceConfig):
     url_prefix = "/project"
-    blueprint_name = "bdcrrm_project"
+    blueprint_name = "storm_project"
 
     request_view_args = {"project_id": fields.Str(),
                          "user_id": fields.Int()}
@@ -29,43 +29,43 @@ class ProjectResourceConfig(ResourceConfig):
     }
 
 
-class BaseProjectGraphResourcesConfig(ResourceConfig):
-    """Base configurations for Project Graph resources."""
+class BaseProjectPipelineResourcesConfig(ResourceConfig):
+    """Base configurations for Project Pipeline resources."""
     request_view_args = {
         "project_id": fields.Str(),
-        "graph_label": fields.Str(),
-        "node_id": fields.Str()
+        "pipeline_label": fields.Str(),
+        "compendium_id": fields.Str()
     }
 
 
-class ProjectGraphResourceConfig(BaseProjectGraphResourcesConfig):
-    """Graph resource config."""
+class ProjectPipelineResourceConfig(BaseProjectPipelineResourcesConfig):
+    """Pipeline resource config."""
 
-    blueprint_name = "graph_resources"
-    url_prefix = "/project/<project_id>/graph"
+    blueprint_name = "storm_pipeline_resources"
+    url_prefix = "/project/<project_id>/pipeline"
 
     routes = {
         "list-items": "",
         "create-item": "",
-        "get-item": "/<graph_label>",
-        "delete-item": "/<graph_label>"
+        "get-item": "/<pipeline_label>",
+        "delete-item": "/<pipeline_label>"
     }
 
 
-class ProjectGraphNodeResourceConfig(BaseProjectGraphResourcesConfig):
+class ProjectPipelineCompendiumResourceConfig(BaseProjectPipelineResourcesConfig):
     """GraphNode resource config."""
 
-    blueprint_name = "graph_node_resources"
-    url_prefix = "/project/<project_id>/graph/<graph_label>/node"
+    blueprint_name = "storm_pipeline_compendium_resources"
+    url_prefix = "/project/<project_id>/pipeline/<pipeline_label>/compendium"
 
     routes = {
-        "create-item": "/<node_id>",
-        "delete-item": "/<node_id>"
+        "create-item": "/<compendium_id>",
+        "delete-item": "/<compendium_id>"
     }
 
 
 __all__ = (
     "ProjectResourceConfig",
-    "ProjectGraphResourceConfig",
-    "ProjectGraphNodeResourceConfig"
+    "ProjectPipelineResourceConfig",
+    "ProjectPipelineCompendiumResourceConfig"
 )

@@ -6,4 +6,16 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""SpatioTemporal Open Research Manager Web Service `jsonschemas for graph models`."""
+"""SpatioTemporal Open Research Manager Web Service `Records services module`."""
+
+from .config import (
+    CompendiumServiceConfig
+)
+from .service import (
+    CompendiumService
+)
+
+__all__ = (
+    "CompendiumService",
+    "CompendiumServiceConfig"
+)

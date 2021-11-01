@@ -6,7 +6,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""SpatioTemporal Open Research Manager Web Service `Graph Marshmallow`."""
+"""SpatioTemporal Open Research Manager Web Service `Execution Compendium Marshmallow`."""
 
 from marshmallow import Schema, fields
 from invenio_drafts_resources.services.records.schema import RecordSchema, ParentSchema
@@ -17,38 +17,38 @@ class InvenioFileSchema(Schema):
     key = fields.String(required=True)
 
 
-class NodeRecordMetadata(Schema):
+class CompendiumRecordMetadata(Schema):
     """Marshmallow Invenio File definition schema."""
     author = fields.String(required=True)
     description = fields.String(required=False)
 
 
-class NodeRecordFiles(Schema):
-    """Marshmallow metadata for Node Record on invenio-records."""
+class CompendiumRecordFiles(Schema):
+    """Marshmallow metadata for Node Record on invenio-compendium."""
     inputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
     outputs = fields.List(cls_or_instance=fields.Nested(InvenioFileSchema()), required=True)
 
 
-class NodeParentSchema(ParentSchema):
-    """Marshmallow metadata for Node Parent on invenio-records."""
+class CompendiumParentSchema(ParentSchema):
+    """Marshmallow metadata for Node Parent on invenio-compendium."""
 
 
-class NodeRecordSchema(RecordSchema):
-    """Marshmallow schema for Node Record on invenio-records."""
-    data = fields.Nested(NodeRecordFiles(), required=True)
+class CompendiumRecordSchema(RecordSchema):
+    """Marshmallow schema for Node Record on invenio-compendium."""
+    data = fields.Nested(CompendiumRecordFiles(), required=True)
 
     environment = fields.Nested(InvenioFileSchema(), required=True)
 
     command = fields.String(required=True)
     command_checksum = fields.String(required=True)
 
-    metadata = fields.Nested(NodeRecordMetadata(), required=True)
+    metadata = fields.Nested(CompendiumRecordMetadata(), required=True)
 
 
 __all__ = (
     "InvenioFileSchema",
-    "NodeRecordMetadata",
-    "NodeRecordFiles",
-    "NodeRecordSchema",
-    "NodeParentSchema"
+    "CompendiumRecordMetadata",
+    "CompendiumRecordFiles",
+    "CompendiumRecordSchema",
+    "CompendiumParentSchema"
 )

@@ -11,7 +11,7 @@
 from .models import (
     Project,
     ProjectUser,
-    ProjectGraph
+    ProjectPipeline
 )
 
 from .api import UserProfile
@@ -19,7 +19,7 @@ from .api import UserProfile
 __all__ = (
     "Project",
     "ProjectUser",
-    "ProjectGraph",
+    "ProjectPipeline",
 
     "UserProfile"
 )

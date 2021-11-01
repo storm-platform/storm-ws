@@ -9,24 +9,24 @@
 """SpatioTemporal Open Research Manager Web Service `Resources`."""
 
 from .files import (
-    FileNodeDraftResourceConfig,
-    FileNodeRecordResourceConfig,
-    NodeFileResource
+    FileCompendiumDraftResourceConfig,
+    FileCompendiumRecordResourceConfig,
+    CompendiumFileResource
 )
 
 from .project import (
     ProjectResourceConfig,
-    ProjectGraphResourceConfig,
-    ProjectGraphNodeResourceConfig,
+    ProjectPipelineResourceConfig,
+    ProjectPipelineCompendiumResourceConfig,
 
     ProjectResource,
-    ProjectGraphResource,
-    ProjectGraphNodeResource
+    ProjectPipelineResource,
+    ProjectPipelineCompendiumResource
 )
 
-from .records import (
-    NodeResource,
-    NodeResourceConfig
+from .compendium import (
+    CompendiumResource,
+    CompendiumResourceConfig
 )
 
 from .server import (
@@ -40,14 +40,14 @@ from .service import (
 )
 
 __all__ = (
-    "NodeResource",
-    "NodeResourceConfig",
+    "CompendiumResource",
+    "CompendiumResourceConfig",
 
-    "FileNodeDraftResourceConfig",
-    "FileNodeRecordResourceConfig",
+    "FileCompendiumDraftResourceConfig",
+    "FileCompendiumRecordResourceConfig",
 
-    "NodeResource",
-    "NodeFileResource",
+    "CompendiumResource",
+    "CompendiumFileResource",
 
     "ServerResource",
     "ServerResourceConfig",
@@ -56,10 +56,10 @@ __all__ = (
     "ServiceResourceConfig",
 
     "ProjectResourceConfig",
-    "ProjectGraphResourceConfig",
-    "ProjectGraphNodeResourceConfig",
+    "ProjectPipelineResourceConfig",
+    "ProjectPipelineCompendiumResourceConfig",
 
     "ProjectResource",
-    "ProjectGraphResource",
-    "ProjectGraphNodeResource"
+    "ProjectPipelineResource",
+    "ProjectPipelineCompendiumResource"
 )

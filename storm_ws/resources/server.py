@@ -12,7 +12,7 @@ from flask_resources import Resource, ResourceConfig, route
 
 
 class ServerResourceConfig(ResourceConfig):
-    blueprint_name = "bdcrrm_server"
+    blueprint_name = "storm_server"
     url_prefix = "/server"
 
 

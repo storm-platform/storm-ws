@@ -11,14 +11,14 @@
 from invenio_records_resources.services import FileService
 
 
-class NodeFileService(FileService):
+class CompendiumFileService(FileService):
     def __init__(self, config, project_service=None):
-        """Constructor for NodeFileService."""
+        """Constructor for CompendiumFileService."""
         super().__init__(config)
         self._project_service = project_service
 
 
-class NodeFileDraftService(NodeFileService):
+class CompendiumFileDraftService(CompendiumFileService):
     def check_draft_files(self, id_, identity, file_keys):
         """Check draft files that will be defined.
 
@@ -37,10 +37,10 @@ class NodeFileDraftService(NodeFileService):
 
         for file_key in file_keys:
             if file_key["key"] not in files:
-                raise RuntimeError("File is not defined for this Node.")
+                raise RuntimeError("File is not defined for this Compendium.")
 
 
 __all__ = (
-    "NodeFileService",
-    "NodeFileDraftService"
+    "CompendiumFileService",
+    "CompendiumFileDraftService"
 )

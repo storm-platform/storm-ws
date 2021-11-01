@@ -13,18 +13,18 @@ import uuid
 from storm_ws.services.project.service import UserProfileService
 
 from . import (
-    NodeFileResource,
-    FileNodeDraftResourceConfig,
-    FileNodeRecordResourceConfig,
-    NodeResource,
-    NodeResourceConfig,
+    CompendiumFileResource,
+    FileCompendiumDraftResourceConfig,
+    FileCompendiumRecordResourceConfig,
+    CompendiumResource,
+    CompendiumResourceConfig,
     ServiceResource,
     ServiceResourceConfig,
-    ProjectGraphResourceConfig,
-    ProjectGraphNodeResourceConfig,
+    ProjectPipelineResourceConfig,
+    ProjectPipelineCompendiumResourceConfig,
 
-    ProjectGraphResource,
-    ProjectGraphNodeResource
+    ProjectPipelineResource,
+    ProjectPipelineCompendiumResource
 )
 from .project import (
     ProjectResource,
@@ -34,13 +34,13 @@ from .server import ServerResourceConfig, ServerResource
 from ..services import (
     FileNodeDraftServiceConfig,
     FileNodeRecordServiceConfig,
-    NodeFileService,
-    NodeFileDraftService,
+    CompendiumFileService,
+    CompendiumFileDraftService,
     ProjectService,
     ProjectServiceConfig,
-    NodeServiceConfig,
-    NodeService,
-    ProjectGraphService,
+    CompendiumServiceConfig,
+    CompendiumService,
+    ProjectPipelineService,
     ProjectGraphServiceConfig
 )
 
@@ -88,7 +88,7 @@ def initialize_service_resources(app) -> None:
     app.register_blueprint(service_resource.as_blueprint())
 
 
-def initialize_graph_resources(app) -> None:
+def initialize_pipeline_resources(app) -> None:
     """Initialize the Graph resources.
 
     Args:
@@ -99,11 +99,11 @@ def initialize_graph_resources(app) -> None:
     """
     # Services
     project_service = ProjectService(ProjectServiceConfig)
-    graph_service = ProjectGraphService(ProjectGraphServiceConfig, project_service)
+    graph_service = ProjectPipelineService(ProjectGraphServiceConfig, project_service)
 
     # Resources
-    graph_resource = ProjectGraphResource(ProjectGraphResourceConfig, graph_service)
-    graph_node_resource = ProjectGraphNodeResource(ProjectGraphNodeResourceConfig, graph_service)
+    graph_resource = ProjectPipelineResource(ProjectPipelineResourceConfig, graph_service)
+    graph_node_resource = ProjectPipelineCompendiumResource(ProjectPipelineCompendiumResourceConfig, graph_service)
 
     # Blueprints
     app.register_blueprint(graph_resource.as_blueprint())
@@ -111,7 +111,7 @@ def initialize_graph_resources(app) -> None:
 
 
 def initialize_invenio_records_resources(app) -> None:
-    """Initialize the invenio records resources.
+    """Initialize the invenio compendium resources.
 
     Args:
         app (flask.Flask): flask app instance
@@ -127,21 +127,21 @@ def initialize_invenio_records_resources(app) -> None:
     #
     # Files (Draft)
     #
-    file_draft_service = NodeFileDraftService(FileNodeDraftServiceConfig, project_service=project_service)
-    file_draft_resource = NodeFileResource(FileNodeDraftResourceConfig, file_draft_service)
+    file_draft_service = CompendiumFileDraftService(FileNodeDraftServiceConfig, project_service=project_service)
+    file_draft_resource = CompendiumFileResource(FileCompendiumDraftResourceConfig, file_draft_service)
 
     #
     # Files (Records)
     #
-    file_record_service = NodeFileService(FileNodeRecordServiceConfig, project_service=project_service)
-    file_record_resource = NodeFileResource(FileNodeRecordResourceConfig, file_record_service)
+    file_record_service = CompendiumFileService(FileNodeRecordServiceConfig, project_service=project_service)
+    file_record_resource = CompendiumFileResource(FileCompendiumRecordResourceConfig, file_record_service)
 
     #
     # Nodes
     #
-    node_service = NodeService(NodeServiceConfig, files_service=file_record_service,
-                               draft_files_service=file_draft_service, project_service=project_service)
-    node_resource = NodeResource(NodeResourceConfig, node_service)
+    node_service = CompendiumService(CompendiumServiceConfig, files_service=file_record_service,
+                                     draft_files_service=file_draft_service, project_service=project_service)
+    node_resource = CompendiumResource(CompendiumResourceConfig, node_service)
 
     # Files (Draft and Record)
     app.register_blueprint(file_draft_resource.as_blueprint())
@@ -157,7 +157,7 @@ def initialize_invenio_records_resources(app) -> None:
 
 
 __all__ = (
-    "initialize_graph_resources",
+    "initialize_pipeline_resources",
     "initialize_server_resources",
     "initialize_project_resources",
     "initialize_service_resources",

@@ -8,40 +8,40 @@
 
 """SpatioTemporal Open Research Manager Web Service `Marshmallow schemas`."""
 
-from .graph import (
+from .compendium import (
     InvenioFileSchema,
-    NodeRecordMetadata,
-    NodeRecordFiles,
-    NodeRecordSchema
+    CompendiumRecordMetadata,
+    CompendiumRecordFiles,
+    CompendiumRecordSchema
 )
 
 from .project import (
     ProjectMetadataLicensesSchema,
     ProjectMetadataSchema,
     ProjectSchema,
-    ProjectGraphNodeSchema,
-    ProjectGraphEdgeField,
-    ProjectGraphField,
-    ProjectGraphSchema,
-    ProjectGraphDefinitionMetadata,
-    ProjectGraphDefinitionSchema,
-    ProjectMultiGraphSchema
+    ProjectPipelineCompendiumSchema,
+    ProjectPipelineConnectionField,
+    ProjectPipelineField,
+    ProjectPipelineSchema,
+    ProjectPipelineDefinitionMetadata,
+    ProjectPipelineDefinitionSchema,
+    ProjectMultiPipelineSchema
 )
 
 __all__ = (
     "InvenioFileSchema",
-    "NodeRecordMetadata",
-    "NodeRecordFiles",
-    "NodeRecordSchema",
+    "CompendiumRecordMetadata",
+    "CompendiumRecordFiles",
+    "CompendiumRecordSchema",
 
     "ProjectMetadataLicensesSchema",
     "ProjectMetadataSchema",
     "ProjectSchema",
-    "ProjectGraphNodeSchema",
-    "ProjectGraphEdgeField",
-    "ProjectGraphField",
-    "ProjectGraphSchema",
-    "ProjectGraphDefinitionMetadata",
-    "ProjectGraphDefinitionSchema",
-    "ProjectMultiGraphSchema"
+    "ProjectPipelineCompendiumSchema",
+    "ProjectPipelineConnectionField",
+    "ProjectPipelineField",
+    "ProjectPipelineSchema",
+    "ProjectPipelineDefinitionMetadata",
+    "ProjectPipelineDefinitionSchema",
+    "ProjectMultiPipelineSchema"
 )

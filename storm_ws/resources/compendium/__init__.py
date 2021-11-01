@@ -6,15 +6,17 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""SpatioTemporal Open Research Manager Web Service `Records resources`."""
+"""SpatioTemporal Open Research Manager Web Service `Records resources module`."""
 
-from invenio_drafts_resources.resources import RecordResource
+from .config import (
+    CompendiumResourceConfig
+)
 
-
-class NodeResource(RecordResource):
-    ...
-
+from .resource import (
+    CompendiumResource
+)
 
 __all__ = (
-    "NodeResource"
+    "CompendiumResource",
+    "CompendiumResourceConfig"
 )

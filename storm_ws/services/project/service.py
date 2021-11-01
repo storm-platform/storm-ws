@@ -20,11 +20,11 @@ from bdcrrm_api.graph import (
 from invenio_records_resources.services import Service
 
 from ..cache import cache_manager
-from ...models import Project, ProjectGraph, NodeRecord
+from ...models import Project, ProjectPipeline, CompendiumRecord
 from ...models import ProjectUser, UserProfile
 from ...models import db
 from ...schema import (
-    ProjectGraphDefinitionSchema
+    ProjectPipelineDefinitionSchema
 )
 from ...schema import ProjectSchema
 
@@ -242,33 +242,33 @@ class ProjectService(Service):
         return project_user
 
 
-class ProjectGraphService(Service):
-    """Graph Service."""
+class ProjectPipelineService(Service):
+    """Pipeline Service."""
 
     def __init__(self, config, project_service=None):
-        """Constructor for GraphService."""
+        """Initializer for ProjectPipelineService."""
         super().__init__(config)
         self._project_service = project_service
 
-    def add_graph(self, identity, project_id: int, data) -> Dict:
-        """Add a new graph to the project.
+    def add_pipeline(self, identity, project_id: int, data) -> Dict:
+        """Add a new pipeline to the project.
 
         Args:
             identity (flask_principal.Identity): Project Owner User ID (from OAuth service)
 
             project_id (int): Project ID
 
-            data (dict): Graph data received from the user.
+            data (dict): Pipeline data received from the user.
         Returns:
-            Project: Created Graph Object.
+            Project: Created Pipeline Object.
         Raises:
-            Exception: When Graph is not created.
+            Exception: When Pipeline is not created.
         """
         # validating
-        form = ProjectGraphDefinitionSchema()
+        form = ProjectPipelineDefinitionSchema()
         form.load(data)
 
-        # populate the graph with the another information
+        # populate the pipeline with the another information
         data = dict(
             label=data["label"],
             graph=dict(
@@ -280,150 +280,154 @@ class ProjectGraphService(Service):
             )
         )
 
-        # search for the project linked to the graph
+        # search for the project linked to the pipeline
         project = self._project_service.get_project_by_id(identity, project_id)
         data["project_id"] = project.id  # avoiding unauthorized registers
 
-        created_project_graph = ProjectGraph(**data)
+        created_project_pipeline = ProjectPipeline(**data)
 
-        db.session.add(created_project_graph)
+        db.session.add(created_project_pipeline)
         db.session.commit()
 
-        return created_project_graph
+        return created_project_pipeline
 
-    def get_graph(self, identity, project_id: int, project_graph_label: str) -> ProjectGraph:
-        """Get a specific Graph by `project` and `graph` id.
-
-        Args:
-            identity (flask_principal.Identity): Project User identity (from OAuth service)
-
-            project_id (int): Project ID
-
-            project_graph_label (str): Project graph identification
-        Returns:
-            ProjectGraph: Project graph
-        """
-        return db.session.query(ProjectGraph).filter(
-            ProjectGraph.project_id == project_id,
-            ProjectGraph.label == project_graph_label
-        ).first_or_404("Graph not found!")
-
-    def list_graph_by_project_id(self, identity, project_id: int = None) -> List[ProjectGraph]:
-        """Get a Graph by `user` and `project` id.
+    def get_pipeline(self, identity, project_id: int, project_pipeline_label: str) -> ProjectPipeline:
+        """Get a specific Pipeline by `project` and `pipeline` id.
 
         Args:
             identity (flask_principal.Identity): Project User identity (from OAuth service)
 
             project_id (int): Project ID
+
+            project_pipeline_label (str): Project pipeline identification
         Returns:
-            List[ProjectGraph]: List of Graph object
+            ProjectPipeline: Project pipeline
         """
-        return db.session.query(ProjectGraph).filter(
-            ProjectGraph.project_id == project_id
+        return db.session.query(ProjectPipeline).filter(
+            ProjectPipeline.project_id == project_id,
+            ProjectPipeline.label == project_pipeline_label
+        ).first_or_404("Pipeline not found!")
+
+    def list_pipeline_by_project_id(self, identity, project_id: int = None) -> List[ProjectPipeline]:
+        """Get a pipeline by `user` and `project` id.
+
+        Args:
+            identity (flask_principal.Identity): Project User identity (from OAuth service)
+
+            project_id (int): Project ID
+        Returns:
+            List[ProjectPipeline]: List of Pipeline object
+        """
+        return db.session.query(ProjectPipeline).filter(
+            ProjectPipeline.project_id == project_id
         ).all()
 
-    def add_node(self, identity, project_id: int, project_graph_label: str, node_id: str) -> ProjectGraph:
-        """Add a new node to the Project Graph.
+    def add_compendium(self, identity, project_id: int, project_pipeline_label: str, node_id: str) -> ProjectPipeline:
+        """Add a new compendium to the Project Pipeline.
 
         Args:
             identity (flask_principal.Identity): Project User identity (from OAuth service)
 
             project_id (int): Project ID
 
-            project_graph_label (str): Project graph identification
+            project_pipeline_label (str): Project pipeline identification.
 
-            node_id (str): NodeRecord ID that will be added.
+            node_id (str): CompendiumRecord ID that will be added.
 
         Returns:
-            ProjectGraph: Project graph created.
+            ProjectPipeline: Project pipeline created.
         """
-        selected_graph = self.get_graph(identity, project_id, project_graph_label)
+        selected_pipeline = self.get_pipeline(identity, project_id, project_pipeline_label)
 
-        selected_node_record = NodeRecord.pid.resolve(node_id)
-        if not selected_node_record.is_published:
-            raise werkzeug_exceptions.BadRequest(description="NodeRecord must be published to be used as a GraphNode")
+        selected_compendium_record = CompendiumRecord.pid.resolve(node_id)
+        if not selected_compendium_record.is_published:
+            raise werkzeug_exceptions.BadRequest(
+                description="Compendium Draft must be published to be used as a Compendium Record.")
 
-        # adding the selected node to the graph
-        selected_execution_graph = deepcopy(selected_graph.graph)
-        graph_manager = ExecutionGraphManager(JSONGraphConverter.from_json({"graph": selected_execution_graph}))
+        # adding the selected node to the pipeline
+        selected_execution_graph = deepcopy(selected_pipeline.graph)
+        graph_manager = ExecutionGraphManager(JSONGraphConverter.from_json({"pipeline": selected_execution_graph}))
 
-        graph_command = selected_node_record.command
-        graph_repropack = selected_node_record.environment["key"]
-        graph_inputs = [x["key"] for x in selected_node_record["data"]["inputs"]]
-        graph_outputs = [x["key"] for x in selected_node_record["data"]["outputs"]]
+        graph_command = selected_compendium_record.command
+        graph_repropack = selected_compendium_record.environment["key"]
+        graph_inputs = [x["key"] for x in selected_compendium_record["data"]["inputs"]]
+        graph_outputs = [x["key"] for x in selected_compendium_record["data"]["outputs"]]
 
         # introducing checksum verification
-        graph_inputs = [selected_node_record.files[file_name].file.file_model.checksum for file_name in graph_inputs]
-        graph_outputs = [selected_node_record.files[file_name].file.file_model.checksum for file_name in graph_outputs]
+        graph_inputs = [selected_compendium_record.files[file_name].file.file_model.checksum for file_name in
+                        graph_inputs]
+        graph_outputs = [selected_compendium_record.files[file_name].file.file_model.checksum for file_name in
+                         graph_outputs]
 
         graph_manager.add_vertex(graph_repropack, graph_command, graph_inputs, graph_outputs, name=node_id)
 
-        # saving the changed graph
-        selected_graph.graph = JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name").get("graph")
+        # saving the changed pipeline
+        selected_pipeline.graph = JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name").get(
+            "pipeline")
 
-        db.session.add(selected_graph)
+        db.session.add(selected_pipeline)
         db.session.commit()
 
-        return selected_graph
+        return selected_pipeline
 
-    def delete_node(self, identity, project_id: int, project_graph_label: str, node_id: str) -> None:
-        """Delete a node from the Project Graph.
+    def delete_compendium(self, identity, project_id: int, project_pipeline_label: str, compendium_id: str) -> None:
+        """Delete a compendium from the Project Pipeline.
 
         Args:
             identity (flask_principal.Identity): Project User identity (from OAuth service)
 
             project_id (int): Project ID
 
-            project_graph_label (str): Project graph identification
+            project_pipeline_label (str): Project pipeline identification
 
-            node_id (str): NodeRecord ID that will be added.
+            compendium_id (str): CompendiumRecord ID that will be added.
 
         Returns:
-            ProjectGraph: Project graph created.
+            ProjectPipeline: Project pipeline created.
         """
-        selected_graph = self.get_graph(identity, project_id, project_graph_label)
+        selected_pipeline = self.get_pipeline(identity, project_id, project_pipeline_label)
 
-        # adding the selected node to the graph
-        graph_manager = ExecutionGraphManager(JSONGraphConverter.from_json({"graph": selected_graph.graph}))
+        # adding the selected node to the pipeline
+        # ToDo: Change the `pipeline` to `pipeline`
+        graph_manager = ExecutionGraphManager(JSONGraphConverter.from_json({"pipeline": selected_pipeline.graph}))
 
         # searching for the vertex that will be deleted
         if graph_manager.graph.vs:
-            selected_node = graph_manager.graph.vs.select(name=node_id)
+            selected_node = graph_manager.graph.vs.select(name=compendium_id)
 
             if selected_node:
                 graph_manager.delete_vertex(
                     " ".join(["".join(x.split()) for x in selected_node["command"][0].split("  ")]))
 
-                selected_graph.graph = (
-                    JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name")
-                        .get("graph")
+                selected_pipeline.graph = (
+                    JSONGraphConverter.to_json(graph_manager.graph, attribute_as_index="name").get("pipeline")
                 )
-                db.session.add(selected_graph)
+                db.session.add(selected_pipeline)
                 db.session.commit()
 
                 return
-        raise werkzeug_exceptions.NotFound(description=f"{node_id} not found!")
+        raise werkzeug_exceptions.NotFound(description=f"{compendium_id} not found!")
 
-    def delete_graph(self, identity, project_id: int, project_graph_label: str) -> None:
-        """Delete a ProjectGraph.
+    def delete_pipeline(self, identity, project_id: int, project_pipeline_label: str) -> None:
+        """Delete a pipeline from a project.
 
         Args:
             identity (flask_principal.Identity): Project User identity (from OAuth service)
 
             project_id (int): Project ID
 
-            project_graph_label (str): Project graph identification
+            project_pipeline_label (str): Project pipeline identification
         Returns:
-            ProjectGraph: Project graph
+            None
         """
-        selected_graph = self.get_graph(identity, project_id, project_graph_label)
+        selected_pipeline = self.get_pipeline(identity, project_id, project_pipeline_label)
 
-        db.session.delete(selected_graph)
+        db.session.delete(selected_pipeline)
         db.session.commit()
 
 
 __all__ = (
     "ProjectService",
     "UserProfileService",
-    "ProjectGraphService"
+    "ProjectPipelineService"
 )

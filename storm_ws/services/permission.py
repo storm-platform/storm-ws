@@ -12,7 +12,7 @@ from invenio_records_permissions.generators import SystemProcess, Disable
 from invenio_records_permissions.policies.records import RecordPermissionPolicy
 
 
-class NodeRecordPermissionPolicy(RecordPermissionPolicy):
+class CompendiumRecordPermissionPolicy(RecordPermissionPolicy):
     """Access control configuration for Node Records.
 
     See:
@@ -90,5 +90,5 @@ class NodeRecordPermissionPolicy(RecordPermissionPolicy):
 
 
 __all__ = (
-    "NodeRecordPermissionPolicy"
+    "CompendiumRecordPermissionPolicy"
 )

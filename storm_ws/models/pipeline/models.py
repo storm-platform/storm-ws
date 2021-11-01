@@ -25,10 +25,10 @@ from ..base import BaseModel
 from ...config import BaseConfiguration
 
 
-class NodeParentMetadata(BaseModel, db.Model, RecordMetadataBase):
+class CompendiumParentMetadata(BaseModel, db.Model, RecordMetadataBase):
     """Metadata store for the parent record."""
 
-    __tablename__ = 'node_parents_metadata'
+    __tablename__ = 'compendium_parents_metadata'
 
     project_id = db.Column(
         db.ForeignKey(f"{BaseConfiguration.STORM_DB_SCHEMA}.project.id", onupdate="CASCADE", ondelete="CASCADE"))
@@ -36,11 +36,11 @@ class NodeParentMetadata(BaseModel, db.Model, RecordMetadataBase):
     project = db.relationship("Project", lazy="joined")
 
 
-class NodeRecordMetadata(BaseModel, db.Model, RecordMetadataBase, ParentRecordMixin):
+class CompendiumRecordMetadata(BaseModel, db.Model, RecordMetadataBase, ParentRecordMixin):
     """Represent a bibliographic record metadata."""
 
-    __tablename__ = 'node_records_metadata'
-    __parent_record_model__ = NodeParentMetadata
+    __tablename__ = 'compendium_records_metadata'
+    __parent_record_model__ = CompendiumParentMetadata
 
     # Enable versioning
     __versioned__ = {}
@@ -49,45 +49,45 @@ class NodeRecordMetadata(BaseModel, db.Model, RecordMetadataBase, ParentRecordMi
     bucket = db.relationship(Bucket)
 
 
-class NodeFileRecordMetadata(BaseModel, db.Model, RecordMetadataBase, FileRecordModelMixin):
+class CompendiumFileRecordMetadata(BaseModel, db.Model, RecordMetadataBase, FileRecordModelMixin):
     """File associated with a record."""
 
-    __tablename__ = 'node_records_files'
-    __record_model_cls__ = NodeRecordMetadata
+    __tablename__ = 'compendium_records_files'
+    __record_model_cls__ = CompendiumRecordMetadata
 
 
-class NodeDraftMetadata(BaseModel, db.Model, DraftMetadataBase, ParentRecordMixin):
+class CompendiumDraftMetadata(BaseModel, db.Model, DraftMetadataBase, ParentRecordMixin):
     """Draft metadata for a record."""
 
-    __tablename__ = 'node_drafts_metadata'
-    __parent_record_model__ = NodeParentMetadata
+    __tablename__ = 'compendium_drafts_metadata'
+    __parent_record_model__ = CompendiumParentMetadata
 
     bucket_id = db.Column(UUIDType, db.ForeignKey(Bucket.id))
     bucket = db.relationship(Bucket)
 
 
-class NodeFileDraftMetadata(BaseModel, db.Model, RecordMetadataBase, FileRecordModelMixin):
+class CompendiumFileDraftMetadata(BaseModel, db.Model, RecordMetadataBase, FileRecordModelMixin):
     """File associated with a draft."""
 
-    __tablename__ = 'node_drafts_files'
-    __record_model_cls__ = NodeDraftMetadata
+    __tablename__ = 'compendium_drafts_files'
+    __record_model_cls__ = CompendiumDraftMetadata
 
 
-class NodeVersionsState(BaseModel, db.Model, ParentRecordStateMixin):
+class CompendiumVersionsState(BaseModel, db.Model, ParentRecordStateMixin):
     """Store for the version state of the parent record."""
 
-    __tablename__ = 'node_versions_state'
+    __tablename__ = 'compendium_versions_state'
 
-    __parent_record_model__ = NodeParentMetadata
-    __record_model__ = NodeRecordMetadata
-    __draft_model__ = NodeDraftMetadata
+    __parent_record_model__ = CompendiumParentMetadata
+    __record_model__ = CompendiumRecordMetadata
+    __draft_model__ = CompendiumDraftMetadata
 
 
 __all__ = (
-    "NodeParentMetadata",
-    "NodeRecordMetadata",
-    "NodeFileRecordMetadata",
-    "NodeDraftMetadata",
-    "NodeFileDraftMetadata",
-    "NodeVersionsState"
+    "CompendiumParentMetadata",
+    "CompendiumRecordMetadata",
+    "CompendiumFileRecordMetadata",
+    "CompendiumDraftMetadata",
+    "CompendiumFileDraftMetadata",
+    "CompendiumVersionsState"
 )

@@ -11,10 +11,10 @@
 from invenio_records_resources.resources import FileResource
 
 
-class NodeFileResource(FileResource):
+class CompendiumFileResource(FileResource):
     ...
 
 
 __all__ = (
-    "NodeFileResource"
+    "CompendiumFileResource"
 )

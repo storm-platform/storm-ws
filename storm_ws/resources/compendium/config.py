@@ -11,11 +11,11 @@
 from invenio_drafts_resources.resources import RecordResourceConfig
 
 
-class NodeResourceConfig(RecordResourceConfig):
-    blueprint_name = "node_resources"
-    url_prefix = "/graph/<project_id>/node"
+class CompendiumResourceConfig(RecordResourceConfig):
+    blueprint_name = "storm_compendium_resources"
+    url_prefix = "/pipeline/<project_id>/compendium"
 
 
 __all__ = (
-    "NodeResourceConfig"
+    "CompendiumResourceConfig"
 )

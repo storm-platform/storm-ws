@@ -21,7 +21,7 @@ from .ext import StormExt
 from .config import BaseConfiguration
 
 from .resources.initializer import (
-    initialize_graph_resources,
+    initialize_pipeline_resources,
     initialize_server_resources,
     initialize_service_resources,
     initialize_project_resources,
@@ -126,7 +126,7 @@ def setup_app(app, config_name):
     setup_security_authentication(app)
 
     # Resources
-    initialize_graph_resources(app)
+    initialize_pipeline_resources(app)
     initialize_server_resources(app)
     initialize_project_resources(app)
     initialize_service_resources(app)

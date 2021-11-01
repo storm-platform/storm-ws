@@ -13,12 +13,12 @@ from invenio_records_resources.services import FileServiceConfig, ConditionalLin
 
 from ..components import (
     ProjectValidatorFileServiceComponent,
-    NodeDraftFileDefinitionValidatorComponent
+    CompendiumDraftFileDefinitionValidatorComponent
 )
 
-from ...models import NodeDraft, NodeRecord
-from ..links import NodeRecordLink, NodeFileLink
-from ..permission import NodeRecordPermissionPolicy
+from ...models import CompendiumDraft, CompendiumRecord
+from ..links import CompendiumRecordLink, CompendiumFileLink
+from ..permission import CompendiumRecordPermissionPolicy
 
 
 def file_record_is_draft(file, ctx):
@@ -27,7 +27,7 @@ def file_record_is_draft(file, ctx):
 
 
 class FileCommonServiceConfig(FileServiceConfig):
-    permission_policy_cls = NodeRecordPermissionPolicy
+    permission_policy_cls = CompendiumRecordPermissionPolicy
 
     components = FileServiceConfig.components + [
         ProjectValidatorFileServiceComponent
@@ -36,38 +36,38 @@ class FileCommonServiceConfig(FileServiceConfig):
     file_links_list = {
         "self": ConditionalLink(
             cond=is_record,
-            if_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/files{?args*}"),
-            else_=NodeRecordLink("{+api}graph/{project_id}/node/{id}/draft/files{?args*}"),
+            if_=CompendiumRecordLink("{+api}pipeline/{project_id}/compendium/{id}/files{?args*}"),
+            else_=CompendiumRecordLink("{+api}pipeline/{project_id}/compendium/{id}/draft/files{?args*}"),
         ),
     }
 
     file_links_item = {
         "self": ConditionalLink(
             cond=file_record_is_draft,
-            if_=NodeFileLink("{+api}graph/{project_id}/node/{id}/draft/files{?args*}"),
-            else_=NodeFileLink("{+api}graph/{project_id}/node/{id}/files{?args*}"),
+            if_=CompendiumFileLink("{+api}pipeline/{project_id}/compendium/{id}/draft/files{?args*}"),
+            else_=CompendiumFileLink("{+api}pipeline/{project_id}/compendium/{id}/files{?args*}"),
         ),
         "content": ConditionalLink(
             cond=file_record_is_draft,
-            if_=NodeFileLink("{+api}graph/{project_id}/node/{id}/draft/files/{key}/content{?args*}"),
-            else_=NodeFileLink("{+api}graph/{project_id}/node/{id}/files/{key}/content{?args*}"),
+            if_=CompendiumFileLink("{+api}pipeline/{project_id}/compendium/{id}/draft/files/{key}/content{?args*}"),
+            else_=CompendiumFileLink("{+api}pipeline/{project_id}/compendium/{id}/files/{key}/content{?args*}"),
         ),
-        "commit": NodeFileLink("{+api}graph/{project_id}/node/{id}/draft/files/{key}/commit{?args*}",
-                               when=file_record_is_draft)
+        "commit": CompendiumFileLink("{+api}pipeline/{project_id}/compendium/{id}/draft/files/{key}/commit{?args*}",
+                                     when=file_record_is_draft)
     }
 
 
 class FileNodeDraftServiceConfig(FileCommonServiceConfig):
-    record_cls = NodeDraft
+    record_cls = CompendiumDraft
     permission_action_prefix = "draft_"
 
     components = FileCommonServiceConfig.components + [
-        NodeDraftFileDefinitionValidatorComponent,
+        CompendiumDraftFileDefinitionValidatorComponent,
     ]
 
 
 class FileNodeRecordServiceConfig(FileCommonServiceConfig):
-    record_cls = NodeRecord
+    record_cls = CompendiumRecord
 
 
 __all__ = (

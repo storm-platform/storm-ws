@@ -8,15 +8,15 @@
 
 """SpatioTemporal Open Research Manager Web Service `Files resources module`."""
 
-from .resource import NodeFileResource
+from .resource import CompendiumFileResource
 
 from .config import (
-    FileNodeDraftResourceConfig,
-    FileNodeRecordResourceConfig
+    FileCompendiumDraftResourceConfig,
+    FileCompendiumRecordResourceConfig
 )
 
 __all__ = (
-    "NodeFileResource",
-    "FileNodeDraftResourceConfig",
-    "FileNodeRecordResourceConfig"
+    "CompendiumFileResource",
+    "FileCompendiumDraftResourceConfig",
+    "FileCompendiumRecordResourceConfig"
 )

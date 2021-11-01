@@ -11,20 +11,20 @@
 from .files import (
     FileNodeDraftServiceConfig,
     FileNodeRecordServiceConfig,
-    NodeFileService,
-    NodeFileDraftService
+    CompendiumFileService,
+    CompendiumFileDraftService
 )
 
 from .project import (
     ProjectService,
     ProjectServiceConfig,
     ProjectGraphServiceConfig,
-    ProjectGraphService
+    ProjectPipelineService
 )
 
-from .records import (
-    NodeService,
-    NodeServiceConfig
+from .compendium import (
+    CompendiumService,
+    CompendiumServiceConfig
 )
 
 __all__ = (
@@ -32,14 +32,14 @@ __all__ = (
     "FileNodeDraftServiceConfig",
     "FileNodeRecordServiceConfig",
 
-    "NodeFileService",
-    "NodeFileDraftService",
+    "CompendiumFileService",
+    "CompendiumFileDraftService",
 
     "ProjectService",
 
-    "NodeService",
-    "NodeServiceConfig",
+    "CompendiumService",
+    "CompendiumServiceConfig",
 
-    "ProjectGraphService",
+    "ProjectPipelineService",
     "ProjectGraphServiceConfig"
 )
