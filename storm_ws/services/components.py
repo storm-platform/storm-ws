@@ -32,8 +32,8 @@ class BaseNodeComponent:
         record.command_checksum = data.get("command_checksum")
 
 
-class NodeRecordParentServiceComponent(DraftServiceComponent):
-    """Component for NodeParent project control."""
+class CompendiumRecordParentServiceComponent(DraftServiceComponent):
+    """Component for CompendiumParent project control."""
 
     def create(self, identity, data=None, record=None, errors=None):
         super().create(identity, data=None, record=None, errors=None)
@@ -42,8 +42,8 @@ class NodeRecordParentServiceComponent(DraftServiceComponent):
         record.parent.project_id = g.project_id
 
 
-class NodeRecordDefinitionServiceComponent(BaseNodeComponent, DraftServiceComponent):
-    """Component for NodeRecord attributes definitions control."""
+class CompendiumRecordDefinitionServiceComponent(BaseNodeComponent, DraftServiceComponent):
+    """Component for Compendium Record attributes definitions control."""
 
     def create(self, identity, data=None, record=None, errors=None):
         self._populate_node_record(data, record)
@@ -61,8 +61,8 @@ class NodeRecordDefinitionServiceComponent(BaseNodeComponent, DraftServiceCompon
         self._populate_node_record(record, draft)
 
 
-class NodeDraftFileDefinitionValidatorComponent(FileServiceComponent):
-    """Component to control the NodeRecord attributes definitions."""
+class CompendiumDraftFileDefinitionValidatorComponent(FileServiceComponent):
+    """Component to control the Compendium Record attributes definitions."""
 
     def init_files(self, id_, identity, record, data):
         """Init files handler."""
@@ -176,9 +176,9 @@ class ProjectValidatorFileServiceComponent(BaseProjectValidatorComponent, FileSe
 
 
 __all__ = (
-    "NodeRecordParentServiceComponent",
-    "NodeRecordDefinitionServiceComponent",
-    "NodeDraftFileDefinitionValidatorComponent",
+    "CompendiumRecordParentServiceComponent",
+    "CompendiumRecordDefinitionServiceComponent",
+    "CompendiumDraftFileDefinitionValidatorComponent",
     "ProjectValidatorRecordServiceComponent",
     "ProjectValidatorFileServiceComponent"
 )

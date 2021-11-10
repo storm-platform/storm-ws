@@ -6,17 +6,4 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 
-"""SpatioTemporal Open Research Manager Web Service `Records resources module`."""
-
-from .config import (
-    NodeResourceConfig
-)
-
-from .resource import (
-    NodeResource
-)
-
-__all__ = (
-    "NodeResource",
-    "NodeResourceConfig"
-)
+"""SpatioTemporal Open Research Manager Web Service `jsonschemas for pipeline models`."""

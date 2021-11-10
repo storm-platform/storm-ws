@@ -31,21 +31,21 @@ from invenio_records_resources.records.systemfields import (
 )
 
 from .models import (
-    NodeParentMetadata,
-    NodeVersionsState,
-    NodeFileDraftMetadata,
-    NodeDraftMetadata,
-    NodeFileRecordMetadata,
-    NodeRecordMetadata
+    CompendiumParentMetadata,
+    CompendiumVersionsState,
+    CompendiumFileDraftMetadata,
+    CompendiumDraftMetadata,
+    CompendiumFileRecordMetadata,
+    CompendiumRecordMetadata
 )
 
 from invenio_drafts_resources.records.api import ParentRecord as ParentRecordBase
 
 
-class NodeParent(ParentRecordBase):
+class CompendiumParent(ParentRecordBase):
     """Node Parent record."""
 
-    model_cls = NodeParentMetadata
+    model_cls = CompendiumParentMetadata
 
     project_id = ModelField(dump=True)
     project = ModelField(dump=False)
@@ -53,15 +53,15 @@ class NodeParent(ParentRecordBase):
     dumper = ElasticsearchDumper()
 
     schema = ConstantField(
-        "$schema", "local://records/nodeparent-v1.0.0.json"
+        "$schema", "local://records/compendiumparent-v1.0.0.json"
     )
 
 
 class CommonFieldsMixin:
-    """Common system fields between records and drafts."""
+    """Common system fields between compendium records and drafts."""
 
-    versions_model_cls = NodeVersionsState
-    parent_record_cls = NodeParent
+    versions_model_cls = CompendiumVersionsState
+    parent_record_cls = CompendiumParent
 
     bucket_id = ModelField(dump=False)
     bucket = ModelField(dump=False)
@@ -79,52 +79,52 @@ class CommonFieldsMixin:
 
     dumper = ElasticsearchDumper()
     schema = ConstantField(
-        '$schema', 'local://records/noderecord-v1.0.0.json')
+        '$schema', 'local://records/compendiumrecord-v1.0.0.json')
 
 
-class NodeFileDraft(FileRecord):
-    model_cls = NodeFileDraftMetadata
-    record_cls = LocalProxy(lambda: NodeDraft)
+class CompendiumFileDraft(FileRecord):
+    model_cls = CompendiumFileDraftMetadata
+    record_cls = LocalProxy(lambda: CompendiumDraft)
 
 
-class NodeDraft(CommonFieldsMixin, Draft):
-    model_cls = NodeDraftMetadata
+class CompendiumDraft(CommonFieldsMixin, Draft):
+    model_cls = CompendiumDraftMetadata
 
-    index = IndexField("node_records-drafts-nodedraft-v1.0.0", search_alias="node_records")
+    index = IndexField("compendium_records-drafts-compendiumdraft-v1.0.0", search_alias="compendium_records")
 
     files = FilesField(
         store=False,
-        file_cls=NodeFileDraft,
+        file_cls=CompendiumFileDraft,
         delete=False
     )
 
     has_draft = HasDraftCheckField()
 
 
-class NodeFileRecord(FileRecord):
-    model_cls = NodeFileRecordMetadata
-    record_cls = LocalProxy(lambda: NodeRecord)
+class CompendiumFileRecord(FileRecord):
+    model_cls = CompendiumFileRecordMetadata
+    record_cls = LocalProxy(lambda: CompendiumRecord)
 
 
-class NodeRecord(CommonFieldsMixin, Record):
-    model_cls = NodeRecordMetadata
+class CompendiumRecord(CommonFieldsMixin, Record):
+    model_cls = CompendiumRecordMetadata
 
-    index = IndexField("node_records-records-noderecord-v1.0.0", search_alias="node_records-records")
+    index = IndexField("compendium_records-records-compendiumrecord-v1.0.0", search_alias="compendium_records-records")
 
     files = FilesField(
         store=False,
-        file_cls=NodeFileRecord,
+        file_cls=CompendiumFileRecord,
         create=False,
         delete=False
     )
 
-    has_draft = HasDraftCheckField(NodeDraft)
+    has_draft = HasDraftCheckField(CompendiumDraft)
 
 
 __all__ = (
-    "NodeParent",
-    "NodeDraft",
-    "NodeFileDraft",
-    "NodeRecord",
-    "NodeFileRecord"
+    "CompendiumParent",
+    "CompendiumDraft",
+    "CompendiumFileDraft",
+    "CompendiumRecord",
+    "CompendiumFileRecord"
 )

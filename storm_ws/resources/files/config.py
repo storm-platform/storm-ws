@@ -11,10 +11,10 @@
 from marshmallow import fields
 from invenio_records_resources.resources import FileResourceConfig as BaseFileResourceConfig
 
-from ...models import NodeDraft, NodeRecord
+from ...models import CompendiumDraft, CompendiumRecord
 
 
-class NodeCommonResourceConfig(BaseFileResourceConfig):
+class CompendiumCommonResourceConfig(BaseFileResourceConfig):
     allow_upload = True
 
     request_view_args = {"pid_value": fields.Str(),
@@ -22,23 +22,23 @@ class NodeCommonResourceConfig(BaseFileResourceConfig):
                          "project_id": fields.Str()}
 
 
-class FileNodeDraftResourceConfig(NodeCommonResourceConfig):
+class FileCompendiumDraftResourceConfig(CompendiumCommonResourceConfig):
     """Custom file resource configuration."""
-    record_cls = NodeDraft
+    record_cls = CompendiumDraft
 
-    blueprint_name = "node_draft_files"
-    url_prefix = "/graph/<project_id>/node/<pid_value>/draft"
+    blueprint_name = "storm_compendium_draft_files"
+    url_prefix = "/pipeline/<project_id>/compendium/<pid_value>/draft"
 
 
-class FileNodeRecordResourceConfig(NodeCommonResourceConfig):
+class FileCompendiumRecordResourceConfig(CompendiumCommonResourceConfig):
     """Custom file resource configuration."""
-    record_cls = NodeRecord
+    record_cls = CompendiumRecord
 
-    blueprint_name = "node_record_files"
-    url_prefix = "/graph/<project_id>/node/<pid_value>"
+    blueprint_name = "storm_compendium_record_files"
+    url_prefix = "/pipeline/<project_id>/compendium/<pid_value>"
 
 
 __all__ = (
-    "FileNodeDraftResourceConfig",
-    "FileNodeRecordResourceConfig"
+    "FileCompendiumDraftResourceConfig",
+    "FileCompendiumRecordResourceConfig"
 )

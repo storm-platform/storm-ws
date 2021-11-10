@@ -11,7 +11,7 @@
 from invenio_drafts_resources.services import RecordService
 
 
-class NodeService(RecordService):
+class CompendiumService(RecordService):
 
     def __init__(self, config, files_service=None, draft_files_service=None, project_service=None):
         """Initializer for NodeDraftRecordService."""
@@ -20,5 +20,5 @@ class NodeService(RecordService):
 
 
 __all__ = (
-    "NodeService"
+    "CompendiumService"
 )

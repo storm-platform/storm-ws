@@ -71,27 +71,27 @@ class ProjectUser(db.Model):
     )
 
 
-class ProjectGraph(db.Model):
+class ProjectPipeline(db.Model):
     """SQLAlchemy ProjectGraph model."""
 
-    __tablename__ = "project_graph"
+    __tablename__ = "project_pipeline"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    graph = db.Column(mutable_json_type(dbtype=JSONB, nested=True), nullable=False)
-    label = db.Column(db.String(40), nullable=False, comment="Graph identification label.")
+    pipeline = db.Column(mutable_json_type(dbtype=JSONB, nested=True), nullable=False)
+    label = db.Column(db.String(40), nullable=False, comment="Pipeline identification label.")
 
     project_id = db.Column(
         db.ForeignKey(f"{BaseConfiguration.STORM_DB_SCHEMA}.project.id", onupdate="CASCADE", ), nullable=False)
     project = db.relationship("Project", lazy="joined")
 
     __table_args__ = (
-                         UniqueConstraint("project_id", "label", name="project_graph_labels"),
+                         UniqueConstraint("project_id", "label", name="project_pipeline_labels"),
                      ) + BaseModel.__table_args__
 
 
 __all__ = (
     "Project",
     "ProjectUser",
-    "ProjectGraph"
+    "ProjectPipeline"
 )

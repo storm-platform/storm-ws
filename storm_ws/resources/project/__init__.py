@@ -10,22 +10,22 @@
 
 from .config import (
     ProjectResourceConfig,
-    ProjectGraphResourceConfig,
-    ProjectGraphNodeResourceConfig
+    ProjectPipelineResourceConfig,
+    ProjectPipelineCompendiumResourceConfig
 )
 
 from .resource import (
     ProjectResource,
-    ProjectGraphResource,
-    ProjectGraphNodeResource
+    ProjectPipelineResource,
+    ProjectPipelineCompendiumResource
 )
 
 __all__ = (
     "ProjectResourceConfig",
-    "ProjectGraphResourceConfig",
-    "ProjectGraphNodeResourceConfig",
+    "ProjectPipelineResourceConfig",
+    "ProjectPipelineCompendiumResourceConfig",
 
     "ProjectResource",
-    "ProjectGraphResource",
-    "ProjectGraphNodeResource"
+    "ProjectPipelineResource",
+    "ProjectPipelineCompendiumResource"
 )

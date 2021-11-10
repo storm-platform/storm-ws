@@ -15,7 +15,7 @@ from invenio_records_resources.services import Link, FileLink
 from invenio_records_resources.services.base.links import preprocess_vars
 
 
-class NodeRecordLink(Link):
+class CompendiumRecordLink(Link):
     """Short cut for writing Node Record links."""
 
     @staticmethod
@@ -30,7 +30,7 @@ class NodeRecordLink(Link):
         })
 
 
-class PaginationNodeRecordLink(Link):
+class PaginationCompendiumRecordLink(Link):
     """Short cut for writing Node Record links."""
 
     def expand(self, obj, context):
@@ -46,7 +46,7 @@ class PaginationNodeRecordLink(Link):
         return self._uritemplate.expand(**vars)
 
 
-class NodeFileLink(FileLink):
+class CompendiumFileLink(FileLink):
     """Short cut for writing record links."""
 
     @staticmethod
@@ -61,18 +61,18 @@ class NodeFileLink(FileLink):
         })
 
 
-def node_pagination_links(tpl):
+def compendium_pagination_links(tpl):
     """Create pagination links (prev/selv/next) from the same template."""
     return {
-        "prev": PaginationNodeRecordLink(
+        "prev": PaginationCompendiumRecordLink(
             tpl,
             when=lambda pagination, ctx: pagination.has_prev,
             vars=lambda pagination, vars: vars["args"].update({
                 "page": pagination.prev_page.page
             })
         ),
-        "self": PaginationNodeRecordLink(tpl),
-        "next": PaginationNodeRecordLink(
+        "self": PaginationCompendiumRecordLink(tpl),
+        "next": PaginationCompendiumRecordLink(
             tpl,
             when=lambda pagination, ctx: pagination.has_next,
             vars=lambda pagination, vars: vars["args"].update({
@@ -83,8 +83,8 @@ def node_pagination_links(tpl):
 
 
 __all__ = (
-    "NodeFileLink",
-    "NodeRecordLink",
+    "CompendiumFileLink",
+    "CompendiumRecordLink",
 
-    "node_pagination_links"
+    "compendium_pagination_links"
 )

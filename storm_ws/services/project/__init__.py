@@ -15,12 +15,12 @@ from .config import (
 
 from .service import (
     ProjectService,
-    ProjectGraphService
+    ProjectPipelineService
 )
 
 __all__ = (
     "ProjectService",
-    "ProjectGraphService",
+    "ProjectPipelineService",
     "ProjectServiceConfig",
     "ProjectGraphServiceConfig"
 )

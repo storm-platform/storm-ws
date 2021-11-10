@@ -14,20 +14,20 @@ from .project import (
     Project,
     UserProfile,
     ProjectUser,
-    ProjectGraph
+    ProjectPipeline
 )
 
-from .graph import *
+from .pipeline import *
 
 __all__ = (
     "Project",
     "ProjectUser",
     "UserProfile",
-    "ProjectGraph",
+    "ProjectPipeline",
 
-    "NodeParent",
-    "NodeFileDraft",
-    "NodeDraft",
-    "NodeFileRecord",
-    "NodeRecord",
+    "CompendiumParent",
+    "CompendiumFileDraft",
+    "CompendiumDraft",
+    "CompendiumFileRecord",
+    "CompendiumRecord",
 )

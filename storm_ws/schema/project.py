@@ -54,53 +54,54 @@ class ProjectSchema(Schema):
     _metadata = fields.Nested(ProjectMetadataSchema(), required=True, dump_only=True, data_key="metadata")
 
 
-class ProjectGraphNodeSchema(Schema):
-    """Marshamllow ProjectGraphNode schema."""
+class ProjectPipelineCompendiumSchema(Schema):
+    """Marshamllow ProjectPipelineNodeSchema schema."""
     id = fields.String(required=True)
 
 
-class ProjectGraphEdgeField(fields.Field):
-    """Marshmallow project Graph field."""
+class ProjectPipelineConnectionField(fields.Field):
+    """Marshmallow project pipeline field."""
     source = fields.String(required=True)
     target = fields.String(required=True)
 
 
-class ProjectGraphBase:
-    """ProjectGraph base properties."""
+class ProjectPipelineBase:
+    """ProjectPipeline base properties."""
     type = fields.String(required=True)
     label = fields.String(required=False, dump_only=True)
     metadata = fields.Dict(keys=fields.String(), values=fields.String(), required=True)
 
     directed = fields.Boolean(required=True, validate=validate.Equal(True))
 
-    edges = fields.List(cls_or_instance=ProjectGraphEdgeField(), required=True)
-    nodes = fields.Dict(keys=fields.String(), values=fields.Nested(ProjectGraphNodeSchema()), required=True)
+    connection = fields.List(cls_or_instance=ProjectPipelineConnectionField(), required=True)
+    compendia = fields.Dict(keys=fields.String(), values=fields.Nested(ProjectPipelineCompendiumSchema()),
+                            required=True)
 
 
-class ProjectGraphField(ProjectGraphBase, fields.Field):
-    """Marshmallow ProjectGraph field."""
+class ProjectPipelineField(ProjectPipelineBase, fields.Field):
+    """Marshmallow ProjectPipeline field."""
 
 
-class ProjectGraphSchema(ProjectGraphBase, Schema):
-    """Marshmallow ProjectGraph schema."""
+class ProjectPipelineSchema(ProjectPipelineBase, Schema):
+    """Marshmallow ProjectPipeline schema."""
 
 
-class ProjectGraphDefinitionMetadata(fields.Field):
-    """Marshmallow Graph definition metadata schema structure."""
+class ProjectPipelineDefinitionMetadata(fields.Field):
+    """Marshmallow Pipeline definition metadata schema structure."""
     description = fields.String(required=True)
 
 
-class ProjectGraphDefinitionSchema(Schema):
-    """Marshmallow ProjectGraphDefinition schema."""
+class ProjectPipelineDefinitionSchema(Schema):
+    """Marshmallow ProjectPipelineDefinitionSchema schema."""
     label = fields.String(required=True, load_only=True)
-    metadata = ProjectGraphDefinitionMetadata(required=True, load_only=True)
+    metadata = ProjectPipelineDefinitionMetadata(required=True, load_only=True)
 
-    graph = ProjectGraphField(dump_only=True)
+    graph = ProjectPipelineField(dump_only=True)
 
 
-class ProjectMultiGraphSchema(Schema):
+class ProjectMultiPipelineSchema(Schema):
     """Marshmallow ProjectMultiGraphGraph schema."""
-    graphs = fields.List(cls_or_instance=ProjectGraphField(), required=True)
+    pipelines = fields.List(cls_or_instance=ProjectPipelineField(), required=True)
 
 
 __all__ = (
@@ -108,11 +109,11 @@ __all__ = (
     "ProjectMetadataLicensesSchema",
     "ProjectMetadataSchema",
     "ProjectSchema",
-    "ProjectGraphNodeSchema",
-    "ProjectGraphEdgeField",
-    "ProjectGraphField",
-    "ProjectGraphSchema",
-    "ProjectGraphDefinitionMetadata",
-    "ProjectGraphDefinitionSchema",
-    "ProjectMultiGraphSchema"
+    "ProjectPipelineCompendiumSchema",
+    "ProjectPipelineConnectionField",
+    "ProjectPipelineField",
+    "ProjectPipelineSchema",
+    "ProjectPipelineDefinitionMetadata",
+    "ProjectPipelineDefinitionSchema",
+    "ProjectMultiPipelineSchema"
 )

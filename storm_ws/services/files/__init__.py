@@ -14,14 +14,14 @@ from .config import (
 )
 
 from .service import (
-    NodeFileService,
-    NodeFileDraftService
+    CompendiumFileService,
+    CompendiumFileDraftService
 )
 
 __all__ = (
     "FileNodeDraftServiceConfig",
     "FileNodeRecordServiceConfig",
 
-    "NodeFileService",
-    "NodeFileDraftService"
+    "CompendiumFileService",
+    "CompendiumFileDraftService"
 )

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "id": "local://records/noderecord-v1.0.0.json",
-    "title": "StormServer Node Record Schema v1.0.0",
+    "id": "local://records/compendiumrecord-v1.0.0.json",
+    "title": "StormServer Execution Compendium Record Schema v1.0.0",
     "type": "object",
     "additionalProperties": false,
     "properties": {
