@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "storm-ws"
+version = "0.1.0"
+license = "MIT"
+repository = "https://github.com/storm-platform/storm-ws"
+authors = ["Felipe Menino Carlos <felipe.carlos@inpe.br>"]
+description = "Web Service for the management and development of reproducible and collaborative research"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Web Environment",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+invenio-records = "^1.6.0"
+invenio-records-resources = { version = "^0.17.3", extras = ["elasticsearch7"] }
+invenio-drafts-resources = "^0.14.5"
+invenio-pidstore = "^1.2.2"
+invenio-db = { version = "^1.0.9", extras = ["postgresql", "versioning"] }
+invenio-app = "^1.3.2"
+
+[tool.poetry.dev-dependencies]
+black = "^21.11b1"
+
+[tool.poetry.plugins."invenio_base.apps"]
+"storm_ws" = "storm_ws:StormWS"
+
+[tool.poetry.plugins."invenio_base.api_apps"]
+"storm_ws" = "storm_ws:StormWS"
+
+[tool.poetry.plugins."invenio_config.module"]
+"storm_ws" = "storm_ws.config"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
