@@ -1,10 +1,9 @@
+# -*- coding: utf-8 -*-
 #
-# This file is part of SpatioTemporal Open Research Manager Web Service.
-# Copyright (C) 2021 INPE.
+# Copyright (C) 2021 Storm Project.
 #
-# SpatioTemporal Open Research Manager Web Service is free software; you can redistribute it and/or modify it
+# storm-ws is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
-#
 
 """Version information for SpatioTemporal Open Research Manager Web Service."""
 
