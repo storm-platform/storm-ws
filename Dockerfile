@@ -8,7 +8,7 @@
 FROM inveniosoftware/centos8-python:3.8
 
 #
-# Install the storm ws
+# Install the Storm WS metapackage
 #
 COPY ./ .
 RUN python setup.py install
