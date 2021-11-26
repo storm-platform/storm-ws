@@ -1,0 +1,6 @@
+[submodule "modules/storm-compendium"]
+	path = modules/storm-compendium
+	url = https://github.com/storm-platform/storm-compendium
+[submodule "modules/storm-project"]
+	path = modules/storm-project
+	url = https://github.com/storm-platform/storm-project
