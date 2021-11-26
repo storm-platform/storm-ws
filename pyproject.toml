@@ -4,7 +4,7 @@ version = "0.1.0"
 license = "MIT"
 repository = "https://github.com/storm-platform/storm-ws"
 authors = ["Felipe Menino Carlos <felipe.carlos@inpe.br>"]
-description = "Web Service for the management and development of reproducible and collaborative research"
+description = "Web Service for the management and development of reproducible and collaborative research."
 classifiers = [
     "Development Status :: 1 - Planning",
     "Environment :: Web Environment",
@@ -25,6 +25,8 @@ invenio-drafts-resources = "^0.14.5"
 invenio-pidstore = "^1.2.2"
 invenio-db = { version = "^1.0.9", extras = ["postgresql", "versioning"] }
 invenio-app = "^1.3.2"
+storm-project = {path = "modules/storm-project"}
+storm-compendium = {path = "modules/storm-compendium"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
@@ -34,6 +36,9 @@ black = "^21.11b1"
 
 [tool.poetry.plugins."invenio_base.api_apps"]
 "storm_ws" = "storm_ws:StormWS"
+
+[tool.poetry.plugins."invenio_base.api_blueprints"]
+"storm_ws_api" = "storm_ws.views:create_ws_blueprint_api"
 
 [tool.poetry.plugins."invenio_config.module"]
 "storm_ws" = "storm_ws.config"
