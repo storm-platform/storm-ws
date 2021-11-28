@@ -4,3 +4,6 @@
 [submodule "modules/storm-project"]
 	path = modules/storm-project
 	url = https://github.com/storm-platform/storm-project
+[submodule "modules/storm-oauth"]
+	path = modules/storm-oauth
+	url = https://github.com/storm-platform/storm-oauth
