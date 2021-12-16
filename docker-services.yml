@@ -15,6 +15,7 @@ services:
         image: storm-ws
         restart: "unless-stopped"
         environment:
+            - "REANA_SERVER_URL=reana-server-url-here"
             - "RATELIMIT_STORAGE_URL=redis://cache:6379/3"
             - "INVENIO_CACHE_TYPE=redis"
             - "INVENIO_WSGI_PROXIES=2"
