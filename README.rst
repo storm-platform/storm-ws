@@ -33,7 +33,7 @@ SpatioTemporal Open Research Manager Web Service
 About
 =====
 
-Service for the collaborative production of reproducible research
+Service for reproducible collaborative research.
 
 - Free software: MIT license;
 - Documentation: https://storm-ws.readthedocs.io/
