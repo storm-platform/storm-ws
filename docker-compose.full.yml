@@ -32,7 +32,6 @@ services:
             file: docker-services.yml
             service: kibana
 
-    # Worker
     worker:
         extends:
             file: docker-services.yml
@@ -49,3 +48,32 @@ services:
                 condition: service_started
             rabbitmq:
                 condition: service_started
+
+    web-api:
+        extends:
+            file: docker-services.yml
+            service: app
+        command: [ "uwsgi /opt/invenio/var/instance/uwsgi_rest.ini" ]
+        image: storm-ws
+        ports:
+            - "5000"
+        volumes:
+            - uploaded_data:/opt/invenio/var/instance/data
+            - archived_data:/opt/invenio/var/instance/archive
+
+    nginx:
+        extends:
+            file: docker-services.yml
+            service: nginx
+        volumes:
+            - static_data:/opt/invenio/var/instance/static
+        depends_on:
+            - web-api
+        ports:
+            - "80:80"
+            - "443:443"
+
+volumes:
+    static_data:
+    uploaded_data:
+    archived_data:
