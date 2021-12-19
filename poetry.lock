@@ -111,6 +111,20 @@ tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)"
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins"]
 
 [[package]]
+name = "authlib"
+version = "0.15.5"
+description = "The ultimate Python library in building OAuth and OpenID Connect servers."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+cryptography = "*"
+
+[package.extras]
+client = ["requests"]
+
+[[package]]
 name = "autosemver"
 version = "0.5.5"
 description = "Tools to handle automatic semantic versioning in python"
@@ -180,6 +194,32 @@ six = ">=1.10"
 all = ["Sphinx (>=1.4.2)", "check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.2.2)", "pydocstyle (>=1.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest-runner (>=2.7.0)", "pytest (>=3.6.0)"]
 docs = ["Sphinx (>=1.4.2)"]
 tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.2.2)", "pydocstyle (>=1.0)", "pytest-cov (>=1.8.0)", "pytest-pep8 (>=1.0.6)", "pytest-runner (>=2.7.0)", "pytest (>=3.6.0)"]
+
+[[package]]
+name = "bdc-auth-client"
+version = "0.2.3"
+description = "BDC-Auth-Client is a client package for authentication and authorization based on OAuth 2.0."
+category = "main"
+optional = false
+python-versions = "*"
+develop = false
+
+[package.dependencies]
+Authlib = ">=0.14"
+cacheout = ">=0.11,<1"
+Flask = ">=1.1"
+requests = ">=2.20"
+
+[package.extras]
+all = ["Sphinx (>=2.2)", "sphinx-rtd-theme", "sphinx-copybutton", "coverage (>=4.5)", "coveralls (>=1.8)", "pytest (>=5.2)", "pytest-cov (>=2.8)", "pytest-pep8 (>=1.0)", "pydocstyle (>=4.0)", "isort (>4.3)", "check-manifest (>=0.40)"]
+docs = ["Sphinx (>=2.2)", "sphinx-rtd-theme", "sphinx-copybutton"]
+tests = ["coverage (>=4.5)", "coveralls (>=1.8)", "pytest (>=5.2)", "pytest-cov (>=2.8)", "pytest-pep8 (>=1.0)", "pydocstyle (>=4.0)", "isort (>4.3)", "check-manifest (>=0.40)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/brazil-data-cube/bdc-auth-client"
+reference = "v0.2.3"
+resolved_reference = "2bbd44064ec94ee989c9121be934415516c61e62"
 
 [[package]]
 name = "billiard"
@@ -293,6 +333,17 @@ requests = "*"
 [package.extras]
 filecache = ["lockfile (>=0.9)"]
 redis = ["redis (>=2.10.5)"]
+
+[[package]]
+name = "cacheout"
+version = "0.13.1"
+description = "A caching library for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["black", "coverage", "docformatter", "flake8", "flake8-black", "flake8-bugbear", "flake8-isort", "invoke", "isort", "mypy", "pylint", "pytest", "pytest-cov", "pytest-flake8", "pytest-mypy", "pytest-pylint", "sphinx", "sphinx-autodoc-typehints", "sphinx-rtd-theme", "tox", "twine", "wheel"]
 
 [[package]]
 name = "cachetools"
@@ -909,26 +960,6 @@ blinker = "*"
 Flask = "*"
 
 [[package]]
-name = "flask-marshmallow"
-version = "0.14.0"
-description = "Flask + marshmallow for beautiful APIs"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-Flask = "*"
-marshmallow = ">=2.0.0"
-six = ">=1.9.0"
-
-[package.extras]
-dev = ["flask-sqlalchemy", "pytest", "mock", "flake8 (==3.8.3)", "pre-commit (>=2.4,<3.0)", "tox", "marshmallow-sqlalchemy (>=0.13.0,<0.19.0)", "flake8-bugbear (==20.1.4)", "marshmallow-sqlalchemy (>=0.13.0)"]
-docs = ["marshmallow-sqlalchemy (>=0.13.0)", "Sphinx (==3.2.1)", "sphinx-issues (==1.2.0)"]
-lint = ["flake8 (==3.8.3)", "pre-commit (>=2.4,<3.0)", "flake8-bugbear (==20.1.4)"]
-sqlalchemy = ["flask-sqlalchemy", "marshmallow-sqlalchemy (>=0.13.0,<0.19.0)", "marshmallow-sqlalchemy (>=0.13.0)"]
-tests = ["flask-sqlalchemy", "pytest", "mock", "marshmallow-sqlalchemy (>=0.13.0,<0.19.0)", "marshmallow-sqlalchemy (>=0.13.0)"]
-
-[[package]]
 name = "flask-menu"
 version = "0.7.2"
 description = "Flask-Menu is a Flask extension that adds support for generating menus."
@@ -1253,11 +1284,11 @@ test = ["networkx (>=2.5)", "pytest (>=6.2.5)", "numpy (>=1.19.0)", "pandas (>=1
 
 [[package]]
 name = "importlib-metadata"
-version = "4.8.2"
+version = "4.9.0"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 zipp = ">=0.5"
@@ -1299,9 +1330,9 @@ invenio-i18n = ">=1.2.0"
 [package.extras]
 all = ["Sphinx (>=3)", "cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>=2.10.5)"]
 docs = ["Sphinx (>=3)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.8)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.8)"]
-sqlite = ["invenio-db[sqlite,versioning] (>=1.0.8)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.8)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.8)"]
+sqlite = ["invenio-db[versioning,sqlite] (>=1.0.8)"]
 tests = ["cachelib (>=0.1)", "pytest-invenio (>=1.4.1)", "redis (>=2.10.5)"]
 
 [[package]]
@@ -1339,8 +1370,8 @@ ua-parser = ">=0.7.3"
 admin = ["invenio-admin (>=1.2.1)"]
 all = ["invenio-admin (>=1.2.1)", "Sphinx (==4.2.0)", "pytest-invenio (>=1.4.2)"]
 docs = ["Sphinx (==4.2.0)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.9)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.9)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.9)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.9)"]
 sqlite = ["invenio-db[versioning] (>=1.0.9)"]
 tests = ["pytest-invenio (>=1.4.2)"]
 
@@ -1519,12 +1550,12 @@ python-versions = "*"
 invenio-records-resources = ">=0.17.3,<0.18.0"
 
 [package.extras]
-all = ["Sphinx (>=4.2.0)", "invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)", "invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)", "invenio-db[versioning] (>=1.0.9,<2.0.0)", "pytest-invenio (>=1.4.2)", "invenio-app (>=1.3.1)", "docker-services-cli (>=0.3.0)"]
+all = ["Sphinx (>=4.2.0)", "invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)", "invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)", "invenio-db[versioning] (>=1.0.9,<2.0.0)", "pytest-invenio (>=1.4.2)", "invenio-app (>=1.3.1)", "docker-services-cli (>=0.3.0)"]
 docs = ["Sphinx (>=4.2.0)"]
 elasticsearch6 = ["invenio-search[elasticsearch6] (>=1.4.0,<2.0.0)"]
 elasticsearch7 = ["invenio-search[elasticsearch7] (>=1.4.0,<2.0.0)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)"]
 sqlite = ["invenio-db[versioning] (>=1.0.9,<2.0.0)"]
 tests = ["pytest-invenio (>=1.4.2)", "invenio-app (>=1.3.1)", "docker-services-cli (>=0.3.0)"]
 
@@ -1660,8 +1691,8 @@ jsonschema = ">=3.0.0,<5.0.0"
 admin = ["invenio-admin (>=1.2.1)"]
 all = ["Sphinx (==4.2.0)", "invenio-admin (>=1.2.1)", "pytest-invenio (>=1.4.1)"]
 docs = ["Sphinx (==4.2.0)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.9,<1.1.0)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.9,<1.1.0)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.9,<1.1.0)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.9,<1.1.0)"]
 sqlite = ["invenio-db[versioning] (>=1.0.9,<1.1.0)"]
 tests = ["pytest-invenio (>=1.4.1)"]
 
@@ -1683,8 +1714,8 @@ all = ["Sphinx (>=3)", "pytest-mock (>=1.6.0)", "pytest-invenio (>=1.4.1)", "inv
 docs = ["Sphinx (>=3)"]
 elasticsearch6 = ["invenio-search[elasticsearch6] (>=1.4.1,<2.0.0)"]
 elasticsearch7 = ["invenio-search[elasticsearch7] (>=1.4.1,<2.0.0)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)"]
 sqlite = ["invenio-db[versioning] (>=1.0.9,<2.0.0)"]
 tests = ["pytest-mock (>=1.6.0)", "pytest-invenio (>=1.4.1)", "invenio-accounts (>=1.4.3)", "invenio-app (>=1.3.0)", "Sphinx (>=3)"]
 
@@ -1714,12 +1745,12 @@ wand = ">=0.6.6,<0.7.0"
 xmltodict = ">=0.12.0,<0.13.0"
 
 [package.extras]
-all = ["Sphinx (==4.2.0)", "invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)", "invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)", "invenio-db[versioning] (>=1.0.9,<2.0.0)", "invenio-app (>=1.3.1)", "pytest-invenio (>=1.4.2)"]
+all = ["Sphinx (==4.2.0)", "invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)", "invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)", "invenio-db[versioning] (>=1.0.9,<2.0.0)", "invenio-app (>=1.3.1)", "pytest-invenio (>=1.4.2)"]
 docs = ["Sphinx (==4.2.0)"]
 elasticsearch6 = ["invenio-search[elasticsearch6] (>=1.4.2,<2.0.0)"]
 elasticsearch7 = ["invenio-search[elasticsearch7] (>=1.4.2,<2.0.0)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)"]
 sqlite = ["invenio-db[versioning] (>=1.0.9,<2.0.0)"]
 tests = ["invenio-app (>=1.3.1)", "pytest-invenio (>=1.4.2)"]
 
@@ -1976,7 +2007,7 @@ tests = ["check-manifest (>=0.25)", "coverage (>=4.0)", "isort (>=4.2.2)", "mock
 
 [[package]]
 name = "jsonschema"
-version = "4.3.0"
+version = "4.3.1"
 description = "An implementation of JSON Schema validation for Python"
 category = "main"
 optional = false
@@ -2324,11 +2355,11 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "packtivity"
-version = "0.14.23"
+version = "0.14.24"
 description = "packtivity - general purpose schema + bindings for PROV activities"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
 checksumdir = "*"
@@ -3108,13 +3139,14 @@ invenio-drafts-resources = ">=0.14.0,<0.15.0"
 invenio-records-resources = ">=0.17.0,<0.18"
 invenio-search = {version = ">=1.4.2,<2.0.0", extras = ["elasticsearch7"], optional = true, markers = "extra == \"elasticsearch7\""}
 jinja2 = ">=3.0.3,<4.0.0"
+pydash = ">=5.1.0,<6.0"
 
 [package.extras]
-all = ["Sphinx (>=3,<4)", "pytest-invenio (>=1.4.0)", "invenio-search[elasticsearch7] (>=1.4.2,<2.0.0)", "invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)", "invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)", "invenio-db[versioning] (>=1.0.9,<2.0.0)"]
+all = ["Sphinx (>=3,<4)", "pytest-invenio (>=1.4.0)", "invenio-search[elasticsearch7] (>=1.4.2,<2.0.0)", "invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)", "invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)", "invenio-db[versioning] (>=1.0.9,<2.0.0)"]
 docs = ["Sphinx (>=3,<4)"]
 elasticsearch7 = ["invenio-search[elasticsearch7] (>=1.4.2,<2.0.0)"]
-mysql = ["invenio-db[mysql,versioning] (>=1.0.9,<2.0.0)"]
-postgresql = ["invenio-db[versioning,postgresql] (>=1.0.9,<2.0.0)"]
+mysql = ["invenio-db[versioning,mysql] (>=1.0.9,<2.0.0)"]
+postgresql = ["invenio-db[postgresql,versioning] (>=1.0.9,<2.0.0)"]
 sqlite = ["invenio-db[versioning] (>=1.0.9,<2.0.0)"]
 tests = ["pytest-invenio (>=1.4.0)"]
 
@@ -3122,7 +3154,7 @@ tests = ["pytest-invenio (>=1.4.0)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-commons"
 reference = "main"
-resolved_reference = "c09d4adc12a3df2e0306161500b696b2c651f885"
+resolved_reference = "6ec8a13fa94c054a02e6e8f1a86b2b4ff38f347b"
 
 [[package]]
 name = "storm-compendium"
@@ -3145,7 +3177,7 @@ tests = ["pytest-invenio (>=1.4.0)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-compendium"
 reference = "main"
-resolved_reference = "8307f2d91868ff67947b635f91009f5cd68f087c"
+resolved_reference = "602ed4248f0e9f97a8a9a8af6cb038292c2e8696"
 
 [[package]]
 name = "storm-deposit"
@@ -3157,7 +3189,6 @@ python-versions = "*"
 develop = false
 
 [package.dependencies]
-flask-marshmallow = ">=0.14.0,<15.0"
 storm-pipeline = {git = "https://github.com/storm-platform/storm-pipeline", rev = "main"}
 
 [package.extras]
@@ -3169,7 +3200,7 @@ tests = ["pytest-invenio (>=1.4.0)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-deposit"
 reference = "main"
-resolved_reference = "8b41cdc3a933aa917b4ed6c7fbbf553820fdfc2f"
+resolved_reference = "cfa6ff0d4bd4d033a50c830107990e360b1b4568"
 
 [[package]]
 name = "storm-deposit-inveniordm"
@@ -3182,7 +3213,6 @@ develop = false
 
 [package.dependencies]
 bagit = ">=1.8.1,<2"
-pydash = ">=5.1.0,<6.0"
 storm-client-invenio = {git = "https://github.com/storm-platform/storm-client-invenio", rev = "main"}
 storm-pipeline = {git = "https://github.com/storm-platform/storm-pipeline", rev = "main"}
 
@@ -3194,7 +3224,7 @@ docs = ["Sphinx (>=3,<4)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-deposit-inveniordm"
 reference = "main"
-resolved_reference = "883ee48211acb9158e1032784cd4792298d6904d"
+resolved_reference = "5c0d5cf843f74f9fc9d642575b0d8a9b24a289be"
 
 [[package]]
 name = "storm-graph"
@@ -3264,7 +3294,7 @@ docs = ["Sphinx (>=3,<4)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-job"
 reference = "main"
-resolved_reference = "4268f858801bfc056dd39f5ef426b02126b04097"
+resolved_reference = "84c1ff06ad95b975642666911e7552f29ba4988d"
 
 [[package]]
 name = "storm-job-reana"
@@ -3291,7 +3321,34 @@ docs = ["Sphinx (>=3,<4)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-job-reana"
 reference = "main"
-resolved_reference = "71989cd1c83f1b8f6ff2c81fd2b7008b670786cf"
+resolved_reference = "dcb1832ddf0d4b2c71169947be074adaeadf20c9"
+
+[[package]]
+name = "storm-oauth"
+version = "0.1.0"
+description = "Authentication module for the Storm platform."
+category = "main"
+optional = false
+python-versions = "*"
+develop = false
+
+[package.dependencies]
+bdc-auth-client = {git = "https://github.com/brazil-data-cube/bdc-auth-client", rev = "v0.2.3"}
+Click = ">=7.0"
+Flask-Principal = ">=0.4.0"
+Flask-Security = ">=3.0.0"
+Werkzeug = ">=2.0.2"
+
+[package.extras]
+all = ["Sphinx (>=2.2)", "sphinx-rtd-theme", "sphinx-copybutton", "coverage (>=4.5)", "coveralls (>=1.8)", "pytest (>=5.2)", "pytest-cov (>=2.8)", "pytest-pep8 (>=1.0)", "pydocstyle (>=4.0)", "isort (>4.3)", "check-manifest (>=0.40)"]
+docs = ["Sphinx (>=2.2)", "sphinx-rtd-theme", "sphinx-copybutton"]
+tests = ["coverage (>=4.5)", "coveralls (>=1.8)", "pytest (>=5.2)", "pytest-cov (>=2.8)", "pytest-pep8 (>=1.0)", "pydocstyle (>=4.0)", "isort (>4.3)", "check-manifest (>=0.40)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/storm-platform/storm-oauth.git"
+reference = "master"
+resolved_reference = "b1a5951f3e2b0d17f1e14f65f2a10fbad27f2071"
 
 [[package]]
 name = "storm-pipeline"
@@ -3315,7 +3372,7 @@ tests = ["pytest-invenio (>=1.4.0)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-pipeline"
 reference = "main"
-resolved_reference = "e2fe644aa9ba8f205cd2a06fb0518e0b41eb82e2"
+resolved_reference = "5a318cfa75417cfb0e91cf20d68a9a10665098e7"
 
 [[package]]
 name = "storm-project"
@@ -3338,7 +3395,7 @@ tests = ["pytest-invenio (>=1.4.0)"]
 type = "git"
 url = "https://github.com/storm-platform/storm-project"
 reference = "main"
-resolved_reference = "de99422dd9cef3401139c6d338722dbc0285c367"
+resolved_reference = "2cce04e7974a37b1e969e3b1f41541e812f4ab80"
 
 [[package]]
 name = "storm-reprozip-proxy"
@@ -3527,6 +3584,14 @@ python-versions = "*"
 [package.dependencies]
 distro = "*"
 requests = "*"
+
+[[package]]
+name = "uwsgi"
+version = "2.0.20"
+description = "The uWSGI server"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "vine"
@@ -3728,7 +3793,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0d3485df5e573046d3d903b31e25f04997af69b33bfd697070e47b3a863292c5"
+content-hash = "ec747370be382356326569a3b53b6f724dcbd2d4d369415c555abb9c13400406"
 
 [metadata.files]
 adage = [
@@ -3766,6 +3831,10 @@ attrs = [
     {file = "attrs-21.2.0-py2.py3-none-any.whl", hash = "sha256:149e90d6d8ac20db7a955ad60cf0e6881a3f20d37096140088356da6c716b0b1"},
     {file = "attrs-21.2.0.tar.gz", hash = "sha256:ef6aaac3ca6cd92904cdd0d83f629a15f18053ec84e6432106f7a4d04ae4f5fb"},
 ]
+authlib = [
+    {file = "Authlib-0.15.5-py2.py3-none-any.whl", hash = "sha256:ecf4a7a9f2508c0bb07e93a752dd3c495cfaffc20e864ef0ffc95e3f40d2abaf"},
+    {file = "Authlib-0.15.5.tar.gz", hash = "sha256:b83cf6360c8e92b0e9df0d1f32d675790bcc4e3c03977499b1eed24dcdef4252"},
+]
 autosemver = [
     {file = "autosemver-0.5.5.tar.gz", hash = "sha256:0af1e8a9c3604545c067311f1c26403e8f0d60b5d9561c0217e14eee21c98b02"},
 ]
@@ -3789,6 +3858,7 @@ base32-lib = [
     {file = "base32-lib-1.0.2.tar.gz", hash = "sha256:09663df621bbc454079a54c92fa25d3bc33ea4a191053a09dd1e05ea4c0fe47c"},
     {file = "base32_lib-1.0.2-py2.py3-none-any.whl", hash = "sha256:f3cbc1c4b3df7af844c9b7ffc1638a688423db2b1e51082b2c014b3959b756ae"},
 ]
+bdc-auth-client = []
 billiard = [
     {file = "billiard-3.6.4.0-py3-none-any.whl", hash = "sha256:87103ea78fa6ab4d5c751c4909bcff74617d985de7fa8b672cf8618afd5a875b"},
     {file = "billiard-3.6.4.0.tar.gz", hash = "sha256:299de5a8da28a783d51b197d496bef4f1595dd023a93a4f59dde1886ae905547"},
@@ -3815,6 +3885,10 @@ bravado-core = [
 cachecontrol = [
     {file = "CacheControl-0.12.10-py2.py3-none-any.whl", hash = "sha256:b0d43d8f71948ef5ebdee5fe236b86c6ffc7799370453dccb0e894c20dfa487c"},
     {file = "CacheControl-0.12.10.tar.gz", hash = "sha256:d8aca75b82eec92d84b5d6eb8c8f66ea16f09d2adb09dbca27fe2d5fc8d3732d"},
+]
+cacheout = [
+    {file = "cacheout-0.13.1-py3-none-any.whl", hash = "sha256:dc357ba56599444e24a41a514bd18b6a2460e9a9de6aa960e5ee3bb8c0bebb3f"},
+    {file = "cacheout-0.13.1.tar.gz", hash = "sha256:296d1a46ce7858e6f45b0fd5d407e5236fefe8fc01be80c56161c23b386849ff"},
 ]
 cachetools = [
     {file = "cachetools-4.2.4-py3-none-any.whl", hash = "sha256:92971d3cb7d2a97efff7c7bb1657f21a8f5fb309a37530537c71b1774189f2d1"},
@@ -4085,10 +4159,6 @@ flask-login = [
 flask-mail = [
     {file = "Flask-Mail-0.9.1.tar.gz", hash = "sha256:22e5eb9a940bf407bcf30410ecc3708f3c56cc44b29c34e1726fe85006935f41"},
 ]
-flask-marshmallow = [
-    {file = "flask-marshmallow-0.14.0.tar.gz", hash = "sha256:bd01a6372cbe50e36f205cfff0fc5dab0b7b662c4c8b2c4fc06a3151b2950950"},
-    {file = "flask_marshmallow-0.14.0-py2.py3-none-any.whl", hash = "sha256:2adcd782b5a4a6c5ae3c96701f320d8ca6997995a52b2661093c56cc3ed24754"},
-]
 flask-menu = [
     {file = "Flask-Menu-0.7.2.tar.gz", hash = "sha256:6aef705e2b12d04a5a4d7eed89901e1e386bc1e6eda69cc1d9b8b594e95a5839"},
     {file = "Flask_Menu-0.7.2-py3-none-any.whl", hash = "sha256:adeb078a2c16ee63b63702b220de3f1be412920ad511a4ecb2c284f45c4026ee"},
@@ -4219,8 +4289,8 @@ igraph = [
     {file = "igraph-0.9.8.tar.gz", hash = "sha256:e7bad9f5f52e6dc3ccdaa3d02d8ec433d9ada704f7a83168915cfa0c4c226730"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-4.8.2-py3-none-any.whl", hash = "sha256:53ccfd5c134223e497627b9815d5030edf77d2ed573922f7a0b8f8bb81a1c100"},
-    {file = "importlib_metadata-4.8.2.tar.gz", hash = "sha256:75bdec14c397f528724c1bfd9709d660b33a4d2e77387a3358f20b848bb5e5fb"},
+    {file = "importlib_metadata-4.9.0-py3-none-any.whl", hash = "sha256:e8b45564028bc25f8c99f546616112a6df5de6655893d7eb74c9a99680dc9751"},
+    {file = "importlib_metadata-4.9.0.tar.gz", hash = "sha256:ee50794eccb0ec340adbc838344ebb9a6ff2bcba78f752d31fc716497e2149d6"},
 ]
 importlib-resources = [
     {file = "importlib_resources-5.4.0-py3-none-any.whl", hash = "sha256:33a95faed5fc19b4bc16b29a6eeae248a3fe69dd55d4d229d2b480e23eeaad45"},
@@ -4402,8 +4472,8 @@ jsonresolver = [
     {file = "jsonresolver-0.3.1.tar.gz", hash = "sha256:2d8090f6a1fe92e70f2903f05515415bde7ce46402e528279f865bce4ee689ca"},
 ]
 jsonschema = [
-    {file = "jsonschema-4.3.0-py3-none-any.whl", hash = "sha256:ab7069946a3ad2037e79a5cdc8d0e9a74cd00721d426d75c5d69a6707c778218"},
-    {file = "jsonschema-4.3.0.tar.gz", hash = "sha256:cb7f57b40f870409d7571844d0623f66d8078c90a9c255d9a4d4314b5ec3fc7c"},
+    {file = "jsonschema-4.3.1-py3-none-any.whl", hash = "sha256:91ffbad994d766041c6003d5f8f475cceb890c30084bd0e64847ccb1c10e48bb"},
+    {file = "jsonschema-4.3.1.tar.gz", hash = "sha256:0070ca8dd5bf47941d1e9d8bc115a3654b1138cfb8aff44f3e3527276107314f"},
 ]
 jupyter-core = [
     {file = "jupyter_core-4.9.1-py3-none-any.whl", hash = "sha256:1c091f3bbefd6f2a8782f2c1db662ca8478ac240e962ae2c66f0b87c818154ea"},
@@ -4666,8 +4736,8 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 packtivity = [
-    {file = "packtivity-0.14.23-py3-none-any.whl", hash = "sha256:8638323dfa56973f2bf57e6aa7c11e6fa076a2c01f91b006df1bdcfc17031a93"},
-    {file = "packtivity-0.14.23.tar.gz", hash = "sha256:4a5b5b933ee2dc742e91db987fe38e3e54ed97209b61231af1dd11e41e4549e8"},
+    {file = "packtivity-0.14.24-py3-none-any.whl", hash = "sha256:7be0e9a97f6886c9a6ffb9e2dd848ab56e655d4d9f4fa18062372fbf4ef7525d"},
+    {file = "packtivity-0.14.24.tar.gz", hash = "sha256:98ab0f059430a19a997790c2200efd30c342953e4ff4e39f5d918197d2d5471b"},
 ]
 parso = [
     {file = "parso-0.8.3-py2.py3-none-any.whl", hash = "sha256:c001d4636cd3aecdaf33cbb40aebb59b094be2a74c556778ef5576c175e19e75"},
@@ -5140,6 +5210,7 @@ storm-graph = []
 storm-hasher = []
 storm-job = []
 storm-job-reana = []
+storm-oauth = []
 storm-pipeline = []
 storm-project = []
 storm-reprozip-proxy = []
@@ -5203,6 +5274,9 @@ urllib3 = [
 usagestats = [
     {file = "usagestats-1.0.1-py2.py3-none-any.whl", hash = "sha256:fc240f95c11fa06dca41d307e444b2f5e2c584e5ca0a755f63c91f697c7309db"},
     {file = "usagestats-1.0.1.tar.gz", hash = "sha256:d8887aa0f65769b1423b784e626ec6fb6ba6ed1432667e10d6115b783571be6d"},
+]
+uwsgi = [
+    {file = "uwsgi-2.0.20.tar.gz", hash = "sha256:88ab9867d8973d8ae84719cf233b7dafc54326fcaec89683c3f9f77c002cdff9"},
 ]
 vine = [
     {file = "vine-5.0.0-py2.py3-none-any.whl", hash = "sha256:4c9dceab6f76ed92105027c49c823800dd33cacce13bdedc5b914e3514b7fb30"},

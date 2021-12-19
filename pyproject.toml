@@ -19,6 +19,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+uWSGI = "^2.0.20"
 invenio-app = "^1.3.3"
 
 storm-commons = { git = "https://github.com/storm-platform/storm-commons", rev = "main", extras = ["elasticsearch7", "postgresql"] }
@@ -29,6 +30,7 @@ storm-deposit = { git = "https://github.com/storm-platform/storm-deposit", rev =
 storm-deposit-inveniordm = { git = "https://github.com/storm-platform/storm-deposit-inveniordm", rev = "main" }
 storm-job = { git = "https://github.com/storm-platform/storm-job", rev = "main" }
 storm-job-reana = { git = "https://github.com/storm-platform/storm-job-reana", rev = "main" }
+storm-oauth = {git = "https://github.com/storm-platform/storm-oauth.git", rev = "master"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
