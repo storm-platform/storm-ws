@@ -13,15 +13,13 @@ FROM inveniosoftware/centos8-python:3.8
 COPY pyproject.toml poetry.lock ./
 RUN pip3 install pip wheel setuptools --upgrade \
     && pip3 install poetry \
-    # Configuring the poetry to install the dependencies
-    # in the system site package
     && poetry config virtualenvs.create false \
     && poetry install
 
 #
 # Project related files
 #
-COPY ./docker/uwsgi/ ${INVENIO_INSTANCE_PATH}
+COPY ./uwsgi.ini ${INVENIO_INSTANCE_PATH}
 COPY ./invenio.cfg ${INVENIO_INSTANCE_PATH}
 COPY ./ .
 
