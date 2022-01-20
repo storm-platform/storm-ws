@@ -13,8 +13,8 @@ FROM inveniosoftware/centos8-python:3.8
 COPY pyproject.toml poetry.lock ./
 RUN pip3 install pip wheel setuptools --upgrade \
     && pip3 install poetry \
-    && poetry config virtualenvs.create false \
-    && poetry install
+    && poetry config virtualenvs.create false # \
+    # && poetry install
 
 #
 # Project related files
