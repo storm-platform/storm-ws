@@ -51,8 +51,8 @@ storm-deposit-inveniordm = { git = "https://github.com/storm-platform/storm-depo
 #
 # Storm Execution
 #
-storm-execution = { git = "https://github.com/storm-platform/storm-job", rev = "main" }
-storm-execution-reana = { git = "https://github.com/storm-platform/storm-job-reana", rev = "main" }
+storm-execution = { git = "https://github.com/storm-platform/storm-execution", rev = "main" }
+storm-execution-reana = { git = "https://github.com/storm-platform/storm-execution-reana", rev = "main" }
 
 #
 # Auxiliary tools
