@@ -16,9 +16,8 @@ RUN pip3 install \
       "wheel<=0.37.1" \
       "setuptools<59.7.0" \
     && pip3 install poetry \
-    && poetry config virtualenvs.create false
-    # \
-    # && poetry install
+    && poetry config virtualenvs.create false \
+    && poetry install
 
 #
 # Project related files
