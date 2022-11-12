@@ -10,11 +10,15 @@ FROM inveniosoftware/centos8-python:3.8
 #
 # App dependencies
 #
+
+COPY storm_ws storm_ws
 COPY pyproject.toml poetry.lock ./
+
 RUN pip3 install \
       "pip<=22.0.2" \
       "wheel<=0.37.1" \
       "setuptools<59.7.0" \
+    && pip3 install --upgrade certifi \
     && pip3 install poetry \
     && poetry config virtualenvs.create false \
     && poetry install
